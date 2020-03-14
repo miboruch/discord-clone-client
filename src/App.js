@@ -12,8 +12,8 @@ function App() {
   useEffect(() => {
     socket.on('connect', () => {
       socket.emit('user_connected', {
-        socketID: socket.id,
-        username: socket.query.username
+        socketID: socket.id
+        // username: socket.query.username
       });
       console.log(socket);
       socket.on('load_rooms', data => {
@@ -46,6 +46,7 @@ function App() {
         >
           create namespace
         </button>
+        <p>asd</p>
       </div>
     </Layout>
   );

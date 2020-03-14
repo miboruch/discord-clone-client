@@ -2,6 +2,8 @@ import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import { theme } from '../../style/theme';
+import GlobalStyle from '../../style/GlobalStyle';
+import SEO from '../SEO';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -12,6 +14,8 @@ const StyledWrapper = styled.div`
 const Layout = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
+      <SEO />
+      <GlobalStyle />
       <StyledWrapper>{children}</StyledWrapper>
     </ThemeProvider>
   );

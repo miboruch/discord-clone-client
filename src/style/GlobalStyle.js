@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     font-weight: 500;
     font-size: 1.6rem;
-    //font-family: Futura;
+    font-family: Futura;
   }
   
   a{
