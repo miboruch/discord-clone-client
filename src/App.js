@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import io from 'socket.io-client';
-const username = prompt('What is your name?');
+import Layout from './components/templates/Layout';
 
-const socketURL = 'http://localhost:9000/default';
+const socketURL = 'http://localhost:9000';
 
-const socket = io(socketURL, {
-  query: {
-    username
-  }
-});
+const socket = io(socketURL);
 
 function App() {
   const [namespaces, setNamespaces] = useState(null);
@@ -21,12 +16,15 @@ function App() {
         username: socket.query.username
       });
       console.log(socket);
-      socket.on('fetch_namespaces', data => {
-        setNamespaces(data);
-        console.log(data);
-      });
       socket.on('load_rooms', data => {
         console.log(data);
+      });
+      socket.on('load_namespaces', namespaces => {
+        setNamespaces(namespaces);
+        console.log(namespaces);
+      });
+      socket.on('namespace_created', namespace => {
+        console.log(namespace);
       });
     });
   }, []);
@@ -34,22 +32,22 @@ function App() {
   console.log(namespaces);
 
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className='App-link'
-          href='https://reactjs.org'
-          target='_blank'
-          rel='noopener noreferrer'
+    <Layout>
+      <div className='App'>
+        <button
+          onClick={() =>
+            socket.emit('create_namespace', {
+              name: 'Test namespace',
+              ownerID: '1928',
+              isPrivate: false,
+              password: 'asd'
+            })
+          }
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          create namespace
+        </button>
+      </div>
+    </Layout>
   );
 }
 
