@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import io from 'socket.io-client';
 import Layout from './components/templates/Layout';
+import {API_URL} from './utils/helpers';
 
-const socketURL = 'http://localhost:9000';
-
-const socket = io(socketURL);
+const socket = io(API_URL);
 
 function App() {
   const [namespaces, setNamespaces] = useState(null);
