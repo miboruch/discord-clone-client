@@ -21,9 +21,10 @@ export const theme = {
     backgroundLight: '#f5f5f5'
   },
   mq: {
-    mobileL: '@media all and (min-width: 370px)',
+    mobileL: '@media all and (min-height: 740px)',
     tabletS: '@media all and (min-width: 512px)',
     tablet: '@media all and (min-width: 710px)',
+    tabletL: '@media all and (min-width: 812px)',
     standard: '@media all and (min-width: 1024px)',
     desktop: '@media all and (min-width: 1440px)'
   }

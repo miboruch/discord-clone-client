@@ -18,12 +18,15 @@ const StyledInput = styled.input`
   width: 100%;
   height: 40px;
   background: none;
-  border: 1px solid
-    ${({ colorTheme }) => (colorTheme === 'dark' ? '#f5f5f5' : 'rgba(23, 23, 23, 0.4)')};
+  border: 1px solid ${({ colorTheme }) => (colorTheme === 'dark' ? '#f5f5f5' : 'rgba(23, 23, 23, 0.4)')};
   color: ${({ colorTheme }) => (colorTheme === 'dark' ? '#f5f5f5' : '#1d1d1d')};
   font-family: ${({ theme }) => theme.font.family.futura};
   font-size: 16px;
   letter-spacing: 2px;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const FormInput = ({ labelText, onChange, onBlur, colorTheme, inputType, name }) => {
@@ -34,14 +37,7 @@ const FormInput = ({ labelText, onChange, onBlur, colorTheme, inputType, name })
           {labelText}
         </StyledLabel>
       ) : null}
-      <StyledInput
-        onChange={onChange}
-        onBlur={onBlur}
-        type={inputType}
-        colorTheme={colorTheme}
-        name={name}
-        required
-      />
+      <StyledInput onChange={onChange} onBlur={onBlur} type={inputType} colorTheme={colorTheme} name={name} />
     </StyledInputWrapper>
   );
 };

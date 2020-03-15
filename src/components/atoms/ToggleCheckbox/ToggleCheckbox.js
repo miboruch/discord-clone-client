@@ -12,8 +12,8 @@ const StyledInput = styled.input`
   position: relative;
   width: 56px;
   height: 24px;
-  z-index: 10;
   transition: all 0.8s ease;
+  z-index: 10;
 
   &:before {
     content: '';
