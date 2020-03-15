@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 const StyledInputWrapper = styled.div`
   position: relative;
   width: 100%;
+  margin-bottom: 1rem;
 `;
 
 const StyledLabel = styled.label`

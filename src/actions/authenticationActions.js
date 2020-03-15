@@ -86,7 +86,7 @@ export const userRegister = (email, password, name, lastName, nick) => async dis
     dispatch(authSuccess(data.token, data._doc._id));
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data._doc._id);
-    history.push('/');
+    // history.push('/');
   } catch (error) {
     dispatch(authRegisterFailure(error));
   }

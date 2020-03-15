@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { API_URL } from './utils/helpers';
 import LoginPage from './pages/LoginPage';
+import LandingPage from './pages/LandingPage';
 
 const socket = io(API_URL);
 
@@ -37,7 +38,11 @@ function App({ isLoggedIn }) {
     <Router>
       <Layout>
         <Switch>
-          {isLoggedIn ? <Route path={'/'} /> : <Route path={'/'} component={LoginPage} />}
+          {isLoggedIn ? (
+            <Route path={'/'} component={LandingPage} />
+          ) : (
+            <Route path={'/'} component={LoginPage} />
+          )}
         </Switch>
       </Layout>
     </Router>

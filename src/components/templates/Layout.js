@@ -4,10 +4,17 @@ import PropTypes from 'prop-types';
 import { theme } from '../../style/theme';
 import GlobalStyle from '../../style/GlobalStyle';
 import SEO from '../SEO';
+import ToggleCheckbox from '../atoms/ToggleCheckbox/ToggleCheckbox';
 
 const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
+`;
+
+const CheckBoxWrapper = styled.div`
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
 `;
 
 /* Layout provides all HOC, ThemeProviders and so on... */
@@ -16,7 +23,12 @@ const Layout = ({ children }) => {
     <ThemeProvider theme={theme}>
       <SEO />
       <GlobalStyle />
-      <StyledWrapper>{children}</StyledWrapper>
+      <StyledWrapper>
+        <CheckBoxWrapper>
+          <ToggleCheckbox />
+        </CheckBoxWrapper>
+        {children}
+      </StyledWrapper>
     </ThemeProvider>
   );
 };
