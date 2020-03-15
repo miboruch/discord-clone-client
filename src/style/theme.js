@@ -15,10 +15,10 @@ export const theme = {
     }
   },
   color: {
-    backgroundDark: '#0c0c0c',
-    backgroundLight: '#f5f5f5',
-    backgroundDarkGradient:
-      'linear-gradient(0deg, rgba(33,33,33,1) 0%, rgba(0,0,0,1) 0%, rgba(16,16,16,1) 47%, rgba(29,29,29,1) 100%);'
+    namespacesPanel: '#19181d',
+    roomsPanel: '#1a1d21',
+    backgroundDark: '#222529',
+    backgroundLight: '#f5f5f5'
   },
   mq: {
     mobileL: '@media all and (min-width: 370px)',

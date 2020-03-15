@@ -56,7 +56,7 @@ export const authLogout = () => dispatch => {
   dispatch(userLogout());
 };
 
-export const userLogin = (email, password, history) => async dispatch => {
+export const userLogin = (email, password) => async dispatch => {
   dispatch(authStart());
 
   try {
@@ -65,7 +65,7 @@ export const userLogin = (email, password, history) => async dispatch => {
 
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data.id);
-    history.push('/');
+    // history.push('/');
   } catch (error) {
     dispatch(authLoginFailure(error));
   }

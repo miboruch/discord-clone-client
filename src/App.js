@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import io from 'socket.io-client';
 import Layout from './components/templates/Layout';
-import {API_URL} from './utils/helpers';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { API_URL } from './utils/helpers';
+import LoginPage from './pages/LoginPage';
 
 const socket = io(API_URL);
 
-function App() {
+function App({ isLoggedIn }) {
   const [namespaces, setNamespaces] = useState(null);
   useEffect(() => {
     socket.on('connect', () => {
@@ -31,24 +34,18 @@ function App() {
   console.log(namespaces);
 
   return (
-    <Layout>
-      <div className='App'>
-        <button
-          onClick={() =>
-            socket.emit('create_namespace', {
-              name: 'Test namespace',
-              ownerID: '1928',
-              isPrivate: false,
-              password: 'asd'
-            })
-          }
-        >
-          create namespace
-        </button>
-        <p>asd</p>
-      </div>
-    </Layout>
+    <Router>
+      <Layout>
+        <Switch>
+          {isLoggedIn ? <Route path={'/'} /> : <Route path={'/'} component={LoginPage} />}
+        </Switch>
+      </Layout>
+    </Router>
   );
 }
 
-export default App;
+const mapStateToProps = ({ authenticationReducer: { isLoggedIn } }) => {
+  return { isLoggedIn };
+};
+
+export default connect(mapStateToProps)(App);
