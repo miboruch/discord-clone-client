@@ -7,11 +7,16 @@ import { connect } from 'react-redux';
 import { API_URL } from './utils/helpers';
 import AuthPage from './pages/AuthPage';
 import LandingPage from './pages/LandingPage';
+import { authenticationCheck } from './actions/authenticationActions';
 
 const socket = io(API_URL);
 
-function App({ isLoggedIn }) {
+function App({ isLoggedIn, loading, authenticationCheck }) {
   const [namespaces, setNamespaces] = useState(null);
+
+  useEffect(() => {
+    authenticationCheck();
+  }, []);
   useEffect(() => {
     socket.on('connect', () => {
       socket.emit('user_connected', {
@@ -37,23 +42,33 @@ function App({ isLoggedIn }) {
   return (
     <Router>
       <Layout>
-        <Switch>
-          {isLoggedIn ? (
-            <Route path={'/'} component={LandingPage} />
-          ) : (
-            <>
-              <Route path={'/'} component={AuthPage} />
-              <Redirect exact from={'/'} to={'/login'} />
-            </>
-          )}
-        </Switch>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <Switch>
+            {isLoggedIn ? (
+              <Route path={'/'} component={LandingPage} />
+            ) : (
+              <>
+                <Redirect exact from={'/'} to={'/login'} />
+                <Route path={'/'} component={AuthPage} />
+              </>
+            )}
+          </Switch>
+        )}
       </Layout>
     </Router>
   );
 }
 
-const mapStateToProps = ({ authenticationReducer: { isLoggedIn } }) => {
-  return { isLoggedIn };
+const mapStateToProps = ({ authenticationReducer: { isLoggedIn, loading } }) => {
+  return { isLoggedIn, loading };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    authenticationCheck: () => dispatch(authenticationCheck())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,4 +1,5 @@
 export const AUTH_START = 'AUTH_START';
+export const AUTH_STOP = 'AUTH_STOP';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_LOGIN_FAILURE = 'AUTH_LOGIN_FAILURE';
 export const AUTH_REGISTER_FAILURE = 'AUTH_REGISTER_FAILURE';
@@ -20,6 +21,11 @@ export const authenticationReducer = (state = initialState, action) => {
         ...state,
         loading: true
       };
+    case AUTH_STOP:
+      return{
+        ...state,
+        loading: false
+      }
     case AUTH_SUCCESS:
       return {
         ...state,

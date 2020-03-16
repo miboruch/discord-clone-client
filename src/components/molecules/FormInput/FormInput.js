@@ -26,7 +26,6 @@ const StyledInput = styled.input`
   color: ${({ colorTheme }) => (colorTheme === 'dark' ? '#f5f5f5' : '#1d1d1d')};
   font-family: ${({ theme }) => theme.font.family.futura};
   font-size: 16px;
-  letter-spacing: 2px;
 
   &:focus {
     outline: none;

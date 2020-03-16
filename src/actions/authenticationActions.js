@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   AUTH_START,
+  AUTH_STOP,
   AUTH_SUCCESS,
   AUTH_LOGOUT,
   AUTH_LOGIN_FAILURE,
@@ -11,6 +12,12 @@ import { API_URL } from '../utils/helpers';
 export const authStart = () => {
   return {
     type: AUTH_START
+  };
+};
+
+export const authStop = () => {
+  return {
+    type: AUTH_STOP
   };
 };
 
@@ -92,10 +99,13 @@ export const userRegister = (email, password, name, lastName) => async dispatch 
 };
 
 export const authenticationCheck = () => async dispatch => {
+  dispatch(authStart());
   const token = localStorage.getItem('token');
   const userID = localStorage.getItem('userID');
 
   if (token && userID) {
     dispatch(authSuccess(token, userID));
+  } else {
+    dispatch(authStop());
   }
 };

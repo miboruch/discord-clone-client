@@ -27,8 +27,5 @@ export const RegisterSchema = Yup.object().shape({
   lastName: Yup.string()
     .strict()
     .min(2, 'Last name too short - 2 chars minimum')
-    .required('Last name is required'),
-  nick: Yup.string()
-    .min(2, 'Address too short - 2 chars minimum')
-    .required('Address is required')
+    .required('Last name is required')
 });

@@ -1,52 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { RegisterSchema } from '../../../utils/validationSchema';
-import FormInput from '../FormInput/FormInput';
-import { Form, Formik } from 'formik';
-import { userRegister } from '../../../actions/authenticationActions';
-import { Link } from 'react-router-dom';
-
-const StyledHeading = styled.h1`
-  font-family: ${({ theme }) => theme.font.family.avanti};
-  font-size: 32px;
-  margin-bottom: 2rem;
-  letter-spacing: 2px;
-
-  ${({ theme }) => theme.mq.standard} {
-    font-size: 56px;
-  }
-`;
-
-const StyledForm = styled(Form)`
-  width: 90%;
-`;
-
-const StyledButton = styled.button`
-  width: 140px;
-  height: 40px;
-  background: ${({ theme }) => theme.color.backgroundDark};
-  border: none;
-  font-family: ${({ theme }) => theme.font.family.futura};
-  margin-top: 1rem;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const StyledParagraph = styled.p`
-  font-size: 13px;
-  letter-spacing: 1px;
-  margin-top: 1rem;
-
-  ${({ theme }) => theme.mq.standard} {
-    margin-top: 2rem;
-  }
-`;
+import { RegisterSchema } from '../../../../utils/validationSchema';
+import FormInput from '../../FormInput/FormInput';
+import { Formik } from 'formik';
+import { userRegister } from '../../../../actions/authenticationActions';
+import { StyledHeading, StyledForm, StyledButton, StyledLink, StyledParagraph } from '../styles';
 
 const RegisterContent = ({ registerError, userRegister }) => {
   return (
@@ -87,9 +45,9 @@ const RegisterContent = ({ registerError, userRegister }) => {
             name='lastName'
           />
           <StyledButton type='submit'>Register</StyledButton>
-          <Link to={'/login'}>
+          <StyledLink to={'/login'}>
             <StyledParagraph>or sign in if you already have an account</StyledParagraph>
-          </Link>
+          </StyledLink>
           <StyledParagraph>{registerError ? 'Provided data are incorrect' : ''}</StyledParagraph>
         </StyledForm>
       )}

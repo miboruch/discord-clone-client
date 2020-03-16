@@ -5,9 +5,8 @@ import gsap from 'gsap';
 import { ReactComponent as MainScene } from '../assets/icons/messages_icon.svg';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userLogin } from '../actions/authenticationActions';
-import RegisterContent from '../components/molecules/RegisterContent/RegisterContent';
-import LoginContent from '../components/molecules/LoginContent/LoginContent';
+import RegisterContent from '../components/molecules/AuthContent/RegisterContent/RegisterContent';
+import LoginContent from '../components/molecules/AuthContent/LoginContent/LoginContent';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -83,7 +82,7 @@ const FormWrapper = styled.div`
   }
 `;
 
-const AuthPage = ({ loading, loginError, userLogin, location }) => {
+const AuthPage = ({ loading, location }) => {
   const wrapper = useRef(null);
   const isRegister = location.pathname.includes('register');
 
@@ -115,37 +114,31 @@ const AuthPage = ({ loading, loginError, userLogin, location }) => {
 
   return (
     <StyledWrapper>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ContentWrapper>
-          <FormWrapper isRegister={isRegister}>
+      <ContentWrapper>
+        <FormWrapper isRegister={isRegister}>
+          {loading ? (
+            <p>Loading... (Spinner)</p>
+          ) : (
             <Switch>
               <Route path={'/login'} component={LoginContent} />
               <Route path={'/register'} component={RegisterContent} />
             </Switch>
-          </FormWrapper>
-          <StyledSceneWrapper ref={wrapper} isRegister={isRegister}>
-            <StyledScene />
-          </StyledSceneWrapper>
-        </ContentWrapper>
-      )}
+          )}
+        </FormWrapper>
+        <StyledSceneWrapper ref={wrapper} isRegister={isRegister}>
+          <StyledScene />
+        </StyledSceneWrapper>
+      </ContentWrapper>
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { loading, loginError } }) => {
-  return { loading, loginError };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    userLogin: (email, password) => dispatch(userLogin(email, password))
-  };
+const mapStateToProps = ({ authenticationReducer: { loading } }) => {
+  return { loading };
 };
 
 AuthPage.propTypes = {
   loading: PropTypes.bool
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthPage);
+export default connect(mapStateToProps)(AuthPage);
