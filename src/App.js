@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import io from 'socket.io-client';
 import Layout from './components/templates/Layout';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { API_URL } from './utils/helpers';
-import LoginPage from './pages/LoginPage';
+import AuthPage from './pages/AuthPage';
 import LandingPage from './pages/LandingPage';
 
 const socket = io(API_URL);
@@ -41,7 +41,10 @@ function App({ isLoggedIn }) {
           {isLoggedIn ? (
             <Route path={'/'} component={LandingPage} />
           ) : (
-            <Route path={'/'} component={LoginPage} />
+            <>
+              <Route path={'/'} component={AuthPage} />
+              <Redirect exact from={'/'} to={'/login'} />
+            </>
           )}
         </Switch>
       </Layout>

@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import gsap from 'gsap';
 import { ReactComponent as MainScene } from '../assets/icons/messages_icon.svg';
-import { Formik, Form } from 'formik';
+import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import FormInput from '../components/molecules/FormInput/FormInput';
 import { userLogin } from '../actions/authenticationActions';
-import { LoginSchema } from '../utils/validationSchema';
+import RegisterContent from '../components/molecules/RegisterContent/RegisterContent';
+import LoginContent from '../components/molecules/LoginContent/LoginContent';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -25,8 +25,15 @@ const StyledWrapper = styled.div`
 
 const StyledSceneWrapper = styled.div`
   width: 90%;
-  height: 50vh;
+  height: ${({ isRegister }) => (isRegister ? '35vh' : '50vh')};
   transform: translateX(15%);
+  position: absolute;
+  bottom: 1rem;
+  transition: height 0.6s ease-in-out;
+
+  ${({ theme }) => theme.mq.tablet} {
+    position: static;
+  }
 
   ${({ theme }) => theme.mq.tabletL} {
     width: 60%;
@@ -55,7 +62,7 @@ const ContentWrapper = styled.div`
 
 const FormWrapper = styled.div`
   width: 100%;
-  height: 50vh;
+  height: ${({ isRegister }) => (isRegister ? '65vh' : '50vh')};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,41 +73,19 @@ const FormWrapper = styled.div`
     padding-bottom: 2rem;
   }
 
+  ${({ theme }) => theme.mq.tablet} {
+    height: 50vh;
+  }
+
   ${({ theme }) => theme.mq.tabletL} {
     width: 40%;
     justify-content: center;
   }
 `;
 
-const StyledHeading = styled.h1`
-  font-family: ${({ theme }) => theme.font.family.avanti};
-  font-size: 32px;
-  margin-bottom: 2rem;
-  letter-spacing: 2px;
-`;
-
-const StyledForm = styled(Form)`
-  width: 90%;
-`;
-
-const StyledButton = styled.button`
-  width: 140px;
-  height: 40px;
-  background: ${({ theme }) => theme.color.backgroundDark};
-  border: none;
-  font-family: ${({ theme }) => theme.font.family.futura};
-  margin-top: 1rem;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const LoginPage = ({ loading, userLogin }) => {
+const AuthPage = ({ loading, loginError, userLogin, location }) => {
   const wrapper = useRef(null);
+  const isRegister = location.pathname.includes('register');
 
   useEffect(() => {
     const [elements] = wrapper.current.children;
@@ -134,35 +119,13 @@ const LoginPage = ({ loading, userLogin }) => {
         <p>Loading...</p>
       ) : (
         <ContentWrapper>
-          <FormWrapper>
-            <Formik
-              initialValues={{ email: '', password: '' }}
-              onSubmit={({ email, password }) => userLogin(email, password)}
-              validationSchema={LoginSchema}
-            >
-              {({ handleChange, handleBlur, errors }) => (
-                <StyledForm>
-                  <StyledHeading>Sign in</StyledHeading>
-                  <FormInput
-                    labelText={errors.email || 'Email'}
-                    inputType='text'
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    name='email'
-                  />
-                  <FormInput
-                    labelText={errors.password || 'Password'}
-                    inputType='password'
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    name='password'
-                  />
-                  <StyledButton>Sign in</StyledButton>
-                </StyledForm>
-              )}
-            </Formik>
+          <FormWrapper isRegister={isRegister}>
+            <Switch>
+              <Route path={'/login'} component={LoginContent} />
+              <Route path={'/register'} component={RegisterContent} />
+            </Switch>
           </FormWrapper>
-          <StyledSceneWrapper ref={wrapper}>
+          <StyledSceneWrapper ref={wrapper} isRegister={isRegister}>
             <StyledScene />
           </StyledSceneWrapper>
         </ContentWrapper>
@@ -171,8 +134,8 @@ const LoginPage = ({ loading, userLogin }) => {
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { loading } }) => {
-  return { loading };
+const mapStateToProps = ({ authenticationReducer: { loading, loginError } }) => {
+  return { loading, loginError };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -181,8 +144,8 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-LoginPage.propTypes = {
+AuthPage.propTypes = {
   loading: PropTypes.bool
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthPage);

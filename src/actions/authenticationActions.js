@@ -71,7 +71,7 @@ export const userLogin = (email, password) => async dispatch => {
   }
 };
 
-export const userRegister = (email, password, name, lastName, nick) => async dispatch => {
+export const userRegister = (email, password, name, lastName) => async dispatch => {
   dispatch(authStart());
 
   try {
@@ -79,8 +79,7 @@ export const userRegister = (email, password, name, lastName, nick) => async dis
       email,
       password,
       name,
-      lastName,
-      nick
+      lastName
     });
     console.log(data);
     dispatch(authSuccess(data.token, data._doc._id));
