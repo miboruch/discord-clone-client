@@ -17,25 +17,6 @@ function App({ isLoggedIn, loading, authenticationCheck }) {
   useEffect(() => {
     authenticationCheck();
   }, []);
-  useEffect(() => {
-    socket.on('connect', () => {
-      socket.emit('user_connected', {
-        socketID: socket.id
-        // username: socket.query.username
-      });
-      console.log(socket);
-      socket.on('load_rooms', data => {
-        console.log(data);
-      });
-      socket.on('load_namespaces', namespaces => {
-        setNamespaces(namespaces);
-        console.log(namespaces);
-      });
-      socket.on('namespace_created', namespace => {
-        console.log(namespace);
-      });
-    });
-  }, []);
 
   console.log(namespaces);
 
