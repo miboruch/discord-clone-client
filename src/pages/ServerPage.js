@@ -1,13 +1,20 @@
 import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
-import {Switch, Route} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { API_URL } from '../utils/helpers';
 import { fetchNamespacesSuccess } from '../actions/projectDataActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
-import RoomsMainPage from '../components/molecules/RoomsMainPage/RoomsMainPage';
+import RoomsMainPage from './RoomsMainPage';
+import ChatPage from './ChatPage';
 
-const LandingPage = ({ fetchNamespaces, token }) => {
+const StyledWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+`;
+
+const ServerPage = ({ fetchNamespaces, token }) => {
   const socket = io(API_URL, {
     query: {
       token
@@ -35,12 +42,14 @@ const LandingPage = ({ fetchNamespaces, token }) => {
   }, []);
 
   return (
-    <NamespaceTemplate>
-      <Switch>
-        <Route path={'/server/:id'} component={RoomsMainPage}/>
-      </Switch>
-      <h1>asdawd</h1>
-    </NamespaceTemplate>
+    <StyledWrapper>
+      <NamespaceTemplate>
+        <Switch>
+          <Route path={'/server/:id'} component={RoomsMainPage} />
+          <Route path={'/room/:id'} component={ChatPage} />
+        </Switch>
+      </NamespaceTemplate>
+    </StyledWrapper>
   );
 };
 
@@ -54,4 +63,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ServerPage);

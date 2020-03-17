@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import { connect } from 'react-redux';
 import { API_URL } from './utils/helpers';
 import AuthPage from './pages/AuthPage';
-import LandingPage from './pages/LandingPage';
+import LandingPage from './pages/ServerPage';
 import { authenticationCheck } from './actions/authenticationActions';
 
 const socket = io(API_URL);

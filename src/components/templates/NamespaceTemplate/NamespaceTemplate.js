@@ -7,15 +7,14 @@ const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   position: relative;
+  display: flex;
+  flex-direction: row;
 `;
 
 const StyledNavbar = styled.nav`
   width: 125px;
   height: 100vh;
   background-color: ${({ theme }) => theme.color.namespacesPanel};
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -35,9 +34,8 @@ const StyledNavbar = styled.nav`
 `;
 
 const ContentWrapper = styled.div`
-  ${({ theme }) => theme.mq.standard} {
-    margin-left: 125px;
-  }
+  width: calc(100% - 125px);
+  height: 100%;
 `;
 
 const StyledNamespaceBox = styled.div`
@@ -52,6 +50,18 @@ const StyledParagraph = styled.p`
   color: #fff;
   font-size: 12px;
   padding: 2rem 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    width: 10px;
+    height: 1px;
+    background-color: #fff;
+    transform: translate(-50%, -30%);
+  }
 `;
 
 const NamespaceTemplate = ({ children, namespaces }) => {
@@ -76,7 +86,7 @@ const NamespaceTemplate = ({ children, namespaces }) => {
           <p>Nothing to show</p>
         )}
       </StyledNavbar>
-      <ContentWrapper>{children}</ContentWrapper>
+      <ContentWrapper>{children || <p>Select server</p>}</ContentWrapper>
     </StyledWrapper>
   );
 };
