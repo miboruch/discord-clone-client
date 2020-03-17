@@ -28,11 +28,13 @@ function App({ isLoggedIn, loading, authenticationCheck }) {
         ) : (
           <Switch>
             {isLoggedIn ? (
-              <Route path={'/'} component={LandingPage} />
+              <>
+                <Route path={'/'} component={LandingPage} />
+              </>
             ) : (
               <>
-                <Redirect exact from={'/'} to={'/login'} />
                 <Route path={'/'} component={AuthPage} />
+                <Redirect exact from={'/'} to={'/login'} />
               </>
             )}
           </Switch>

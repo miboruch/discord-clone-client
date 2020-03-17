@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
+import {Switch, Route} from 'react-router-dom';
 import { API_URL } from '../utils/helpers';
 import { fetchNamespacesSuccess } from '../actions/projectDataActions';
+import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
+import RoomsMainPage from '../components/molecules/RoomsMainPage/RoomsMainPage';
 
 const LandingPage = ({ fetchNamespaces, token }) => {
   const socket = io(API_URL, {
@@ -32,9 +35,12 @@ const LandingPage = ({ fetchNamespaces, token }) => {
   }, []);
 
   return (
-    <div>
-      <h1>Landing page</h1>
-    </div>
+    <NamespaceTemplate>
+      <Switch>
+        <Route path={'/server/:id'} component={RoomsMainPage}/>
+      </Switch>
+      <h1>asdawd</h1>
+    </NamespaceTemplate>
   );
 };
 
