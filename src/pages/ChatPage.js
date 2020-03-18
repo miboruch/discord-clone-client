@@ -15,10 +15,10 @@ const StyledParagraph = styled.p`
   color: #000;
 `;
 
-const ChatPage = () => {
+const ChatPage = ({match}) => {
   return (
     <StyledWrapper>
-      <StyledParagraph>welcome on the main chat page</StyledParagraph>
+      <StyledParagraph>welcome on the main chat page {match.params.id}</StyledParagraph>
     </StyledWrapper>
   );
 };

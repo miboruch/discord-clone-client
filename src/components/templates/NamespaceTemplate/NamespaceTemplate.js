@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import RoomsTemplate from '../RoomsTemplate/RoomsTemplate';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -11,18 +12,12 @@ const StyledWrapper = styled.div`
   flex-direction: row;
 `;
 
-const StyledNavbar = styled.nav`
-  width: 125px;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.color.namespacesPanel};
+const NavbarWrapper = styled.div`
   display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding: 2rem 0;
+  flex-direction: row;
   transform: translateX(-85%);
   transition: transform 0.5s ease;
-  z-index: 10;
-  border-right: 2px solid rgba(0, 0, 0, 0.5);
+  z-index: 15;
 
   &:hover {
     transform: translateX(0);
@@ -33,9 +28,28 @@ const StyledNavbar = styled.nav`
   }
 `;
 
+const StyledNavbar = styled.nav`
+  width: 125px;
+  height: 100vh;
+  background-color: ${({ theme }) => theme.color.namespacesPanel};
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem 0;
+  z-index: 10;
+  border-right: 2px solid rgba(0, 0, 0, 0.5);
+`;
+
 const ContentWrapper = styled.div`
-  width: calc(100% - 125px);
+  width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  ${({ theme }) => theme.mq.standard} {
+    width: calc(100% - 125px);
+  }
 `;
 
 const StyledNamespaceBox = styled.div`
@@ -67,25 +81,28 @@ const StyledParagraph = styled.p`
 const NamespaceTemplate = ({ children, namespaces }) => {
   return (
     <StyledWrapper>
-      <StyledNavbar>
-        {namespaces.joined || namespaces.created ? (
-          <>
-            <StyledParagraph>Your servers:</StyledParagraph>
-            {namespaces.created.map(item => (
-              <Link to={`/server/${item._id}`}>
+      <NavbarWrapper>
+        <StyledNavbar>
+          {namespaces.joined || namespaces.created ? (
+            <>
+              <StyledParagraph>Your servers:</StyledParagraph>
+              {namespaces.created.map(item => (
+                <Link to={`/server/${item._id}`}>
+                  <StyledNamespaceBox>{item.name}</StyledNamespaceBox>
+                </Link>
+              ))}
+              <StyledParagraph>Joined servers:</StyledParagraph>
+              {namespaces.joined.map(item => (
                 <StyledNamespaceBox>{item.name}</StyledNamespaceBox>
-              </Link>
-            ))}
-            <StyledParagraph>Joined servers:</StyledParagraph>
-            {namespaces.joined.map(item => (
-              <StyledNamespaceBox>{item.name}</StyledNamespaceBox>
-            ))}
-            <StyledNamespaceBox isAddNew={true}>Add new</StyledNamespaceBox>
-          </>
-        ) : (
-          <p>Nothing to show</p>
-        )}
-      </StyledNavbar>
+              ))}
+              <StyledNamespaceBox isAddNew={true}>Add new</StyledNamespaceBox>
+            </>
+          ) : (
+            <p>Nothing to show</p>
+          )}
+        </StyledNavbar>
+        <RoomsTemplate />
+      </NavbarWrapper>
       <ContentWrapper>{children || <p>Select server</p>}</ContentWrapper>
     </StyledWrapper>
   );

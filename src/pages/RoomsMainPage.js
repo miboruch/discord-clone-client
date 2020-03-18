@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -9,19 +8,6 @@ const StyledWrapper = styled.div`
   display: flex;
   flex-direction: row;
   overflow: hidden;
-`;
-
-const RoomsNavbar = styled.div`
-  width: 150px;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.color.roomsPanel};
-  color: #fff;
-  padding-left: 3rem;
-  transition: all 1s ease;
-
-  ${({ theme }) => theme.mq.standard} {
-    width: 250px;
-  }
 `;
 
 const ContentWrapper = styled.div`
@@ -37,11 +23,6 @@ const ContentWrapper = styled.div`
 const RoomsMainPage = () => {
   return (
     <StyledWrapper>
-      <RoomsNavbar>
-        <Link to={'/room/123'}>
-          <p>hello</p>
-        </Link>
-      </RoomsNavbar>
       <ContentWrapper>Choose room</ContentWrapper>
     </StyledWrapper>
   );
