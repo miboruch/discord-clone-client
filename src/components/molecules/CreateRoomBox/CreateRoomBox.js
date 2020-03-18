@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import gsap from 'gsap';
 import { connect } from 'react-redux';
 import CloseButton from '../../atoms/CloseButton/CloseButton';
 import { closeCreateRoom } from '../../../actions/toggleActions';
+import ToggleCheckbox from '../../atoms/ToggleCheckbox/ToggleCheckbox';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -17,10 +19,6 @@ const StyledWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  backdrop-filter: blur(2px);
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transition: all 0.3s ease;
 `;
 
 const StyledBox = styled.div`
@@ -47,12 +45,38 @@ const CloseButtonWrapper = styled.div`
 `;
 
 const CreateRoomBox = ({ closeCreateRoomBox, isCreateRoomOpen }) => {
+  const [isCreatedRoomPrivate, setCreatedRoomPrivate] = useState(false);
+  const [tl] = useState(gsap.timeline({ defaults: { ease: 'power3.inOut' } }));
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    const wrapperElement = wrapperRef.current;
+    const [boxElement] = wrapperElement.children;
+
+    gsap.set([wrapperElement, boxElement], { autoAlpha: 0 });
+
+    tl.to(wrapperElement, { autoAlpha: 1, duration: 0.8 }).fromTo(
+      boxElement,
+      { x: '-=50' },
+      { x: 0, autoAlpha: 1, duration: 0.7 }
+    );
+  }, []);
+
+  useEffect(() => {
+    isCreateRoomOpen ? tl.play() : tl.reverse();
+  }, [isCreateRoomOpen]);
+
+  const toggleRoomPrivacy = () => {
+    setCreatedRoomPrivate(!isCreatedRoomPrivate);
+  };
+
   return (
-    <StyledWrapper isOpen={isCreateRoomOpen}>
+    <StyledWrapper ref={wrapperRef}>
       <StyledBox>
         <CloseButtonWrapper>
           <CloseButton setBoxState={closeCreateRoomBox} />
         </CloseButtonWrapper>
+        <ToggleCheckbox isChecked={isCreatedRoomPrivate} toggleFunction={toggleRoomPrivacy} />
       </StyledBox>
     </StyledWrapper>
   );

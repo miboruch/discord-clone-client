@@ -29,3 +29,12 @@ export const RegisterSchema = Yup.object().shape({
     .min(2, 'Last name too short - 2 chars minimum')
     .required('Last name is required')
 });
+
+export const CreateRoomSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, 'Room name is too short - 2 chars minimum')
+    .required('Room name is required'),
+  isPrivate: Yup.bool(),
+  password: Yup.string()
+    .min(3, 'Password is too short - 3 chars minimum')
+});
