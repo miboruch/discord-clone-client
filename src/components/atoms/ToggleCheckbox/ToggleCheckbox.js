@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { toggleDarkTheme } from '../../../actions/toggleActions';
 
@@ -63,25 +64,20 @@ const StyledSpan = styled.span`
   font-weight: bold;
 `;
 
-const ToggleCheckbox = ({ toggleDarkTheme, isDarkTheme }) => {
+const ToggleCheckbox = ({ toggleFunction, isChecked }) => {
   return (
     <StyledWrapper>
       <StyledParagraph>
         Dark theme: <StyledSpan>OFF</StyledSpan>
       </StyledParagraph>
-      <StyledInput type='checkbox' onChange={() => toggleDarkTheme()} checked={isDarkTheme} />
+      <StyledInput type='checkbox' onChange={() => toggleFunction()} checked={isChecked} />
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ toggleReducer: { isDarkTheme } }) => {
-  return { isDarkTheme };
+ToggleCheckbox.propTypes = {
+  toggleFunction: PropTypes.func.isRequired,
+  isChecked: PropTypes.bool.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleDarkTheme: () => dispatch(toggleDarkTheme())
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ToggleCheckbox);
+export default ToggleCheckbox;

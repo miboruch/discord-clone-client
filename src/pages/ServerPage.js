@@ -8,6 +8,7 @@ import { fetchNamespacesSuccess } from '../actions/projectDataActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
 import RoomsMainPage from './RoomsMainPage';
 import ChatPage from './ChatPage';
+import CreateRoomBox from '../components/molecules/CreateRoomBox/CreateRoomBox';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -43,6 +44,7 @@ const ServerPage = ({ fetchNamespaces, token }) => {
 
   return (
     <StyledWrapper>
+      <CreateRoomBox />
       <NamespaceTemplate>
         <Switch>
           <Route path={'/server/:id'} component={RoomsMainPage} />

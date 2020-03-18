@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { openCreateRoom } from '../../../actions/toggleActions';
 
 const RoomsNavbar = styled.div`
   width: 150px;
@@ -60,7 +62,14 @@ const StyledParagraph = styled.p`
   }
 `;
 
-const RoomsTemplate = () => {
+const StyledCreateParagraph = styled(StyledParagraph)`
+  color: ${({ theme }) => theme.color.darkThemeFontColor};
+  letter-spacing: 1px;
+  font-weight: bold;
+  cursor: pointer;
+`;
+
+const RoomsTemplate = ({ openCreateRoomBox }) => {
   /* Fetch rooms - redux */
   return (
     <RoomsNavbar>
@@ -69,11 +78,15 @@ const RoomsTemplate = () => {
           <p>hello</p>
         </StyledLink>
       </RoomWrapper>
-      <StyledLink>
-        <StyledParagraph>Create new room</StyledParagraph>
-      </StyledLink>
+      <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
     </RoomsNavbar>
   );
 };
 
-export default RoomsTemplate;
+const mapDispatchToProps = dispatch => {
+  return {
+    openCreateRoomBox: () => dispatch(openCreateRoom())
+  };
+};
+
+export default connect(null, mapDispatchToProps)(RoomsTemplate);

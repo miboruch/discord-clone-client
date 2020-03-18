@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { theme } from '../../style/theme';
 import GlobalStyle from '../../style/GlobalStyle';
 import SEO from '../SEO';
+import { connect } from 'react-redux';
 import ToggleCheckbox from '../atoms/ToggleCheckbox/ToggleCheckbox';
+import { toggleDarkTheme } from '../../actions/toggleActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -18,14 +20,14 @@ const CheckBoxWrapper = styled.div`
 `;
 
 /* Layout provides all HOC, ThemeProviders and so on... */
-const Layout = ({ children }) => {
+const Layout = ({ children, toggleDarkTheme, isDarkTheme }) => {
   return (
     <ThemeProvider theme={theme}>
       <SEO />
       <GlobalStyle />
       <StyledWrapper>
         <CheckBoxWrapper>
-          <ToggleCheckbox />
+          <ToggleCheckbox toggleFunction={toggleDarkTheme} isChecked={isDarkTheme} />
         </CheckBoxWrapper>
         {children}
       </StyledWrapper>
@@ -37,4 +39,14 @@ Layout.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired
 };
 
-export default Layout;
+const mapStateToProps = ({ toggleReducer: { isDarkTheme } }) => {
+  return { isDarkTheme };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleDarkTheme: () => dispatch(toggleDarkTheme())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);
