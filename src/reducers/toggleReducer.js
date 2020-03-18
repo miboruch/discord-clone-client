@@ -3,11 +3,12 @@ export const CLOSE_CREATE_NAMESPACE = 'CLOSE_CREATE_NAMESPACE';
 export const OPEN_CREATE_ROOM = 'OPEN_CREATE_ROOM';
 export const CLOSE_CREATE_ROOM = 'CLOSE_CREATE_ROOM';
 export const TOGGLE_DARK_THEME = 'TOGGLE_DARK_THEME';
+export const SET_DARK_THEME = 'SET_DARK_THEME';
 
 const initialState = {
   isCreateNamespaceOpen: false,
   isCreateRoomOpen: false,
-  isDarkTheme: false
+  isDarkTheme: true
 };
 
 export const toggleReducer = (state = initialState, action) => {
@@ -36,6 +37,11 @@ export const toggleReducer = (state = initialState, action) => {
       return {
         ...state,
         isDarkTheme: !state.isDarkTheme
+      };
+    case SET_DARK_THEME:
+      return {
+        ...state,
+        isDarkTheme: action.payload
       };
     default:
       return state;

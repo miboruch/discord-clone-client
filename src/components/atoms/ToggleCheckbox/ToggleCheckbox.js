@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { toggleDarkTheme } from '../../../actions/toggleActions';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -61,15 +63,25 @@ const StyledSpan = styled.span`
   font-weight: bold;
 `;
 
-const ToggleCheckbox = () => {
+const ToggleCheckbox = ({ toggleDarkTheme, isDarkTheme }) => {
   return (
     <StyledWrapper>
       <StyledParagraph>
         Dark theme: <StyledSpan>OFF</StyledSpan>
       </StyledParagraph>
-      <StyledInput type='checkbox' />
+      <StyledInput type='checkbox' onChange={() => toggleDarkTheme()} checked={isDarkTheme} />
     </StyledWrapper>
   );
 };
 
-export default ToggleCheckbox;
+const mapStateToProps = ({ toggleReducer: { isDarkTheme } }) => {
+  return { isDarkTheme };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleDarkTheme: () => dispatch(toggleDarkTheme())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ToggleCheckbox);

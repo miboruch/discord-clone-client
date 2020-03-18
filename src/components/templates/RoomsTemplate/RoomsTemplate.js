@@ -7,17 +7,27 @@ const RoomsNavbar = styled.div`
   height: 100vh;
   background-color: ${({ theme }) => theme.color.roomsPanel};
   color: #fff;
-  padding-left: 3rem;
   transition: all 1s ease;
   position: relative;
+  border-right: 2px solid rgba(23, 23, 23, 0.3);
 
   ${({ theme }) => theme.mq.standard} {
     width: 250px;
   }
 `;
 
+const RoomWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2rem;
+`;
+
 const StyledLink = styled(Link)`
-  color: #fff;
+  color: ${({ theme }) => theme.color.darkThemeFontColor};
+  letter-spacing: 1px;
+  font-weight: bold;
 `;
 
 const StyledParagraph = styled.p`
@@ -54,9 +64,11 @@ const RoomsTemplate = () => {
   /* Fetch rooms - redux */
   return (
     <RoomsNavbar>
-      <StyledLink to={'/room/123'}>
-        <p>hello</p>
-      </StyledLink>
+      <RoomWrapper>
+        <StyledLink to={'/room/123'}>
+          <p>hello</p>
+        </StyledLink>
+      </RoomWrapper>
       <StyledLink>
         <StyledParagraph>Create new room</StyledParagraph>
       </StyledLink>

@@ -6,24 +6,18 @@ const StyledWrapper = styled.div`
   min-height: 100vh;
   position: relative;
   display: flex;
-  flex-direction: row;
-  overflow: hidden;
-`;
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: #f5f5f5;
-  display: flex;
   justify-content: center;
   align-items: center;
-  z-index: -1;
+  flex-direction: row;
+  overflow: hidden;
+  background: transparent;
 `;
 
 const RoomsMainPage = () => {
+  /* here namespace connection - socket - namespace */
   return (
     <StyledWrapper>
-      <ContentWrapper>Choose room</ContentWrapper>
+      <p>Choose room</p>
     </StyledWrapper>
   );
 };

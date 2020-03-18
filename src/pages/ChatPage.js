@@ -8,11 +8,11 @@ const StyledWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #f5f5f5;
+  background-color: transparent;
 `;
 
 const StyledParagraph = styled.p`
-  color: #000;
+  color: inherit;
 `;
 
 const ChatPage = ({match}) => {

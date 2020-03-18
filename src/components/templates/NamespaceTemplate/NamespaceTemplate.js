@@ -37,15 +37,20 @@ const StyledNavbar = styled.nav`
   flex-direction: column;
   padding: 2rem 0;
   z-index: 10;
-  border-right: 2px solid rgba(0, 0, 0, 0.5);
+  border-right: 2px solid rgba(14, 14, 14, 0.5);
 `;
 
+/* Main wrapper - it contains main chat page */
 const ContentWrapper = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   right: 0;
+  background-color: ${({ theme, isDarkTheme }) =>
+    isDarkTheme ? theme.color.backgroundDark : theme.color.backgroundLight};
+  color: ${({ isDarkTheme }) => (isDarkTheme ? '#fff' : '#000')};
+  transition: all 0.3s ease;
 
   ${({ theme }) => theme.mq.standard} {
     width: calc(100% - 125px);
@@ -78,7 +83,7 @@ const StyledParagraph = styled.p`
   }
 `;
 
-const NamespaceTemplate = ({ children, namespaces }) => {
+const NamespaceTemplate = ({ children, namespaces, isDarkTheme }) => {
   return (
     <StyledWrapper>
       <NavbarWrapper>
@@ -103,13 +108,13 @@ const NamespaceTemplate = ({ children, namespaces }) => {
         </StyledNavbar>
         <RoomsTemplate />
       </NavbarWrapper>
-      <ContentWrapper>{children || <p>Select server</p>}</ContentWrapper>
+      <ContentWrapper isDarkTheme={isDarkTheme}>{children}</ContentWrapper>
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ projectDataReducer: { namespaces } }) => {
-  return { namespaces };
+const mapStateToProps = ({ projectDataReducer: { namespaces }, toggleReducer: { isDarkTheme } }) => {
+  return { namespaces, isDarkTheme };
 };
 
 export default connect(mapStateToProps)(NamespaceTemplate);
