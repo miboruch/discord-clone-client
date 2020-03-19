@@ -40,6 +40,7 @@ const CloseButtonWrapper = styled.div`
   position: absolute;
   top: 1rem;
   right: 1rem;
+  z-index: 900;
 `;
 
 const ModalBox = ({ closeFunction, isOpen, children }) => {

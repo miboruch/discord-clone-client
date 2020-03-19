@@ -10,7 +10,13 @@ const CreateNamespace = ({ isCreateNamespaceOpen, closeCreateNamespace }) => {
     <ModalBox isOpen={isCreateNamespaceOpen} closeFunction={closeCreateNamespace}>
       <NamespaceMultiStep.Wizard>
         <NamespaceMultiStep.Page pageIndex={0}>
-          <h1>hello</h1>
+          <NamespaceMultiStep.Controls/>
+        </NamespaceMultiStep.Page>
+        <NamespaceMultiStep.Page pageIndex={1}>
+          <h1>Page 1</h1>
+        </NamespaceMultiStep.Page>
+        <NamespaceMultiStep.Page pageIndex={2}>
+          <h1>Page 2</h1>
         </NamespaceMultiStep.Page>
       </NamespaceMultiStep.Wizard>
     </ModalBox>
