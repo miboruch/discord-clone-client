@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import { Form, Formik } from 'formik';
 import { CreateRoomSchema } from '../../../utils/validationSchema';
 import FormInput from '../FormInput/FormInput';
 import ToggleCheckbox from '../../atoms/ToggleCheckbox/ToggleCheckbox';
 import { StyledForm, StyledButton } from '../AuthContent/styles';
+import MainSocketContext from '../../../providers/mainSocketContext';
 
 const CheckboxWrapper = styled.div`
   margin-bottom: 2rem;
@@ -17,7 +19,9 @@ const StyledParagraph = styled.p`
   margin-left: 2rem;
 `;
 
-const CreateNamespaceForm = () => {
+const CreateNamespaceForm = ({ userID }) => {
+  const { socket } = useContext(MainSocketContext);
+  console.log(socket);
   return (
     <Formik
       initialValues={{
@@ -25,7 +29,10 @@ const CreateNamespaceForm = () => {
         isPrivate: false,
         password: ''
       }}
-      onSubmit={({ name, isPrivate, password }) => console.log(name, isPrivate, password)}
+      onSubmit={({ name, isPrivate, password }) => {
+        console.log('SUBMITED');
+        socket.emit('create_namespace', { name, ownerID: userID, isPrivate, password });
+      }}
       validationSchema={CreateRoomSchema}
     >
       {({ handleChange, handleBlur, errors, values, setFieldValue }) => (
@@ -62,4 +69,8 @@ const CreateNamespaceForm = () => {
   );
 };
 
-export default CreateNamespaceForm;
+const mapStateToProps = ({ authenticationReducer: { userID } }) => {
+  return { userID };
+};
+
+export default connect(mapStateToProps)(CreateNamespaceForm);

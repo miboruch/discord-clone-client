@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { API_URL } from '../utils/helpers';
-import { fetchNamespacesSuccess } from '../actions/projectDataActions';
+import { addCreatedNamespace, fetchNamespacesSuccess } from '../actions/projectDataActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
 import RoomsMainPage from './RoomsMainPage';
 import ChatPage from './ChatPage';
@@ -12,6 +12,7 @@ import ModalBox from '../components/molecules/ModalBox/ModalBox';
 import ToggleCheckbox from '../components/atoms/ToggleCheckbox/ToggleCheckbox';
 import { closeCreateRoom } from '../actions/toggleActions';
 import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespace';
+import MainSocketContext from '../providers/mainSocketContext';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -26,8 +27,7 @@ const StyledSpan = styled.span`
   font-weight: bold;
 `;
 
-
-const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomBox }) => {
+const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomBox, addCreatedNamespace }) => {
   const [isCreatedRoomPrivate, setCreatedRoomPrivate] = useState(false);
 
   const socket = io(API_URL, {
@@ -52,6 +52,7 @@ const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomB
       });
       socket.on('namespace_created', namespace => {
         console.log(namespace);
+        addCreatedNamespace(namespace);
       });
     });
   }, []);
@@ -61,6 +62,7 @@ const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomB
   };
 
   return (
+    <MainSocketContext.Provider value={{socket}}>
     <StyledWrapper>
       <ModalBox closeFunction={closeCreateRoomBox} isOpen={isCreateRoomOpen}>
         <ToggleCheckbox isChecked={isCreatedRoomPrivate} toggleFunction={toggleRoomPrivacy}>
@@ -77,6 +79,7 @@ const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomB
         </Switch>
       </NamespaceTemplate>
     </StyledWrapper>
+    </MainSocketContext.Provider>
   );
 };
 
@@ -87,7 +90,8 @@ const mapStateToProps = ({ authenticationReducer: { token }, toggleReducer: { is
 const mapDispatchToProps = dispatch => {
   return {
     fetchNamespaces: namespaces => dispatch(fetchNamespacesSuccess(namespaces)),
-    closeCreateRoomBox: () => dispatch(closeCreateRoom())
+    closeCreateRoomBox: () => dispatch(closeCreateRoom()),
+    addCreatedNamespace: namespace => dispatch(addCreatedNamespace(namespace))
   };
 };
 

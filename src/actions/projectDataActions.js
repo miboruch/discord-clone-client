@@ -3,7 +3,8 @@ import {
   FETCH_NAMESPACES_SUCCESS,
   FETCH_ROOMS_START,
   FETCH_ROOMS_SUCCESS,
-  ADD_NAMESPACE,
+  ADD_CREATED_NAMESPACE,
+  ADD_JOINED_NAMESPACE,
   REMOVE_NAMESPACE,
   ADD_ROOM,
   REMOVE_ROOM
@@ -35,9 +36,16 @@ export const fetchRoomsSuccess = rooms => {
   };
 };
 
-export const addNamespace = namespace => {
+export const addCreatedNamespace = namespace => {
   return {
-    type: ADD_NAMESPACE,
+    type: ADD_CREATED_NAMESPACE,
+    payload: namespace
+  };
+};
+
+export const addJoinedNamespace = namespace => {
+  return {
+    type: ADD_CREATED_NAMESPACE,
     payload: namespace
   };
 };

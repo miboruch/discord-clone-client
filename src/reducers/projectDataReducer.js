@@ -2,13 +2,17 @@ export const FETCH_NAMESPACES_START = 'FETCH_NAMESPACES_START';
 export const FETCH_NAMESPACES_SUCCESS = 'FETCH_NAMESPACES_SUCCESS';
 export const FETCH_ROOMS_START = 'FETCH_ROOMS_START';
 export const FETCH_ROOMS_SUCCESS = 'FETCH_ROOMS_SUCCESS';
-export const ADD_NAMESPACE = 'ADD_NAMESPACE';
+export const ADD_CREATED_NAMESPACE = 'ADD_CREATED_NAMESPACE';
+export const ADD_JOINED_NAMESPACE = 'ADD_JOINED_NAMESPACE';
 export const REMOVE_NAMESPACE = 'REMOVE_NAMESPACE';
 export const ADD_ROOM = 'ADD_ROOM';
 export const REMOVE_ROOM = 'REMOVE_ROOM';
 
 const initialState = {
-  namespaces: [],
+  namespaces: {
+    joined: [],
+    created: []
+  },
   namespacesLoading: false,
   rooms: [],
   roomsLoading: false
@@ -37,10 +41,15 @@ export const projectDataReducer = (state = initialState, action) => {
         ...state,
         rooms: action.payload
       };
-    case ADD_NAMESPACE:
+    case ADD_CREATED_NAMESPACE:
       return {
         ...state,
-        namespaces: [...state.namespaces, action.payload]
+        namespaces: { joined: [...state.namespaces.joined], created: [...state.namespaces.created, action.payload] }
+      };
+    case ADD_JOINED_NAMESPACE:
+      return {
+        ...state,
+        namespaces: { joined: [...state.namespaces.joined, action.payload], created: [...state.namespaces.created] }
       };
     case REMOVE_NAMESPACE:
       return {
