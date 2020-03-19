@@ -11,6 +11,16 @@ export const StyledWrapper = styled.div`
   flex-direction: row;
 `;
 
+export const StyledContentWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+`;
+
 export const StyledJoinSection = styled.section`
   width: 40%;
   height: 60%;
@@ -33,7 +43,7 @@ export const StyledJoinSection = styled.section`
 `;
 
 export const StyledCreateSection = styled(StyledJoinSection)`
-  background-color: lightgreen;
+  background-color: #46cf94;
   display: flex;
   justify-content: center;
   align-items: center;

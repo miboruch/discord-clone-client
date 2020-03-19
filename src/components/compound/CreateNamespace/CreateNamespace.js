@@ -1,22 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as NamespaceMultiStep from './NamespaceMultiStep';
+import * as NamespaceMultiStep from './MultiStep/NamespaceMultiStep';
 import { connect } from 'react-redux';
 import { closeCreateNamespace } from '../../../actions/toggleActions';
 import ModalBox from '../../molecules/ModalBox/ModalBox';
+import { StyledHeading } from './styles/multiStepStyles';
 
 const CreateNamespace = ({ isCreateNamespaceOpen, closeCreateNamespace }) => {
   return (
     <ModalBox isOpen={isCreateNamespaceOpen} closeFunction={closeCreateNamespace}>
       <NamespaceMultiStep.Wizard>
         <NamespaceMultiStep.Page pageIndex={0}>
-          <NamespaceMultiStep.Controls/>
+          <NamespaceMultiStep.Controls />
         </NamespaceMultiStep.Page>
         <NamespaceMultiStep.Page pageIndex={1}>
-          <h1>Page 1</h1>
+          <StyledHeading>Page 1</StyledHeading>
         </NamespaceMultiStep.Page>
         <NamespaceMultiStep.Page pageIndex={2}>
-          <h1>Page 2</h1>
+          <StyledHeading>Page 2</StyledHeading>
         </NamespaceMultiStep.Page>
       </NamespaceMultiStep.Wizard>
     </ModalBox>

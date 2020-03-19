@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { toggleDarkTheme } from '../../../actions/toggleActions';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -56,20 +54,10 @@ const StyledInput = styled.input`
   }
 `;
 
-const StyledParagraph = styled.p`
-  font-size: 12px;
-`;
-
-const StyledSpan = styled.span`
-  font-weight: bold;
-`;
-
-const ToggleCheckbox = ({ toggleFunction, isChecked }) => {
+const ToggleCheckbox = ({ toggleFunction, isChecked, children }) => {
   return (
     <StyledWrapper>
-      <StyledParagraph>
-        Dark theme: <StyledSpan>OFF</StyledSpan>
-      </StyledParagraph>
+      {children}
       <StyledInput type='checkbox' onChange={() => toggleFunction()} checked={isChecked} />
     </StyledWrapper>
   );

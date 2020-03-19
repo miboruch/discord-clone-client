@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import RoomsTemplate from '../RoomsTemplate/RoomsTemplate';
 import { openCreateNamespace } from '../../../actions/toggleActions';
+import { ReactComponent as AddIcon } from '../../../assets/icons/add.svg';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -64,6 +65,9 @@ const StyledNamespaceBox = styled.div`
   border-radius: 8px;
   background-color: ${({ isAddNew }) => (isAddNew ? 'rgba(102, 102, 102, 0.6)' : 'rgba(83, 212, 172, 0.7)')};
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledParagraph = styled.p`
@@ -84,6 +88,12 @@ const StyledParagraph = styled.p`
   }
 `;
 
+const StyledAddIcon = styled(AddIcon)`
+  width: 25px;
+  height: 25px;
+  fill: #fff;
+`;
+
 const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamespace }) => {
   return (
     <StyledWrapper>
@@ -102,7 +112,7 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
                 <StyledNamespaceBox>{item.name}</StyledNamespaceBox>
               ))}
               <StyledNamespaceBox isAddNew={true} onClick={() => openCreateNamespace()}>
-                Add new
+                <StyledAddIcon />
               </StyledNamespaceBox>
             </>
           ) : (

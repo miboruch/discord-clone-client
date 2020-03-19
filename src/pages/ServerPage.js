@@ -18,6 +18,15 @@ const StyledWrapper = styled.div`
   height: 100vh;
 `;
 
+const StyledParagraph = styled.p`
+  font-size: 12px;
+`;
+
+const StyledSpan = styled.span`
+  font-weight: bold;
+`;
+
+
 const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomBox }) => {
   const [isCreatedRoomPrivate, setCreatedRoomPrivate] = useState(false);
 
@@ -54,7 +63,11 @@ const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomB
   return (
     <StyledWrapper>
       <ModalBox closeFunction={closeCreateRoomBox} isOpen={isCreateRoomOpen}>
-        <ToggleCheckbox isChecked={isCreatedRoomPrivate} toggleFunction={toggleRoomPrivacy} />
+        <ToggleCheckbox isChecked={isCreatedRoomPrivate} toggleFunction={toggleRoomPrivacy}>
+          <StyledParagraph>
+            Is private: <StyledSpan>{isCreatedRoomPrivate}</StyledSpan>
+          </StyledParagraph>
+        </ToggleCheckbox>
       </ModalBox>
       <CreateNamespace />
       <NamespaceTemplate>
@@ -67,7 +80,7 @@ const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomB
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token }, toggleReducer: { isCreateRoomOpen } }) => {
+const mapStateToProps = ({ authenticationReducer: { token }, toggleReducer: { isCreateRoomOpen, isDarkTheme } }) => {
   return { token, isCreateRoomOpen };
 };
 

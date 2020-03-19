@@ -1,22 +1,25 @@
 import React, { useContext } from 'react';
-import CreateNamespaceContextProvider from './CreateNamespaceContext';
+import CreateNamespaceContextProvider from '../CreateNamespaceContext';
 import PropTypes from 'prop-types';
-import { CreateNamespaceContext } from './CreateNamespaceContext';
+import { CreateNamespaceContext } from '../CreateNamespaceContext';
 import {
   StyledWrapper,
+  StyledContentWrapper,
   StyledJoinSection,
   StyledCreateSection,
   StyledCreateIcon,
   StyledJoinIcon,
   StyledHeading,
   StyledParagraph
-} from './styles/multiStepStyles';
+} from '../styles/multiStepStyles';
 
 const Page = ({ children, pageIndex }) => {
   const { currentPage } = useContext(CreateNamespaceContext);
-  return currentPage === pageIndex ? children : null;
+
+  return currentPage === pageIndex ? <StyledContentWrapper>{children}</StyledContentWrapper> : null;
 };
 
+/* Choose between join and create server */
 const Controls = () => {
   const { currentPage, changePage } = useContext(CreateNamespaceContext);
 
