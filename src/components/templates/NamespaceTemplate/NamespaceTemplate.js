@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import RoomsTemplate from '../RoomsTemplate/RoomsTemplate';
+import { openCreateNamespace } from '../../../actions/toggleActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -83,7 +84,7 @@ const StyledParagraph = styled.p`
   }
 `;
 
-const NamespaceTemplate = ({ children, namespaces, isDarkTheme }) => {
+const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamespace }) => {
   return (
     <StyledWrapper>
       <NavbarWrapper>
@@ -100,7 +101,9 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme }) => {
               {namespaces.joined.map(item => (
                 <StyledNamespaceBox>{item.name}</StyledNamespaceBox>
               ))}
-              <StyledNamespaceBox isAddNew={true}>Add new</StyledNamespaceBox>
+              <StyledNamespaceBox isAddNew={true} onClick={() => openCreateNamespace()}>
+                Add new
+              </StyledNamespaceBox>
             </>
           ) : (
             <p>Nothing to show</p>
@@ -117,4 +120,10 @@ const mapStateToProps = ({ projectDataReducer: { namespaces }, toggleReducer: { 
   return { namespaces, isDarkTheme };
 };
 
-export default connect(mapStateToProps)(NamespaceTemplate);
+const mapDispatchToProps = dispatch => {
+  return {
+    openCreateNamespace: () => dispatch(openCreateNamespace())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NamespaceTemplate);

@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import gsap from 'gsap';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import CloseButton from '../../atoms/CloseButton/CloseButton';
-import { closeCreateRoom } from '../../../actions/toggleActions';
-import ToggleCheckbox from '../../atoms/ToggleCheckbox/ToggleCheckbox';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -44,8 +42,7 @@ const CloseButtonWrapper = styled.div`
   right: 1rem;
 `;
 
-const CreateRoomBox = ({ closeCreateRoomBox, isCreateRoomOpen }) => {
-  const [isCreatedRoomPrivate, setCreatedRoomPrivate] = useState(false);
+const ModalBox = ({ closeFunction, isOpen, children }) => {
   const [tl] = useState(gsap.timeline({ defaults: { ease: 'power3.inOut' } }));
   const wrapperRef = useRef(null);
 
@@ -63,33 +60,24 @@ const CreateRoomBox = ({ closeCreateRoomBox, isCreateRoomOpen }) => {
   }, []);
 
   useEffect(() => {
-    isCreateRoomOpen ? tl.play() : tl.reverse();
-  }, [isCreateRoomOpen]);
-
-  const toggleRoomPrivacy = () => {
-    setCreatedRoomPrivate(!isCreatedRoomPrivate);
-  };
+    isOpen ? tl.play() : tl.reverse();
+  }, [isOpen]);
 
   return (
     <StyledWrapper ref={wrapperRef}>
       <StyledBox>
         <CloseButtonWrapper>
-          <CloseButton setBoxState={closeCreateRoomBox} />
+          <CloseButton setBoxState={closeFunction} />
         </CloseButtonWrapper>
-        <ToggleCheckbox isChecked={isCreatedRoomPrivate} toggleFunction={toggleRoomPrivacy} />
+        {children}
       </StyledBox>
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ toggleReducer: { isCreateRoomOpen } }) => {
-  return { isCreateRoomOpen };
+ModalBox.propTypes = {
+  closeFunction: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    closeCreateRoomBox: () => dispatch(closeCreateRoom())
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateRoomBox);
+export default ModalBox;
