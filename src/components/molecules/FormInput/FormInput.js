@@ -26,13 +26,23 @@ const StyledInput = styled.input`
   color: ${({ colorTheme }) => (colorTheme === 'dark' ? '#f5f5f5' : '#1d1d1d')};
   font-family: ${({ theme }) => theme.font.family.futura};
   font-size: 16px;
+  transition: background-color 0.3s ease;
 
   &:focus {
     outline: none;
   }
+  
+  &:disabled {
+    background-color: #ccc;
+  }
+  
+  &::placeholder{
+    letter-spacing: 1px;
+    padding-left: 1rem;
+  }
 `;
 
-const FormInput = ({ labelText, onChange, onBlur, colorTheme, inputType, name }) => {
+const FormInput = ({ labelText, onChange, onBlur, colorTheme, inputType, name, ...props }) => {
   return (
     <StyledInputWrapper>
       {labelText ? (
@@ -40,7 +50,14 @@ const FormInput = ({ labelText, onChange, onBlur, colorTheme, inputType, name })
           {labelText}
         </StyledLabel>
       ) : null}
-      <StyledInput onChange={onChange} onBlur={onBlur} type={inputType} colorTheme={colorTheme} name={name} />
+      <StyledInput
+        onChange={onChange}
+        onBlur={onBlur}
+        type={inputType}
+        colorTheme={colorTheme}
+        name={name}
+        {...props}
+      />
     </StyledInputWrapper>
   );
 };

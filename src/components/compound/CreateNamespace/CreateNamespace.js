@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { closeCreateNamespace } from '../../../actions/toggleActions';
 import ModalBox from '../../molecules/ModalBox/ModalBox';
 import { StyledHeading } from './styles/multiStepStyles';
+import CreateNamespaceForm from '../../molecules/CreateNamespaceForm/CreateNamespaceForm';
 
 const CreateNamespace = ({ isCreateNamespaceOpen, closeCreateNamespace }) => {
   return (
@@ -17,7 +18,8 @@ const CreateNamespace = ({ isCreateNamespaceOpen, closeCreateNamespace }) => {
           <StyledHeading>Page 1</StyledHeading>
         </NamespaceMultiStep.Page>
         <NamespaceMultiStep.Page pageIndex={2}>
-          <StyledHeading>Page 2</StyledHeading>
+          <StyledHeading>Create server</StyledHeading>
+          <CreateNamespaceForm />
         </NamespaceMultiStep.Page>
       </NamespaceMultiStep.Wizard>
     </ModalBox>

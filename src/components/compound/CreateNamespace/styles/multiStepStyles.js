@@ -77,3 +77,12 @@ export const StyledParagraph = styled.p`
   padding-bottom: 2.5rem;
   color: #000;
 `;
+
+export const BackParagraph = styled.p`
+  color: #777;
+  letter-spacing: 1px;
+  position: absolute;
+  bottom: 2rem;
+  left: 4rem;
+  cursor: pointer;
+`;
