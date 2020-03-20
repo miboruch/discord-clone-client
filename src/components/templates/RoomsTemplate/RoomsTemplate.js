@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { openCreateRoom } from '../../../actions/toggleActions';
+import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 
 const RoomsNavbar = styled.div`
-  width: 150px;
+  width: 130px;
   height: 100vh;
   background-color: ${({ theme }) => theme.color.roomsPanel};
   color: #fff;
@@ -72,18 +73,23 @@ const StyledCreateParagraph = styled(StyledParagraph)`
 const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox }) => {
   /* Fetch rooms - redux */
   return (
-    <RoomsNavbar>
-      <RoomWrapper>
-        {currentNamespaceID ? (
-          <StyledLink to={`/server/${currentNamespaceID}?room=123`}>
-            <p>hello</p>
-          </StyledLink>
-        ) : <p>You are not in the server</p>}
-      </RoomWrapper>
-      {namespaces.created.some(item => item._id.includes(currentNamespaceID)) ? (
-        <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
-      ) : null}
-    </RoomsNavbar>
+    <>
+      <CreateRoomBox />
+      <RoomsNavbar>
+        <RoomWrapper>
+          {currentNamespaceID ? (
+            <StyledLink to={`/server/${currentNamespaceID}?room=123`}>
+              <p>hello</p>
+            </StyledLink>
+          ) : (
+            <p>You are not in the server</p>
+          )}
+        </RoomWrapper>
+        {namespaces.created.some(item => item._id.includes(currentNamespaceID)) ? (
+          <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
+        ) : null}
+      </RoomsNavbar>
+    </>
   );
 };
 

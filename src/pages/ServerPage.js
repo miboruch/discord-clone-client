@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { API_URL } from '../utils/helpers';
-import {addCreatedNamespace, fetchNamespacesSuccess} from '../actions/namespaceActions';
+import { addCreatedNamespace, fetchNamespacesSuccess } from '../actions/namespaceActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
-import RoomsMainPage from './RoomsMainPage';
-import ChatPage from './ChatPage';
-import ModalBox from '../components/molecules/ModalBox/ModalBox';
-import ToggleCheckbox from '../components/atoms/ToggleCheckbox/ToggleCheckbox';
+import RoomsMainPage from './ServerContentPage';
 import { closeCreateRoom } from '../actions/toggleActions';
 import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespace';
 import MainSocketContext from '../providers/mainSocketContext';
@@ -19,17 +16,7 @@ const StyledWrapper = styled.div`
   height: 100vh;
 `;
 
-const StyledParagraph = styled.p`
-  font-size: 12px;
-`;
-
-const StyledSpan = styled.span`
-  font-weight: bold;
-`;
-
-const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomBox, addCreatedNamespace }) => {
-  const [isCreatedRoomPrivate, setCreatedRoomPrivate] = useState(false);
-
+const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace }) => {
   const socket = io(`${API_URL}`, {
     query: {
       token
@@ -57,27 +44,16 @@ const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomB
     });
   }, []);
 
-  const toggleRoomPrivacy = () => {
-    setCreatedRoomPrivate(!isCreatedRoomPrivate);
-  };
-
   return (
-    <MainSocketContext.Provider value={{socket}}>
-    <StyledWrapper>
-      <ModalBox closeFunction={closeCreateRoomBox} isOpen={isCreateRoomOpen}>
-        <ToggleCheckbox isChecked={isCreatedRoomPrivate} toggleFunction={toggleRoomPrivacy}>
-          <StyledParagraph>
-            Is private: <StyledSpan>{isCreatedRoomPrivate}</StyledSpan>
-          </StyledParagraph>
-        </ToggleCheckbox>
-      </ModalBox>
-      <CreateNamespace />
-      <NamespaceTemplate>
-        <Switch>
-          <Route path={'/server/:id'} component={RoomsMainPage} />
-        </Switch>
-      </NamespaceTemplate>
-    </StyledWrapper>
+    <MainSocketContext.Provider value={{ socket }}>
+      <StyledWrapper>
+        <CreateNamespace />
+        <NamespaceTemplate>
+          <Switch>
+            <Route path={'/server/:id'} component={RoomsMainPage} />
+          </Switch>
+        </NamespaceTemplate>
+      </StyledWrapper>
     </MainSocketContext.Provider>
   );
 };

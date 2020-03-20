@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import RoomsTemplate from '../RoomsTemplate/RoomsTemplate';
 import { openCreateNamespace } from '../../../actions/toggleActions';
 import NamespaceNavBox from '../../atoms/NamespaceNavBox/NamespaceNavBox';
 import { getFirstLetter } from '../../../utils/helpers';
@@ -109,7 +108,6 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
             <NamespaceNavBox firstLetter={'+'} onClick={() => openCreateNamespace()} backgroundColor={'#888'} />
           </>
         </StyledNavbar>
-        <RoomsTemplate />
       </NavbarWrapper>
       <ContentWrapper isDarkTheme={isDarkTheme}>{children}</ContentWrapper>
     </StyledWrapper>
