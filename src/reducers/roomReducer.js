@@ -2,10 +2,12 @@ export const FETCH_ROOMS_START = 'FETCH_ROOMS_START';
 export const FETCH_ROOMS_SUCCESS = 'FETCH_ROOMS_SUCCESS';
 export const ADD_ROOM = 'ADD_ROOM';
 export const REMOVE_ROOM = 'REMOVE_ROOM';
+export const SET_CURRENT_ROOM = 'SET_CURRENT_ROOM';
 
 const initialState = {
   rooms: [],
-  roomsLoading: false
+  roomsLoading: false,
+  currentRoom: ''
 };
 
 export const roomReducer = (state = initialState, action) => {
@@ -29,6 +31,11 @@ export const roomReducer = (state = initialState, action) => {
       return {
         ...state,
         rooms: [...state.rooms.filter(item => item._id !== action.payload.id)]
+      };
+    case SET_CURRENT_ROOM:
+      return {
+        ...state,
+        currentRoom: action.payload
       };
     default:
       return state;

@@ -69,24 +69,33 @@ const StyledCreateParagraph = styled(StyledParagraph)`
   cursor: pointer;
 `;
 
-const RoomsTemplate = ({ openCreateRoomBox }) => {
+const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox }) => {
   /* Fetch rooms - redux */
   return (
     <RoomsNavbar>
       <RoomWrapper>
-        <StyledLink to={'/room/123'}>
-          <p>hello</p>
-        </StyledLink>
+        {currentNamespaceID ? (
+          <StyledLink to={`/server/${currentNamespaceID}?room=123`}>
+            <p>hello</p>
+          </StyledLink>
+        ) : <p>You are not in the server</p>}
       </RoomWrapper>
-      <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
+      {namespaces.created.some(item => item._id.includes(currentNamespaceID)) ? (
+        <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
+      ) : null}
     </RoomsNavbar>
   );
 };
 
+const mapStateToProps = ({ namespaceReducer: { namespaces, currentNamespaceID } }) => {
+  return { namespaces, currentNamespaceID };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
-    openCreateRoomBox: () => dispatch(openCreateRoom())
+    openCreateRoomBox: () => dispatch(openCreateRoom()),
+    setCurrentRoom: () => dispatch()
   };
 };
 
-export default connect(null, mapDispatchToProps)(RoomsTemplate);
+export default connect(mapStateToProps, mapDispatchToProps)(RoomsTemplate);

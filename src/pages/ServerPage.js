@@ -30,7 +30,7 @@ const StyledSpan = styled.span`
 const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomBox, addCreatedNamespace }) => {
   const [isCreatedRoomPrivate, setCreatedRoomPrivate] = useState(false);
 
-  const socket = io(API_URL, {
+  const socket = io(`${API_URL}`, {
     query: {
       token
     }
@@ -75,7 +75,6 @@ const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomB
       <NamespaceTemplate>
         <Switch>
           <Route path={'/server/:id'} component={RoomsMainPage} />
-          <Route path={'/room/:id'} component={ChatPage} />
         </Switch>
       </NamespaceTemplate>
     </StyledWrapper>

@@ -2,7 +2,8 @@ import {
   FETCH_ROOMS_START,
   FETCH_ROOMS_SUCCESS,
   ADD_ROOM,
-  REMOVE_ROOM
+  REMOVE_ROOM,
+  SET_CURRENT_ROOM
 } from '../reducers/roomReducer';
 
 export const fetchRoomsStart = () => {
@@ -34,3 +35,9 @@ export const removeRoom = roomID => {
   };
 };
 
+export const setCurrentRoom = roomID => {
+  return {
+    type: SET_CURRENT_ROOM,
+    payload: roomID
+  };
+};

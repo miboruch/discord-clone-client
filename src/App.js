@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import io from 'socket.io-client';
 import Layout from './components/templates/Layout';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { API_URL } from './utils/helpers';
 import AuthPage from './pages/AuthPage';
 import LandingPage from './pages/ServerPage';
 import { authenticationCheck } from './actions/authenticationActions';
 
-const socket = io(API_URL);
-
 function App({ isLoggedIn, loading, authenticationCheck }) {
-  const [namespaces, setNamespaces] = useState(null);
-
   useEffect(() => {
     authenticationCheck();
   }, []);
-
-  console.log(namespaces);
 
   return (
     <Router>

@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import RoomsTemplate from '../RoomsTemplate/RoomsTemplate';
 import { openCreateNamespace } from '../../../actions/toggleActions';
-import { ReactComponent as AddIcon } from '../../../assets/icons/add.svg';
 import NamespaceNavBox from '../../atoms/NamespaceNavBox/NamespaceNavBox';
 import { getFirstLetter } from '../../../utils/helpers';
+import { setCurrentNamespace } from '../../../actions/namespaceActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -62,18 +62,6 @@ const ContentWrapper = styled.div`
   }
 `;
 
-const StyledNamespaceBox = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  background-color: ${({ isAddNew }) => (isAddNew ? 'rgba(102, 102, 102, 0.6)' : 'rgba(83, 212, 172, 0.7)')};
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 2rem;
-`;
-
 const StyledParagraph = styled.p`
   color: #fff;
   font-size: 12px;
@@ -92,13 +80,7 @@ const StyledParagraph = styled.p`
   }
 `;
 
-const StyledAddIcon = styled(AddIcon)`
-  width: 25px;
-  height: 25px;
-  fill: #fff;
-`;
-
-const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamespace }) => {
+const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamespace, setCurrentNamespace }) => {
   return (
     <StyledWrapper>
       <NavbarWrapper>
@@ -108,7 +90,7 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
             {namespaces.created && (
               <>
                 {namespaces.created.map(item => (
-                  <Link to={`/server/${item._id}`}>
+                  <Link to={`/server/${item._id}`} onClick={() => setCurrentNamespace(item._id)}>
                     <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
                   </Link>
                 ))}
@@ -118,7 +100,7 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
             {namespaces.join && (
               <>
                 {namespaces.joined.map(item => (
-                  <Link to={`/server/${item._id}`}>
+                  <Link to={`/server/${item._id}`} onClick={() => setCurrentNamespace(item._id)}>
                     <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
                   </Link>
                 ))}
@@ -140,7 +122,8 @@ const mapStateToProps = ({ namespaceReducer: { namespaces }, toggleReducer: { is
 
 const mapDispatchToProps = dispatch => {
   return {
-    openCreateNamespace: () => dispatch(openCreateNamespace())
+    openCreateNamespace: () => dispatch(openCreateNamespace()),
+    setCurrentNamespace: namespaceID => dispatch(setCurrentNamespace(namespaceID))
   };
 };
 

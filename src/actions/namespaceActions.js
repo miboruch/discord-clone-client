@@ -3,7 +3,8 @@ import {
   FETCH_NAMESPACES_SUCCESS,
   ADD_CREATED_NAMESPACE,
   ADD_JOINED_NAMESPACE,
-  REMOVE_NAMESPACE
+  REMOVE_NAMESPACE,
+  SET_CURRENT_NAMESPACE
 } from '../reducers/namespaceReducer';
 
 export const fetchNamespacesStart = () => {
@@ -39,5 +40,12 @@ export const removeNamespace = namespaceID => {
     payload: {
       id: namespaceID
     }
+  };
+};
+
+export const setCurrentNamespace = namespaceID => {
+  return {
+    type: SET_CURRENT_NAMESPACE,
+    payload: namespaceID
   };
 };
