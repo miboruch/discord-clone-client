@@ -1,14 +1,10 @@
 import {
   FETCH_NAMESPACES_START,
   FETCH_NAMESPACES_SUCCESS,
-  FETCH_ROOMS_START,
-  FETCH_ROOMS_SUCCESS,
   ADD_CREATED_NAMESPACE,
   ADD_JOINED_NAMESPACE,
-  REMOVE_NAMESPACE,
-  ADD_ROOM,
-  REMOVE_ROOM
-} from '../reducers/projectDataReducer';
+  REMOVE_NAMESPACE
+} from '../reducers/namespaceReducer';
 
 export const fetchNamespacesStart = () => {
   return {
@@ -23,19 +19,6 @@ export const fetchNamespacesSuccess = namespaces => {
   };
 };
 
-export const fetchRoomsStart = () => {
-  return {
-    type: FETCH_ROOMS_START
-  };
-};
-
-export const fetchRoomsSuccess = rooms => {
-  return {
-    type: FETCH_ROOMS_SUCCESS,
-    payload: rooms
-  };
-};
-
 export const addCreatedNamespace = namespace => {
   return {
     type: ADD_CREATED_NAMESPACE,
@@ -45,7 +28,7 @@ export const addCreatedNamespace = namespace => {
 
 export const addJoinedNamespace = namespace => {
   return {
-    type: ADD_CREATED_NAMESPACE,
+    type: ADD_JOINED_NAMESPACE,
     payload: namespace
   };
 };
@@ -55,22 +38,6 @@ export const removeNamespace = namespaceID => {
     type: REMOVE_NAMESPACE,
     payload: {
       id: namespaceID
-    }
-  };
-};
-
-export const addRoom = room => {
-  return {
-    type: ADD_ROOM,
-    payload: room
-  };
-};
-
-export const removeRoom = roomID => {
-  return {
-    type: REMOVE_ROOM,
-    payload: {
-      id: roomID
     }
   };
 };

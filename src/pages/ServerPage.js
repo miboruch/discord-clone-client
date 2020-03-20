@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { API_URL } from '../utils/helpers';
-import { addCreatedNamespace, fetchNamespacesSuccess } from '../actions/projectDataActions';
+import {addCreatedNamespace, fetchNamespacesSuccess} from '../actions/namespaceActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
 import RoomsMainPage from './RoomsMainPage';
 import ChatPage from './ChatPage';
@@ -83,7 +83,7 @@ const ServerPage = ({ fetchNamespaces, token, isCreateRoomOpen, closeCreateRoomB
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token }, toggleReducer: { isCreateRoomOpen, isDarkTheme } }) => {
+const mapStateToProps = ({ authenticationReducer: { token }, toggleReducer: { isCreateRoomOpen } }) => {
   return { token, isCreateRoomOpen };
 };
 

@@ -1,4 +1,5 @@
-import io from 'socket.io-client';
-
 export const API_URL = 'http://localhost:9000';
-export const socket = io(API_URL);
+
+export const getFirstLetter = text => {
+  return text.charAt(0);
+}

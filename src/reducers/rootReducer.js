@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import { authenticationReducer } from './authenticationReducer';
-import { projectDataReducer } from './projectDataReducer';
 import { toggleReducer } from './toggleReducer';
+import {namespaceReducer} from './namespaceReducer';
+import {roomReducer} from './roomReducer';
 
 export const rootReducer = combineReducers({
   authenticationReducer,
-  projectDataReducer,
-  toggleReducer
+  toggleReducer,
+  namespaceReducer,
+  roomReducer
 });

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Form, Formik } from 'formik';
+import { Formik } from 'formik';
 import { CreateRoomSchema } from '../../../utils/validationSchema';
 import FormInput from '../FormInput/FormInput';
 import ToggleCheckbox from '../../atoms/ToggleCheckbox/ToggleCheckbox';
@@ -21,7 +21,7 @@ const StyledParagraph = styled.p`
 
 const CreateNamespaceForm = ({ userID }) => {
   const { socket } = useContext(MainSocketContext);
-  console.log(socket);
+
   return (
     <Formik
       initialValues={{
@@ -30,7 +30,6 @@ const CreateNamespaceForm = ({ userID }) => {
         password: ''
       }}
       onSubmit={({ name, isPrivate, password }) => {
-        console.log('SUBMITED');
         socket.emit('create_namespace', { name, ownerID: userID, isPrivate, password });
       }}
       validationSchema={CreateRoomSchema}
@@ -57,7 +56,6 @@ const CreateNamespaceForm = ({ userID }) => {
               isChecked={values.isPrivate}
               toggleFunction={() => setFieldValue('isPrivate', !values.isPrivate)}
             />
-            {}
             <StyledParagraph>
               {values.isPrivate ? 'Password will be required while joining to the server' : 'Password is not required'}
             </StyledParagraph>

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import RoomsTemplate from '../RoomsTemplate/RoomsTemplate';
 import { openCreateNamespace } from '../../../actions/toggleActions';
 import { ReactComponent as AddIcon } from '../../../assets/icons/add.svg';
+import NamespaceNavBox from '../../atoms/NamespaceNavBox/NamespaceNavBox';
+import { getFirstLetter } from '../../../utils/helpers';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -40,6 +42,7 @@ const StyledNavbar = styled.nav`
   padding: 2rem 0;
   z-index: 10;
   border-right: 2px solid rgba(14, 14, 14, 0.5);
+  overflow-y: scroll;
 `;
 
 /* Main wrapper - it contains main chat page */
@@ -68,12 +71,13 @@ const StyledNamespaceBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 2rem;
 `;
 
 const StyledParagraph = styled.p`
   color: #fff;
   font-size: 12px;
-  padding: 2rem 0;
+  margin-bottom: 2rem;
   position: relative;
 
   &::before {
@@ -99,25 +103,29 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
     <StyledWrapper>
       <NavbarWrapper>
         <StyledNavbar>
-          {namespaces.joined || namespaces.created ? (
-            <>
-              <StyledParagraph>Your servers:</StyledParagraph>
-              {namespaces.created.map(item => (
-                <Link to={`/server/${item._id}`}>
-                  <StyledNamespaceBox>{item.name}</StyledNamespaceBox>
-                </Link>
-              ))}
-              <StyledParagraph>Joined servers:</StyledParagraph>
-              {namespaces.joined.map(item => (
-                <StyledNamespaceBox>{item.name}</StyledNamespaceBox>
-              ))}
-              <StyledNamespaceBox isAddNew={true} onClick={() => openCreateNamespace()}>
-                <StyledAddIcon />
-              </StyledNamespaceBox>
-            </>
-          ) : (
-            <p>Nothing to show</p>
-          )}
+          <>
+            <StyledParagraph>Your servers:</StyledParagraph>
+            {namespaces.created && (
+              <>
+                {namespaces.created.map(item => (
+                  <Link to={`/server/${item._id}`}>
+                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
+                  </Link>
+                ))}
+              </>
+            )}
+            <StyledParagraph>Joined servers:</StyledParagraph>
+            {namespaces.join && (
+              <>
+                {namespaces.joined.map(item => (
+                  <Link to={`/server/${item._id}`}>
+                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
+                  </Link>
+                ))}
+              </>
+            )}
+            <NamespaceNavBox firstLetter={'+'} onClick={() => openCreateNamespace()} backgroundColor={'#888'} />
+          </>
         </StyledNavbar>
         <RoomsTemplate />
       </NavbarWrapper>
@@ -126,7 +134,7 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
   );
 };
 
-const mapStateToProps = ({ projectDataReducer: { namespaces }, toggleReducer: { isDarkTheme } }) => {
+const mapStateToProps = ({ namespaceReducer: { namespaces }, toggleReducer: { isDarkTheme } }) => {
   return { namespaces, isDarkTheme };
 };
 
