@@ -7,16 +7,11 @@ import SEO from '../SEO';
 import { connect } from 'react-redux';
 import ToggleCheckbox from '../atoms/ToggleCheckbox/ToggleCheckbox';
 import { toggleDarkTheme } from '../../actions/toggleActions';
+import Header from '../molecules/Header/Header';
 
 const StyledWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-`;
-
-const CheckBoxWrapper = styled.div`
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
 `;
 
 /* Layout provides all HOC, ThemeProviders and so on... */
@@ -26,9 +21,7 @@ const Layout = ({ children, toggleDarkTheme, isDarkTheme }) => {
       <SEO />
       <GlobalStyle />
       <StyledWrapper>
-        <CheckBoxWrapper>
-          <ToggleCheckbox toggleFunction={toggleDarkTheme} isChecked={isDarkTheme} />
-        </CheckBoxWrapper>
+        <Header />
         {children}
       </StyledWrapper>
     </ThemeProvider>

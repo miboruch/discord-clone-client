@@ -7,6 +7,7 @@ import queryString from 'query-string';
 import { setCurrentRoom } from '../actions/roomActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
+import NamespaceSocketContext from '../providers/namespaceSocketContext';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -18,6 +19,11 @@ const StyledWrapper = styled.div`
   flex-direction: row;
   overflow: hidden;
   background: transparent;
+  margin-left: 125px;
+
+  ${({ theme }) => theme.mq.tablet} {
+    margin-left: 0;
+  }
 `;
 
 const StyledChatWrapper = styled.section`
@@ -26,12 +32,15 @@ const StyledChatWrapper = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  ${({ theme }) => theme.mq.tablet} {
+    position: static;
+  }
 `;
 
-/* TODO:
-    -create namespace socket context
-    -provider
-*/
 const ServerContentPage = ({ match, location, setCurrentNamespace, setCurrentRoom, token }) => {
   const namespaceSocket = io(`${API_URL}/${match.params.id}`);
 
@@ -54,12 +63,14 @@ const ServerContentPage = ({ match, location, setCurrentNamespace, setCurrentRoo
   }, []);
 
   return (
-    <StyledWrapper>
-      <RoomsTemplate />
-      <StyledChatWrapper>
-        <p>Choose room</p>
-      </StyledChatWrapper>
-    </StyledWrapper>
+    <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
+      <StyledWrapper>
+        <RoomsTemplate />
+        <StyledChatWrapper>
+          <p>Choose room</p>
+        </StyledChatWrapper>
+      </StyledWrapper>
+    </NamespaceSocketContext.Provider>
   );
 };
 

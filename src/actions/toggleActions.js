@@ -4,7 +4,8 @@ import {
   OPEN_CREATE_ROOM,
   CLOSE_CREATE_ROOM,
   TOGGLE_DARK_THEME,
-  SET_DARK_THEME
+  SET_DARK_THEME,
+  TOGGLE_MENU
 } from '../reducers/toggleReducer';
 
 export const openCreateNamespace = () => {
@@ -41,5 +42,11 @@ export const setDarkThemeState = isDark => {
   return {
     type: SET_DARK_THEME,
     payload: isDark
+  };
+};
+
+export const toggleMenu = () => {
+  return {
+    type: TOGGLE_MENU
   };
 };

@@ -5,26 +5,35 @@ import { connect } from 'react-redux';
 import { openCreateRoom } from '../../../actions/toggleActions';
 import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 
-const RoomsNavbar = styled.div`
-  width: 130px;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.color.roomsPanel};
-  color: #fff;
-  transition: all 1s ease;
-  position: relative;
-  border-right: 2px solid rgba(23, 23, 23, 0.3);
-
-  ${({ theme }) => theme.mq.standard} {
-    width: 250px;
-  }
-`;
-
 const RoomWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   padding-top: 2rem;
+`;
+
+const RoomsNavbar = styled.div`
+  width: 230px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 125px;
+  background-color: ${({ theme }) => theme.color.roomsPanel};
+  color: #fff;
+  border-right: 2px solid rgba(23, 23, 23, 0.3);
+  z-index: 800;
+  transform: translateX(${({ isOpen }) => (isOpen ? '0' : '-155%')});
+  transition: all 0.8s ease-in;
+
+  ${({ theme }) => theme.mq.tablet} {
+    transform: translateX(0);
+    position: static;
+  }
+
+  ${({ theme }) => theme.mq.standard} {
+    width: 250px;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -70,12 +79,12 @@ const StyledCreateParagraph = styled(StyledParagraph)`
   cursor: pointer;
 `;
 
-const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox }) => {
+const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen }) => {
   /* Fetch rooms - redux */
   return (
     <>
       <CreateRoomBox />
-      <RoomsNavbar>
+      <RoomsNavbar isOpen={isMenuOpen}>
         <RoomWrapper>
           {currentNamespaceID ? (
             <StyledLink to={`/server/${currentNamespaceID}?room=123`}>
@@ -93,8 +102,8 @@ const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox }) =>
   );
 };
 
-const mapStateToProps = ({ namespaceReducer: { namespaces, currentNamespaceID } }) => {
-  return { namespaces, currentNamespaceID };
+const mapStateToProps = ({ namespaceReducer: { namespaces, currentNamespaceID }, toggleReducer: { isMenuOpen } }) => {
+  return { namespaces, currentNamespaceID, isMenuOpen };
 };
 
 const mapDispatchToProps = dispatch => {

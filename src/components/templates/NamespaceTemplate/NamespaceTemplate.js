@@ -13,35 +13,37 @@ const StyledWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 `;
 
 const NavbarWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  transform: translateX(-85%);
-  transition: transform 0.5s ease;
   z-index: 15;
-
-  &:hover {
-    transform: translateX(0);
-  }
-
-  ${({ theme }) => theme.mq.standard} {
-    transform: translateX(0);
-  }
 `;
 
 const StyledNavbar = styled.nav`
   width: 125px;
   height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: ${({ theme }) => theme.color.namespacesPanel};
   display: flex;
   align-items: center;
   flex-direction: column;
   padding: 2rem 0;
-  z-index: 10;
+  z-index: 800;
   border-right: 2px solid rgba(14, 14, 14, 0.5);
   overflow-y: scroll;
+  transform: translateX(${({ isOpen }) => (isOpen ? '0' : '-100%')});
+  transition: transform 0.6s ease-in;
+
+  ${({ theme }) => theme.mq.tablet} {
+    position: static;
+    overflow-y: scroll;
+    transform: translateX(0);
+  }
 `;
 
 /* Main wrapper - it contains main chat page */
@@ -56,7 +58,7 @@ const ContentWrapper = styled.div`
   color: ${({ isDarkTheme }) => (isDarkTheme ? '#fff' : '#000')};
   transition: all 0.3s ease;
 
-  ${({ theme }) => theme.mq.standard} {
+  ${({ theme }) => theme.mq.tablet} {
     width: calc(100% - 125px);
   }
 `;
@@ -79,11 +81,18 @@ const StyledParagraph = styled.p`
   }
 `;
 
-const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamespace, setCurrentNamespace }) => {
+const NamespaceTemplate = ({
+  children,
+  namespaces,
+  isDarkTheme,
+  openCreateNamespace,
+  setCurrentNamespace,
+  isMenuOpen
+}) => {
   return (
     <StyledWrapper>
       <NavbarWrapper>
-        <StyledNavbar>
+        <StyledNavbar isOpen={isMenuOpen}>
           <>
             <StyledParagraph>Your servers:</StyledParagraph>
             {namespaces.created && (
@@ -114,8 +123,8 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
   );
 };
 
-const mapStateToProps = ({ namespaceReducer: { namespaces }, toggleReducer: { isDarkTheme } }) => {
-  return { namespaces, isDarkTheme };
+const mapStateToProps = ({ namespaceReducer: { namespaces }, toggleReducer: { isDarkTheme, isMenuOpen } }) => {
+  return { namespaces, isDarkTheme, isMenuOpen };
 };
 
 const mapDispatchToProps = dispatch => {
