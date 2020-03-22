@@ -15,6 +15,12 @@ const StyledHeader = styled.header`
   justify-content: center;
   align-items: center;
   z-index: 480;
+
+  ${({ theme }) => theme.mq.tablet} {
+    width: 200px;
+    left: auto;
+    right: 0;
+  }
 `;
 
 const CheckBoxWrapper = styled.div`

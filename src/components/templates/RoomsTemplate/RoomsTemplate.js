@@ -83,21 +83,29 @@ const StyledCreateParagraph = styled(StyledParagraph)`
   cursor: pointer;
 `;
 
-const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen }) => {
+const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen, roomsLoading, rooms }) => {
   /* Fetch rooms - redux */
   return (
     <>
       <CreateRoomBox />
       <RoomsNavbar isOpen={isMenuOpen}>
-        <RoomWrapper>
-          {currentNamespaceID ? (
-            <StyledLink to={`/server/${currentNamespaceID}?room=123`}>
-              <p>hello</p>
-            </StyledLink>
-          ) : (
-            <p>You are not in the server</p>
-          )}
-        </RoomWrapper>
+        {roomsLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <RoomWrapper>
+            {currentNamespaceID ? (
+              <>
+                {rooms.map(item => (
+                  <StyledLink to={`/server/${currentNamespaceID}?room=${item._id}`} key={item._id}>
+                    <p>{item.name}</p>
+                  </StyledLink>
+                ))}
+              </>
+            ) : (
+              <p>You are not in the server</p>
+            )}
+          </RoomWrapper>
+        )}
         {namespaces.created.some(item => item._id.includes(currentNamespaceID)) ? (
           <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
         ) : null}
@@ -106,8 +114,12 @@ const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMe
   );
 };
 
-const mapStateToProps = ({ namespaceReducer: { namespaces, currentNamespaceID }, toggleReducer: { isMenuOpen } }) => {
-  return { namespaces, currentNamespaceID, isMenuOpen };
+const mapStateToProps = ({
+  namespaceReducer: { namespaces, currentNamespaceID },
+  toggleReducer: { isMenuOpen },
+  roomReducer: { roomsLoading, rooms }
+}) => {
+  return { namespaces, currentNamespaceID, isMenuOpen, roomsLoading, rooms };
 };
 
 const mapDispatchToProps = dispatch => {

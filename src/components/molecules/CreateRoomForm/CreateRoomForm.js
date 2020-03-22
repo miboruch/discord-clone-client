@@ -25,16 +25,6 @@ const StyledHeading = styled.h1`
 const CreateRoomForm = () => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
-  useEffect(() => {
-    namespaceSocket.on('test', data => {
-      console.log(data);
-    });
-    namespaceSocket.on('room_created', data => {
-      /* save to the fetched namespace rooms */
-      console.log(data);
-    });
-  }, []);
-
   return (
     <StyledWrapper>
       <StyledHeading>Create new room</StyledHeading>
