@@ -27,6 +27,7 @@ const StyledInput = styled.input`
   font-family: ${({ theme }) => theme.font.family.futura};
   font-size: 16px;
   transition: background-color 0.3s ease;
+  padding-left: 1rem;
 
   &:focus {
     outline: none;
@@ -38,7 +39,7 @@ const StyledInput = styled.input`
   
   &::placeholder{
     letter-spacing: 1px;
-    padding-left: 1rem;
+    padding-left: 0.2rem;
   }
 `;
 

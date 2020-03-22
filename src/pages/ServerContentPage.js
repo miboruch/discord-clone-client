@@ -35,6 +35,7 @@ const StyledChatWrapper = styled.section`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1;
 
   ${({ theme }) => theme.mq.tablet} {
     position: static;
@@ -42,7 +43,11 @@ const StyledChatWrapper = styled.section`
 `;
 
 const ServerContentPage = ({ match, location, setCurrentNamespace, setCurrentRoom, token }) => {
-  const namespaceSocket = io(`${API_URL}/${match.params.id}`);
+  const namespaceSocket = io(`${API_URL}/${match.params.id}`, {
+    query: {
+      token
+    }
+  });
 
   useEffect(() => {
     namespaceSocket.on('connect', () => {
@@ -50,6 +55,7 @@ const ServerContentPage = ({ match, location, setCurrentNamespace, setCurrentRoo
     });
     namespaceSocket.on('load_rooms', data => {
       console.log(data);
+      /* load all rooms */
     });
     namespaceSocket.on('namespace_joined', namespaceID => {
       setCurrentNamespace(namespaceID);

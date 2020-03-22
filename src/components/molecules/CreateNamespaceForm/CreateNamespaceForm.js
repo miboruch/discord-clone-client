@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
-import { CreateRoomSchema } from '../../../utils/validationSchema';
+import { CreateNamespaceSchema } from '../../../utils/validationSchema';
 import FormInput from '../FormInput/FormInput';
 import ToggleCheckbox from '../../atoms/ToggleCheckbox/ToggleCheckbox';
 import { StyledForm, StyledButton } from '../AuthContent/styles';
@@ -32,7 +32,7 @@ const CreateNamespaceForm = ({ userID }) => {
       onSubmit={({ name, isPrivate, password }) => {
         socket.emit('create_namespace', { name, ownerID: userID, isPrivate, password });
       }}
-      validationSchema={CreateRoomSchema}
+      validationSchema={CreateNamespaceSchema}
     >
       {({ handleChange, handleBlur, errors, values, setFieldValue }) => (
         <StyledForm>

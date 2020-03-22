@@ -4,7 +4,7 @@ import Layout from './components/templates/Layout';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import AuthPage from './pages/AuthPage';
-import LandingPage from './pages/ServerPage';
+import ServerPage from './pages/ServerPage';
 import { authenticationCheck } from './actions/authenticationActions';
 
 function App({ isLoggedIn, loading, authenticationCheck }) {
@@ -21,7 +21,7 @@ function App({ isLoggedIn, loading, authenticationCheck }) {
           <Switch>
             {isLoggedIn ? (
               <>
-                <Route path={'/'} component={LandingPage} />
+                <Route path={'/'} component={ServerPage} />
               </>
             ) : (
               <>

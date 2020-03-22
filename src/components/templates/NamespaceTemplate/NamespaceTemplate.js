@@ -32,8 +32,8 @@ const StyledNavbar = styled.nav`
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 2rem 0;
-  z-index: 800;
+  padding: 6rem 0;
+  z-index: 20;
   border-right: 2px solid rgba(14, 14, 14, 0.5);
   overflow-y: scroll;
   transform: translateX(${({ isOpen }) => (isOpen ? '0' : '-100%')});
@@ -43,6 +43,7 @@ const StyledNavbar = styled.nav`
     position: static;
     overflow-y: scroll;
     transform: translateX(0);
+    padding: 2rem 0;
   }
 `;
 

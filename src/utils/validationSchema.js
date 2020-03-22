@@ -16,10 +16,7 @@ export const RegisterSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, 'Password is too short - 8 chars minimum')
     .required('Password is required')
-    .matches(
-      /^(?=.*\d)(?=.*[a-z])[\w~@#$%^&*+=`|{}:;!.?\"()\[\]-]{8,25}$/,
-      'Password must contain at least 1 number'
-    ),
+    .matches(/^(?=.*\d)(?=.*[a-z])[\w~@#$%^&*+=`|{}:;!.?\"()\[\]-]{8,25}$/, 'Password must contain at least 1 number'),
   name: Yup.string()
     .strict()
     .min(2, 'Name too short - 2 chars minimum')
@@ -30,11 +27,17 @@ export const RegisterSchema = Yup.object().shape({
     .required('Last name is required')
 });
 
+export const CreateNamespaceSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, 'Namespace name is too short - 2 chars minimum')
+    .required('Namespace name is required'),
+  isPrivate: Yup.bool(),
+  password: Yup.string().min(3, 'Password is too short - 3 chars minimum')
+});
+
 export const CreateRoomSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Room name is too short - 2 chars minimum')
     .required('Room name is required'),
-  isPrivate: Yup.bool(),
-  password: Yup.string()
-    .min(3, 'Password is too short - 3 chars minimum')
+  description: Yup.string()
 });

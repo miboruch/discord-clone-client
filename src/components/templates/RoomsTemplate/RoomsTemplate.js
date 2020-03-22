@@ -5,14 +5,6 @@ import { connect } from 'react-redux';
 import { openCreateRoom } from '../../../actions/toggleActions';
 import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 
-const RoomWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 2rem;
-`;
-
 const RoomsNavbar = styled.div`
   width: 230px;
   height: 100vh;
@@ -22,9 +14,9 @@ const RoomsNavbar = styled.div`
   background-color: ${({ theme }) => theme.color.roomsPanel};
   color: #fff;
   border-right: 2px solid rgba(23, 23, 23, 0.3);
-  z-index: 800;
   transform: translateX(${({ isOpen }) => (isOpen ? '0' : '-155%')});
-  transition: all 0.8s ease-in;
+  transition: transform 0.8s ease-in;
+  z-index: 20;
 
   ${({ theme }) => theme.mq.tablet} {
     transform: translateX(0);
@@ -33,6 +25,18 @@ const RoomsNavbar = styled.div`
 
   ${({ theme }) => theme.mq.standard} {
     width: 250px;
+  }
+`;
+
+const RoomWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5rem;
+
+  ${({ theme }) => theme.mq.tablet} {
+    padding-top: 2rem;
   }
 `;
 

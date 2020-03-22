@@ -14,7 +14,7 @@ const StyledHeader = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 480;
 `;
 
 const CheckBoxWrapper = styled.div`

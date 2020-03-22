@@ -6,7 +6,7 @@ import { Switch, Route } from 'react-router-dom';
 import { API_URL } from '../utils/helpers';
 import { addCreatedNamespace, fetchNamespacesSuccess } from '../actions/namespaceActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
-import RoomsMainPage from './ServerContentPage';
+import ServerContentPage from './ServerContentPage';
 import { closeCreateRoom } from '../actions/toggleActions';
 import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespace';
 import MainSocketContext from '../providers/mainSocketContext';
@@ -50,7 +50,7 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace }) => {
         <CreateNamespace />
         <NamespaceTemplate>
           <Switch>
-            <Route path={'/server/:id'} component={RoomsMainPage} />
+            <Route path={'/server/:id'} component={ServerContentPage} />
           </Switch>
         </NamespaceTemplate>
       </StyledWrapper>
