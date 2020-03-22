@@ -3,6 +3,7 @@ export const FETCH_ROOMS_SUCCESS = 'FETCH_ROOMS_SUCCESS';
 export const ADD_ROOM = 'ADD_ROOM';
 export const REMOVE_ROOM = 'REMOVE_ROOM';
 export const SET_CURRENT_ROOM = 'SET_CURRENT_ROOM';
+export const RESET_ROOMS = 'RESET_ROOMS';
 
 const initialState = {
   rooms: [],
@@ -37,6 +38,11 @@ export const roomReducer = (state = initialState, action) => {
       return {
         ...state,
         currentRoom: action.payload
+      };
+    case RESET_ROOMS:
+      return {
+        ...state,
+        rooms: []
       };
     default:
       return state;

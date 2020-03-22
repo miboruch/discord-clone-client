@@ -99,7 +99,7 @@ const NamespaceTemplate = ({
             {namespaces.created && (
               <>
                 {namespaces.created.map(item => (
-                  <Link to={`/server/${item._id}`} onClick={() => setCurrentNamespace(item._id)}>
+                  <Link to={`/server/${item._id}`}>
                     <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
                   </Link>
                 ))}
@@ -109,7 +109,7 @@ const NamespaceTemplate = ({
             {namespaces.join && (
               <>
                 {namespaces.joined.map(item => (
-                  <Link to={`/server/${item._id}`} onClick={() => setCurrentNamespace(item._id)}>
+                  <Link to={`/server/${item._id}`}>
                     <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
                   </Link>
                 ))}
