@@ -10,7 +10,7 @@ const StyledWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 499;
+  z-index: 560;
   background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
   display: flex;

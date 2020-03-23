@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { setCurrentNamespace } from '../actions/namespaceActions';
 import queryString from 'query-string';
-import { fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoom } from '../actions/roomActions';
+import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoom } from '../actions/roomActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
@@ -53,7 +53,8 @@ const ServerContentPage = ({
   fetchRoomsStart,
   fetchRoomsSuccess,
   resetRooms,
-  roomsLoading
+  roomsLoading,
+  addRoom
 }) => {
   const namespaceSocket = io(`${API_URL}/${match.params.id}`, {
     query: {
@@ -72,16 +73,15 @@ const ServerContentPage = ({
     });
 
     namespaceSocket.on('load_rooms', rooms => {
-      console.log(rooms);
       fetchRoomsSuccess(rooms);
+    });
+
+    namespaceSocket.on('room_created', room => {
+      addRoom(room);
     });
   }, [match.params.id]);
 
   useEffect(() => {
-    namespaceSocket.on('room_created', data => {
-      /* save to the fetched namespace rooms */
-      console.log(data);
-    });
     namespaceSocket.on('disconnect', data => {
       console.log('DISCONNECTED');
       console.log(data);
@@ -114,7 +114,8 @@ const mapDispatchToProps = dispatch => {
     setCurrentRoom: roomID => dispatch(setCurrentRoom(roomID)),
     fetchRoomsStart: () => dispatch(fetchRoomsStart()),
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
-    resetRooms: () => dispatch(resetRooms())
+    resetRooms: () => dispatch(resetRooms()),
+    addRoom: room => dispatch(addRoom(room))
   };
 };
 

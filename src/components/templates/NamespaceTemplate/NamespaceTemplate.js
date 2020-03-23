@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { openCreateNamespace } from '../../../actions/toggleActions';
 import NamespaceNavBox from '../../atoms/NamespaceNavBox/NamespaceNavBox';
 import { getFirstLetter } from '../../../utils/helpers';
-import { setCurrentNamespace } from '../../../actions/namespaceActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -19,7 +18,7 @@ const StyledWrapper = styled.div`
 const NavbarWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  z-index: 15;
+  z-index: 20;
 
   ${({ theme }) => theme.mq.tablet} {
     z-index: 500;

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { openCreateRoom } from '../../../actions/toggleActions';
 import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
+import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -49,8 +50,16 @@ const RoomWrapper = styled.div`
 
 const StyledLink = styled(Link)`
   color: ${({ theme }) => theme.color.darkThemeFontColor};
-  letter-spacing: 1px;
-  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+`;
+
+const StyledRoomNameParagraph = styled.p`
+  font-size: 16px;
+  letter-spacing: 2px;
 `;
 
 const StyledParagraph = styled.p`
@@ -90,6 +99,13 @@ const StyledCreateParagraph = styled(StyledParagraph)`
   cursor: pointer;
 `;
 
+const StyledHashIcon = styled(HashIcon)`
+  width: 25px;
+  height: 25px;
+  fill: ${({ theme }) => theme.color.darkThemeFontColor};
+  margin: 0 1rem;
+`;
+
 const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen, roomsLoading, rooms }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
   const { namespaceSocket } = useContext(NamespaceSocketContext);
@@ -104,15 +120,14 @@ const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMe
     <>
       <CreateRoomBox />
       <RoomsNavbar isOpen={isMenuOpen}>
-        <RoomName>
-          {currentNamespaceData.name && <p>{currentNamespaceData.name}</p>}
-        </RoomName>
+        <RoomName>{currentNamespaceData.name && <p>{currentNamespaceData.name}</p>}</RoomName>
         <RoomWrapper>
           {currentNamespaceID ? (
             <>
               {rooms.map(item => (
                 <StyledLink to={`/server/${currentNamespaceID}?room=${item._id}`} key={item._id}>
-                  <p>{item.name}</p>
+                  <StyledHashIcon />
+                  <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
                 </StyledLink>
               ))}
             </>
@@ -120,9 +135,9 @@ const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMe
             <p>You are not in the server</p>
           )}
         </RoomWrapper>
-        {namespaces.created.some(item => item._id.includes(currentNamespaceID)) ? (
+        {namespaces.created.some(item => item._id.includes(currentNamespaceID)) && (
           <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
-        ) : null}
+        )}
       </RoomsNavbar>
     </>
   );
