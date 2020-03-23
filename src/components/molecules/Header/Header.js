@@ -17,9 +17,15 @@ const StyledHeader = styled.header`
   z-index: 480;
 
   ${({ theme }) => theme.mq.tablet} {
-    width: 200px;
+    width: 100%;
+    background-color: transparent;
+    pointer-events: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
     left: auto;
     right: 0;
+    -webkit-box-shadow: 0px 3px 8px -5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 3px 8px -5px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 3px 8px -5px rgba(0, 0, 0, 0.75);
   }
 `;
 
@@ -27,6 +33,7 @@ const CheckBoxWrapper = styled.div`
   position: absolute;
   top: 2rem;
   right: 2rem;
+  pointer-events: auto;
 `;
 
 const Header = ({ isMenuOpen, toggleMenu, isDarkTheme, toggleDarkTheme }) => {

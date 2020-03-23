@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { openCreateRoom } from '../../../actions/toggleActions';
 import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
+import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -11,6 +12,8 @@ const RoomsNavbar = styled.div`
   position: fixed;
   top: 0;
   left: 125px;
+  display: flex;
+  flex-direction: column;
   background-color: ${({ theme }) => theme.color.roomsPanel};
   color: #fff;
   border-right: 2px solid rgba(23, 23, 23, 0.3);
@@ -28,16 +31,20 @@ const RoomsNavbar = styled.div`
   }
 `;
 
-const RoomWrapper = styled.div`
+const RoomName = styled.div`
+  width: 100%;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  padding-top: 5rem;
+`;
 
-  ${({ theme }) => theme.mq.tablet} {
-    padding-top: 2rem;
-  }
+const RoomWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: 2rem;
 `;
 
 const StyledLink = styled(Link)`
@@ -84,28 +91,35 @@ const StyledCreateParagraph = styled(StyledParagraph)`
 `;
 
 const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen, roomsLoading, rooms }) => {
-  /* Fetch rooms - redux */
+  const [currentNamespaceData, setCurrentNamespaceData] = useState({});
+  const { namespaceSocket } = useContext(NamespaceSocketContext);
+
+  useEffect(() => {
+    namespaceSocket.on('namespace_data', namespace => {
+      setCurrentNamespaceData(namespace);
+    });
+  }, []);
+
   return (
     <>
       <CreateRoomBox />
       <RoomsNavbar isOpen={isMenuOpen}>
-        {roomsLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <RoomWrapper>
-            {currentNamespaceID ? (
-              <>
-                {rooms.map(item => (
-                  <StyledLink to={`/server/${currentNamespaceID}?room=${item._id}`} key={item._id}>
-                    <p>{item.name}</p>
-                  </StyledLink>
-                ))}
-              </>
-            ) : (
-              <p>You are not in the server</p>
-            )}
-          </RoomWrapper>
-        )}
+        <RoomName>
+          {currentNamespaceData.name && <p>{currentNamespaceData.name}</p>}
+        </RoomName>
+        <RoomWrapper>
+          {currentNamespaceID ? (
+            <>
+              {rooms.map(item => (
+                <StyledLink to={`/server/${currentNamespaceID}?room=${item._id}`} key={item._id}>
+                  <p>{item.name}</p>
+                </StyledLink>
+              ))}
+            </>
+          ) : (
+            <p>You are not in the server</p>
+          )}
+        </RoomWrapper>
         {namespaces.created.some(item => item._id.includes(currentNamespaceID)) ? (
           <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
         ) : null}

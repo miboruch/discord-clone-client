@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import { fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoom } from '
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
+import Spinner from '../components/atoms/Spinner/Spinner';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -20,6 +21,7 @@ const StyledWrapper = styled.div`
   overflow: hidden;
   background: transparent;
   margin-left: 125px;
+  z-index: 1;
 
   ${({ theme }) => theme.mq.tablet} {
     margin-left: 0;
@@ -50,7 +52,8 @@ const ServerContentPage = ({
   token,
   fetchRoomsStart,
   fetchRoomsSuccess,
-  resetRooms
+  resetRooms,
+  roomsLoading
 }) => {
   const namespaceSocket = io(`${API_URL}/${match.params.id}`, {
     query: {
@@ -87,24 +90,22 @@ const ServerContentPage = ({
 
   useEffect(() => {
     const roomParams = queryString.parse(location.search);
+    console.log(roomParams);
     roomParams && setCurrentRoom(roomParams.room);
-    /* socket -> if params exists,  */
   }, []);
 
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
       <StyledWrapper>
         <RoomsTemplate />
-        <StyledChatWrapper>
-          <p>Choose room</p>
-        </StyledChatWrapper>
+        <StyledChatWrapper>{roomsLoading ? <Spinner /> : <p>Choose room</p>}</StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token } }) => {
-  return { token };
+const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { roomsLoading } }) => {
+  return { token, roomsLoading };
 };
 
 const mapDispatchToProps = dispatch => {

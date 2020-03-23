@@ -20,6 +20,10 @@ const NavbarWrapper = styled.div`
   display: flex;
   flex-direction: row;
   z-index: 15;
+
+  ${({ theme }) => theme.mq.tablet} {
+    z-index: 500;
+  }
 `;
 
 const StyledNavbar = styled.nav`
@@ -33,7 +37,6 @@ const StyledNavbar = styled.nav`
   align-items: center;
   flex-direction: column;
   padding: 6rem 0;
-  z-index: 20;
   border-right: 2px solid rgba(14, 14, 14, 0.5);
   overflow-y: scroll;
   transform: translateX(${({ isOpen }) => (isOpen ? '0' : '-100%')});
@@ -82,14 +85,7 @@ const StyledParagraph = styled.p`
   }
 `;
 
-const NamespaceTemplate = ({
-  children,
-  namespaces,
-  isDarkTheme,
-  openCreateNamespace,
-  setCurrentNamespace,
-  isMenuOpen
-}) => {
+const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamespace, isMenuOpen }) => {
   return (
     <StyledWrapper>
       <NavbarWrapper>
@@ -99,7 +95,7 @@ const NamespaceTemplate = ({
             {namespaces.created && (
               <>
                 {namespaces.created.map(item => (
-                  <Link to={`/server/${item._id}`}>
+                  <Link to={`/server/${item._id}`} key={item._id}>
                     <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
                   </Link>
                 ))}
@@ -130,8 +126,7 @@ const mapStateToProps = ({ namespaceReducer: { namespaces }, toggleReducer: { is
 
 const mapDispatchToProps = dispatch => {
   return {
-    openCreateNamespace: () => dispatch(openCreateNamespace()),
-    setCurrentNamespace: namespaceID => dispatch(setCurrentNamespace(namespaceID))
+    openCreateNamespace: () => dispatch(openCreateNamespace())
   };
 };
 
