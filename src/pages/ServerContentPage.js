@@ -10,6 +10,7 @@ import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
 import Spinner from '../components/atoms/Spinner/Spinner';
 import CreateRoomBox from '../components/molecules/CreateRoomBox/CreateRoomBox';
+import ChatPage from './ChatPage';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -88,16 +89,13 @@ const ServerContentPage = ({
     });
   }, [match.params.id]);
 
-  useEffect(() => {
-    const roomParams = queryString.parse(location.search);
-    roomParams && setCurrentRoom(roomParams.room);
-  }, [location.search]);
-
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
       <StyledWrapper>
         <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
-        <StyledChatWrapper>{roomsLoading ? <Spinner /> : <p>Choose room</p>}</StyledChatWrapper>
+        <StyledChatWrapper>
+          {roomsLoading ? <Spinner /> : <>{location.search ? <ChatPage /> : <p>Choose room</p>}</>}
+        </StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>
   );

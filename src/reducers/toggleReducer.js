@@ -9,7 +9,7 @@ export const TOGGLE_MENU = 'TOGGLE_MENU';
 const initialState = {
   isCreateNamespaceOpen: false,
   isCreateRoomOpen: false,
-  isDarkTheme: true,
+  isDarkTheme: JSON.parse(localStorage.getItem('isDarkTheme')),
   isMenuOpen: false
 };
 
@@ -36,6 +36,7 @@ export const toggleReducer = (state = initialState, action) => {
         isCreateRoomOpen: false
       };
     case TOGGLE_DARK_THEME:
+      localStorage.setItem('isDarkTheme', `${!state.isDarkTheme}`);
       return {
         ...state,
         isDarkTheme: !state.isDarkTheme

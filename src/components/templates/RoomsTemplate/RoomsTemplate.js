@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -108,6 +108,7 @@ const StyledHashIcon = styled(HashIcon)`
 `;
 
 const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen, rooms, namespaceName }) => {
+  const { namespaceSocket } = useContext(NamespaceSocketContext);
   return (
     <>
       <CreateRoomBox />
@@ -119,7 +120,13 @@ const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMe
           {currentNamespaceID ? (
             <>
               {rooms.map(item => (
-                <StyledLink to={`/server/${currentNamespaceID}?room=${item._id}`} key={item._id}>
+                <StyledLink
+                  to={`/server/${currentNamespaceID}?room=${item._id}`}
+                  key={item._id}
+                  onClick={() => {
+                    namespaceSocket.emit('join_room', item._id);
+                  }}
+                >
                   <StyledHashIcon />
                   <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
                 </StyledLink>
