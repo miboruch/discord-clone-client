@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { openCreateRoom } from '../../../actions/toggleActions';
 import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
-import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
 import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
+import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -20,7 +21,7 @@ const RoomsNavbar = styled.div`
   border-right: 2px solid rgba(23, 23, 23, 0.3);
   transform: translateX(${({ isOpen }) => (isOpen ? '0' : '-155%')});
   transition: transform 0.8s ease-in;
-  z-index: 20;
+  z-index: 10;
 
   ${({ theme }) => theme.mq.tablet} {
     transform: translateX(0);
@@ -106,21 +107,14 @@ const StyledHashIcon = styled(HashIcon)`
   margin: 0 1rem;
 `;
 
-const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen, roomsLoading, rooms }) => {
-  const [currentNamespaceData, setCurrentNamespaceData] = useState({});
-  const { namespaceSocket } = useContext(NamespaceSocketContext);
-
-  useEffect(() => {
-    namespaceSocket.on('namespace_data', namespace => {
-      setCurrentNamespaceData(namespace);
-    });
-  }, []);
-
+const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen, rooms, namespaceName }) => {
   return (
     <>
       <CreateRoomBox />
       <RoomsNavbar isOpen={isMenuOpen}>
-        <RoomName>{currentNamespaceData.name && <p>{currentNamespaceData.name}</p>}</RoomName>
+        <RoomName>
+          <p>{namespaceName}</p>
+        </RoomName>
         <RoomWrapper>
           {currentNamespaceID ? (
             <>
@@ -156,6 +150,10 @@ const mapDispatchToProps = dispatch => {
     openCreateRoomBox: () => dispatch(openCreateRoom()),
     setCurrentRoom: () => dispatch()
   };
+};
+
+RoomsTemplate.propTypes = {
+  namespaceName: PropTypes.string.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoomsTemplate);

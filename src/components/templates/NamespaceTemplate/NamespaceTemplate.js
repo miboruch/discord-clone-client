@@ -18,11 +18,7 @@ const StyledWrapper = styled.div`
 const NavbarWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  z-index: 20;
-
-  ${({ theme }) => theme.mq.tablet} {
-    z-index: 500;
-  }
+  z-index: 12;
 `;
 
 const StyledNavbar = styled.nav`

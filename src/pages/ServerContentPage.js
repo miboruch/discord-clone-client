@@ -9,6 +9,7 @@ import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
 import Spinner from '../components/atoms/Spinner/Spinner';
+import CreateRoomBox from '../components/molecules/CreateRoomBox/CreateRoomBox';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -56,6 +57,8 @@ const ServerContentPage = ({
   roomsLoading,
   addRoom
 }) => {
+  const [currentNamespaceData, setCurrentNamespaceData] = useState({});
+
   const namespaceSocket = io(`${API_URL}/${match.params.id}`, {
     query: {
       token
@@ -72,6 +75,10 @@ const ServerContentPage = ({
       fetchRoomsStart();
     });
 
+    namespaceSocket.on('namespace_data', namespace => {
+      setCurrentNamespaceData(namespace);
+    });
+
     namespaceSocket.on('load_rooms', rooms => {
       fetchRoomsSuccess(rooms);
     });
@@ -82,22 +89,14 @@ const ServerContentPage = ({
   }, [match.params.id]);
 
   useEffect(() => {
-    namespaceSocket.on('disconnect', data => {
-      console.log('DISCONNECTED');
-      console.log(data);
-    });
-  }, []);
-
-  useEffect(() => {
     const roomParams = queryString.parse(location.search);
-    console.log(roomParams);
     roomParams && setCurrentRoom(roomParams.room);
-  }, []);
+  }, [location.search]);
 
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
       <StyledWrapper>
-        <RoomsTemplate />
+        <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
         <StyledChatWrapper>{roomsLoading ? <Spinner /> : <p>Choose room</p>}</StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>

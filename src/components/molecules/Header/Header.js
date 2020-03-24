@@ -14,10 +14,9 @@ const StyledHeader = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 480;
+  z-index: 16;
 
   ${({ theme }) => theme.mq.tablet} {
-    width: 100%;
     background-color: transparent;
     pointer-events: none;
     border-bottom: 1px solid rgba(0, 0, 0, 0.4);
@@ -26,6 +25,7 @@ const StyledHeader = styled.header`
     -webkit-box-shadow: 0px 3px 8px -5px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 3px 8px -5px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 3px 8px -5px rgba(0, 0, 0, 0.75);
+    z-index: 11;
   }
 `;
 

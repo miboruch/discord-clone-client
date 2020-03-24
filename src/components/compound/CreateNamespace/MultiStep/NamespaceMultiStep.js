@@ -10,9 +10,7 @@ const Page = ({ children, pageIndex }) => {
   return currentPage === pageIndex ? (
     <Styles.StyledContentWrapper>
       {children}
-      {currentPage !== 0 ? (
-        <Styles.BackParagraph onClick={() => changePage(0)}>GO BACK</Styles.BackParagraph>
-      ) : null}
+      {currentPage !== 0 ? <Styles.BackParagraph onClick={() => changePage(0)}>GO BACK</Styles.BackParagraph> : null}
     </Styles.StyledContentWrapper>
   ) : null;
 };

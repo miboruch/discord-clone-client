@@ -8,7 +8,7 @@ export const RESET_ROOMS = 'RESET_ROOMS';
 const initialState = {
   rooms: [],
   roomsLoading: false,
-  currentRoom: ''
+  currentRoom: null
 };
 
 export const roomReducer = (state = initialState, action) => {

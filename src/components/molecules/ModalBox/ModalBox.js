@@ -9,8 +9,8 @@ const StyledWrapper = styled.div`
   height: 100vh;
   position: fixed;
   top: 0;
-  left: 0;
-  z-index: 560;
+  right: 0;
+  z-index: 16;
   background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
   display: flex;
