@@ -25,15 +25,14 @@ const ChatPage = ({ match, location, setCurrentRoom }) => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const { room } = queryString.parse(location.search);
-    console.log(room);
+    console.log('CHATPAGE CHANGE');
+    const { roomID } = match.params;
+    console.log(roomID);
 
-    namespaceSocket.emit('join_room', room);
-    // setCurrentRoom(room);
-  }, []);
+    namespaceSocket.emit('join_room', roomID);
 
-  useEffect(() => {
     namespaceSocket.on('user_joined', roomName => {
+      console.log(`user joined to ${roomName}`);
       setCurrentRoom(roomName);
       setMessage(`user joined to ${roomName} room`);
     });
@@ -41,7 +40,7 @@ const ChatPage = ({ match, location, setCurrentRoom }) => {
     namespaceSocket.on('first_message', message => {
       console.log(message);
     });
-  }, []);
+  }, [match.params.roomID]);
 
   return (
     <StyledWrapper>

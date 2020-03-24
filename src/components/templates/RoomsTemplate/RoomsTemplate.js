@@ -121,7 +121,7 @@ const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMe
             <>
               {rooms.map(item => (
                 <StyledLink
-                  to={`/server/${currentNamespaceID}?room=${item._id}`}
+                  to={`/server/${currentNamespaceID}/${item._id}`}
                   key={item._id}
                   onClick={() => {
                     namespaceSocket.emit('join_room', item._id);

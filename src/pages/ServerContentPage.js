@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 import { setCurrentNamespace } from '../actions/namespaceActions';
 import queryString from 'query-string';
 import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoom } from '../actions/roomActions';
@@ -94,7 +95,10 @@ const ServerContentPage = ({
       <StyledWrapper>
         <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
         <StyledChatWrapper>
-          {roomsLoading ? <Spinner /> : <>{location.search ? <ChatPage /> : <p>Choose room</p>}</>}
+          {/*{roomsLoading ? <Spinner /> : <>{location.search ? <ChatPage /> : <p>Choose room</p>}</>}*/}
+          <Switch>
+            <Route exact path={'/server/:id/:roomID'} component={ChatPage} />
+          </Switch>
         </StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>
