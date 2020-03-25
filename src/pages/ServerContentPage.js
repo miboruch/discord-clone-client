@@ -95,10 +95,7 @@ const ServerContentPage = ({
       <StyledWrapper>
         <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
         <StyledChatWrapper>
-          {/*{roomsLoading ? <Spinner /> : <>{location.search ? <ChatPage /> : <p>Choose room</p>}</>}*/}
-          <Switch>
-            <Route exact path={'/server/:id/:roomID'} component={ChatPage} />
-          </Switch>
+          <Route path={'/server/:id/:roomID'} component={ChatPage} />
         </StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import queryString from 'query-string';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
 import { setCurrentRoom } from '../actions/roomActions';
@@ -20,36 +19,93 @@ const StyledParagraph = styled.p`
   color: inherit;
 `;
 
-const ChatPage = ({ match, location, setCurrentRoom }) => {
+const ChatPage = ({ match, location, setCurrentRoom, currentRoom }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
   const [message, setMessage] = useState('');
+  const [isInRoom, setRoomID] = useState(false);
 
   useEffect(() => {
-    console.log('CHATPAGE CHANGE');
-    const { roomID } = match.params;
-    console.log(roomID);
+    if (!currentRoom) {
+      console.log('joining room');
+      namespaceSocket.emit('join_room', match.params.roomID);
+    }
 
-    namespaceSocket.emit('join_room', roomID);
+    // else {
+    //   setCurrentRoom(match.params.roomID);
+    //   namespaceSocket.emit('join_room', match.params.roomID);
+    // }
 
-    namespaceSocket.on('user_joined', roomName => {
-      console.log(`user joined to ${roomName}`);
-      setCurrentRoom(roomName);
-      setMessage(`user joined to ${roomName} room`);
-    });
+    // if (!isInRoom) {
+    //   console.log('joining room');
+    //   namespaceSocket.emit('join_room', match.params.roomID);
+    // }
 
-    namespaceSocket.on('first_message', message => {
-      console.log(message);
-    });
+    return () => {
+      if (currentRoom) {
+        console.log('leaving room');
+        namespaceSocket.emit('leave_room', currentRoom);
+        setCurrentRoom(null);
+      }
+    };
   }, [match.params.roomID]);
+
+  useEffect(() => {
+    // console.log('CHAT PAGE MOUNTED');
+    console.log(match);
+    console.log('here i should emit join room socket');
+    namespaceSocket.on('user_joined', roomID => {
+      setCurrentRoom(roomID);
+      setMessage(`Joined ${roomID}`);
+    });
+
+    // namespaceSocket.on('first_message', message => {
+    //   setMessage(message);
+    // });
+  }, [match.params.roomID]);
+
+  // useEffect(() => {
+  //   if (isInRoom) {
+  //     console.log('joining room');
+  //     namespaceSocket.emit('join_room', match.params.roomID);
+  //   }
+  //
+  //   return () => {
+  //     if (isInRoom) {
+  //       console.log('leaving room');
+  //       namespaceSocket.emit('leave_room', match.params.roomID);
+  //     }
+  //   };
+  // }, [match.params.roomID]);
+
+  // useEffect(() => {
+  //   console.log('CHATPAGE CHANGE');
+  //   const { roomID } = match.params;
+  //   console.log(roomID);
+  //
+  //   namespaceSocket.on('user_joined', roomName => {
+  //     console.log(`You have joined to ${roomName} room`);
+  //     setCurrentRoom(roomName);
+  //     setMessage(`You have joined to ${roomName} room`);
+  //   });
+  //
+  //   namespaceSocket.on('first_message', message => {
+  //     console.log(message);
+  //   });
+  // }, []);
 
   return (
     <StyledWrapper>
       <StyledParagraph>
         <p>welcome on the main chat page {queryString.parse(location.search).room}</p>
         <p>{message}</p>
+        <p>CHAT PAGE MOUNTED</p>
       </StyledParagraph>
     </StyledWrapper>
   );
+};
+
+const mapStateToProps = ({ roomReducer: { currentRoom } }) => {
+  return { currentRoom };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -58,6 +114,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const ChatPageWithRouter = withRouter(ChatPage);
-
-export default connect(null, mapDispatchToProps)(ChatPageWithRouter);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatPage);

@@ -10,6 +10,7 @@ import ServerContentPage from './ServerContentPage';
 import { closeCreateRoom } from '../actions/toggleActions';
 import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespace';
 import MainSocketContext from '../providers/mainSocketContext';
+import ChatPage from './ChatPage';
 
 const StyledWrapper = styled.div`
   width: 100%;

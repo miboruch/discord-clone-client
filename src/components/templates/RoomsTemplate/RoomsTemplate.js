@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { openCreateRoom } from '../../../actions/toggleActions';
 import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
 import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
+import ChatPage from '../../../pages/ChatPage';
+import { setCurrentRoom } from '../../../actions/roomActions';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -107,8 +110,17 @@ const StyledHashIcon = styled(HashIcon)`
   margin: 0 1rem;
 `;
 
-const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMenuOpen, rooms, namespaceName }) => {
+const RoomsTemplate = ({
+  namespaces,
+  currentNamespaceID,
+  openCreateRoomBox,
+  isMenuOpen,
+  rooms,
+  namespaceName,
+  setCurrentRoom
+}) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
+
   return (
     <>
       <CreateRoomBox />
@@ -124,7 +136,9 @@ const RoomsTemplate = ({ namespaces, currentNamespaceID, openCreateRoomBox, isMe
                   to={`/server/${currentNamespaceID}/${item._id}`}
                   key={item._id}
                   onClick={() => {
+                    setCurrentRoom(null);
                     namespaceSocket.emit('join_room', item._id);
+                    // setCurrentRoom(item._id);
                   }}
                 >
                   <StyledHashIcon />
@@ -155,7 +169,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = dispatch => {
   return {
     openCreateRoomBox: () => dispatch(openCreateRoom()),
-    setCurrentRoom: () => dispatch()
+    setCurrentRoom: roomID => dispatch(setCurrentRoom(roomID))
   };
 };
 
