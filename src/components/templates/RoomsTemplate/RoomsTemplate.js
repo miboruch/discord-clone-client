@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { openCreateRoom } from '../../../actions/toggleActions';
@@ -9,7 +9,7 @@ import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
 import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
 import ChatPage from '../../../pages/ChatPage';
-import { setCurrentRoom } from '../../../actions/roomActions';
+import { chatLoadingStart, setCurrentRoom } from '../../../actions/roomActions';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -117,7 +117,9 @@ const RoomsTemplate = ({
   isMenuOpen,
   rooms,
   namespaceName,
-  setCurrentRoom
+  setCurrentRoom,
+  match,
+  chatLoadingStart
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
@@ -133,13 +135,11 @@ const RoomsTemplate = ({
             <>
               {rooms.map(item => (
                 <StyledLink
-                  to={`/server/${currentNamespaceID}/${item._id}`}
-                  key={item._id}
                   onClick={() => {
-                    setCurrentRoom(null);
                     namespaceSocket.emit('join_room', item._id);
-                    // setCurrentRoom(item._id);
                   }}
+                  to={`/server/${currentNamespaceID}/room/${item._id}`}
+                  key={item._id}
                 >
                   <StyledHashIcon />
                   <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
@@ -169,7 +169,8 @@ const mapStateToProps = ({
 const mapDispatchToProps = dispatch => {
   return {
     openCreateRoomBox: () => dispatch(openCreateRoom()),
-    setCurrentRoom: roomID => dispatch(setCurrentRoom(roomID))
+    setCurrentRoom: roomID => dispatch(setCurrentRoom(roomID)),
+    chatLoadingStart: () => dispatch(chatLoadingStart())
   };
 };
 
@@ -177,4 +178,6 @@ RoomsTemplate.propTypes = {
   namespaceName: PropTypes.string.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RoomsTemplate);
+const RoomsTemplateWithRouter = withRouter(RoomsTemplate);
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoomsTemplateWithRouter);

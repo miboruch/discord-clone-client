@@ -9,7 +9,7 @@ import { authenticationCheck } from './actions/authenticationActions';
 
 function App({ isLoggedIn, loading, authenticationCheck }) {
   useEffect(() => {
-    localStorage.getItem('isDarkTheme') && localStorage.setItem('isDarkTheme', 'true');
+    !localStorage.getItem('isDarkTheme') && localStorage.setItem('isDarkTheme', 'true');
     authenticationCheck();
   }, []);
 

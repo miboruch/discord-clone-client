@@ -4,7 +4,9 @@ import {
   ADD_ROOM,
   REMOVE_ROOM,
   SET_CURRENT_ROOM,
-  RESET_ROOMS
+  RESET_ROOMS,
+  CHAT_LOADING_START,
+  CHAT_LOADING_STOP
 } from '../reducers/roomReducer';
 
 export const fetchRoomsStart = () => {
@@ -46,5 +48,17 @@ export const setCurrentRoom = roomID => {
 export const resetRooms = () => {
   return {
     type: RESET_ROOMS
+  };
+};
+
+export const chatLoadingStart = () => {
+  return {
+    type: CHAT_LOADING_START
+  };
+};
+
+export const chatLoadingStop = () => {
+  return {
+    type: CHAT_LOADING_STOP
   };
 };

@@ -4,11 +4,14 @@ export const ADD_ROOM = 'ADD_ROOM';
 export const REMOVE_ROOM = 'REMOVE_ROOM';
 export const SET_CURRENT_ROOM = 'SET_CURRENT_ROOM';
 export const RESET_ROOMS = 'RESET_ROOMS';
+export const CHAT_LOADING_START = 'CHAT_LOADING_START';
+export const CHAT_LOADING_STOP = 'CHAT_LOADING_STOP';
 
 const initialState = {
   rooms: [],
   roomsLoading: false,
-  currentRoom: null
+  currentRoom: null,
+  chatLoading: false
 };
 
 export const roomReducer = (state = initialState, action) => {
@@ -43,6 +46,16 @@ export const roomReducer = (state = initialState, action) => {
       return {
         ...state,
         rooms: []
+      };
+    case CHAT_LOADING_START:
+      return {
+        ...state,
+        chatLoading: true
+      };
+    case CHAT_LOADING_STOP:
+      return {
+        ...state,
+        chatLoading: false
       };
     default:
       return state;

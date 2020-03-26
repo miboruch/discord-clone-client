@@ -88,6 +88,14 @@ const ServerContentPage = ({
     namespaceSocket.on('room_created', room => {
       addRoom(room);
     });
+
+    namespaceSocket.on('disconnect', () => {
+      console.log('Namespace disconnected');
+    });
+
+    return () => {
+      namespaceSocket.emit('disconnect');
+    };
   }, [match.params.id]);
 
   return (
@@ -95,7 +103,7 @@ const ServerContentPage = ({
       <StyledWrapper>
         <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
         <StyledChatWrapper>
-          <Route path={'/server/:id/:roomID'} component={ChatPage} />
+          <Route exact path={'/server/:id/room/:roomID'} component={ChatPage} />
         </StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>
