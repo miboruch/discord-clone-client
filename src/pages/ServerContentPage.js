@@ -57,7 +57,8 @@ const ServerContentPage = ({
   fetchRoomsSuccess,
   resetRooms,
   roomsLoading,
-  addRoom
+  addRoom,
+  rooms
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
 
@@ -95,6 +96,7 @@ const ServerContentPage = ({
 
     return () => {
       namespaceSocket.emit('disconnect');
+      setCurrentNamespace(null);
     };
   }, [match.params.id]);
 
@@ -110,8 +112,8 @@ const ServerContentPage = ({
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { roomsLoading } }) => {
-  return { token, roomsLoading };
+const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { roomsLoading, rooms } }) => {
+  return { token, roomsLoading, rooms };
 };
 
 const mapDispatchToProps = dispatch => {

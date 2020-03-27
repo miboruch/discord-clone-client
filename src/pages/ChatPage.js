@@ -19,8 +19,9 @@ const StyledParagraph = styled.p`
   color: inherit;
 `;
 
-const ChatPage = ({ match, location, setCurrentRoom, currentRoom, chatLoading, chatLoadingStop }) => {
+const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chatLoadingStop }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
+
   const [message, setMessage] = useState('');
   const [isInRoom, setRoomID] = useState(false);
 
@@ -29,25 +30,35 @@ const ChatPage = ({ match, location, setCurrentRoom, currentRoom, chatLoading, c
       namespaceSocket.emit('join_room', match.params.roomID);
     }
 
-    return () => {
-      namespaceSocket.emit('leave_room', match.params.roomID);
-    };
-  }, [match.params.roomID]);
+    console.log('should emit join');
 
-
-
-  useEffect(() => {
     console.log(match.params);
 
-    namespaceSocket.on('user_left', () => {
-      setCurrentRoom(null);
-    });
-
     namespaceSocket.on('user_joined', roomID => {
-      console.log('user joined the chat');
+      console.log(`user joined room ${roomID}`);
       setCurrentRoom(roomID);
       chatLoadingStop();
     });
+
+    namespaceSocket.on('update_members', clientsCounter => {
+      console.log('Users online: ');
+      console.log(clientsCounter);
+    });
+
+    namespaceSocket.on('user_left', roomID => {
+      console.log(`user left room ${roomID}`);
+      // setCurrentRoom('empty');
+    });
+
+    return () => {
+      if (match.params.roomID) {
+        console.log('should emit leave');
+        setCurrentRoom(match.params.roomID);
+      } else {
+        namespaceSocket.emit('leave_room', match.params.roomID);
+        setCurrentRoom(null);
+      }
+    };
   }, [match.params.roomID]);
 
   return (
@@ -74,8 +85,8 @@ const ChatPage = ({ match, location, setCurrentRoom, currentRoom, chatLoading, c
   );
 };
 
-const mapStateToProps = ({ roomReducer: { currentRoom, chatLoading } }) => {
-  return { currentRoom, chatLoading };
+const mapStateToProps = ({ roomReducer: { currentRoom, chatLoading, rooms } }) => {
+  return { currentRoom, chatLoading, rooms };
 };
 
 const mapDispatchToProps = dispatch => {
