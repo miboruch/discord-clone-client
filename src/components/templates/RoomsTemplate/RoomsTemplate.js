@@ -53,12 +53,23 @@ const RoomWrapper = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  color: ${({ theme }) => theme.color.darkThemeFontColor};
+  color: ${({ isCurrent, theme }) => (isCurrent ? '#fff' : theme.color.darkThemeFontColor)};
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
+  transition: color 0.3s ease;
+`;
+
+const StyledLinkWrapper = styled.div`
+  color: ${({ isCurrent, theme }) => (isCurrent ? '#fff' : theme.color.darkThemeFontColor)};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
 `;
 
 const StyledRoomNameParagraph = styled.p`
@@ -111,6 +122,7 @@ const StyledHashIcon = styled(HashIcon)`
 `;
 
 const RoomsTemplate = ({
+  history,
   namespaces,
   currentNamespaceID,
   openCreateRoomBox,
@@ -119,7 +131,8 @@ const RoomsTemplate = ({
   namespaceName,
   setCurrentRoom,
   match,
-  chatLoadingStart
+  chatLoadingStart,
+  currentRoom
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
@@ -134,16 +147,16 @@ const RoomsTemplate = ({
           {currentNamespaceID ? (
             <>
               {rooms.map(item => (
-                <StyledLink
-                  to={`/server/${currentNamespaceID}/room/${item._id}`}
-                  key={item._id}
+                <StyledLinkWrapper
+                  isCurrent={currentRoom === item._id}
                   onClick={() => {
-                    namespaceSocket.emit('join_room', item._id);
+                    history.push(`${match.url}/room/${item._id}`);
+                    namespaceSocket.emit('join_room', item._id.toString());
                   }}
                 >
                   <StyledHashIcon />
                   <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
-                </StyledLink>
+                </StyledLinkWrapper>
               ))}
             </>
           ) : (
@@ -161,9 +174,9 @@ const RoomsTemplate = ({
 const mapStateToProps = ({
   namespaceReducer: { namespaces, currentNamespaceID },
   toggleReducer: { isMenuOpen },
-  roomReducer: { roomsLoading, rooms }
+  roomReducer: { roomsLoading, rooms, currentRoom }
 }) => {
-  return { namespaces, currentNamespaceID, isMenuOpen, roomsLoading, rooms };
+  return { namespaces, currentNamespaceID, isMenuOpen, roomsLoading, rooms, currentRoom };
 };
 
 const mapDispatchToProps = dispatch => {

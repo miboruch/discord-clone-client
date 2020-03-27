@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
@@ -58,6 +58,7 @@ const ServerContentPage = ({
   resetRooms,
   roomsLoading,
   addRoom,
+  history,
   rooms
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
@@ -84,6 +85,10 @@ const ServerContentPage = ({
 
     namespaceSocket.on('load_rooms', rooms => {
       fetchRoomsSuccess(rooms);
+      if (rooms) {
+        namespaceSocket.emit('join_room', rooms[0]._id.toString());
+        history.push(`${match.url}/room/${rooms[0]._id.toString()}`);
+      }
     });
 
     namespaceSocket.on('room_created', room => {
@@ -94,8 +99,12 @@ const ServerContentPage = ({
       console.log('Namespace disconnected');
     });
 
+    namespaceSocket.on('user_joined', roomID => {
+      console.log(`user joined room ${roomID}`);
+      setCurrentRoom(roomID);
+    });
+
     return () => {
-      namespaceSocket.emit('disconnect');
       setCurrentNamespace(null);
     };
   }, [match.params.id]);
@@ -105,7 +114,7 @@ const ServerContentPage = ({
       <StyledWrapper>
         <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
         <StyledChatWrapper>
-          <Route exact path={'/server/:id/room/:roomID'} component={ChatPage} />
+          <Route exact path={`${match.url}/room/:roomID`} component={ChatPage} />
         </StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>

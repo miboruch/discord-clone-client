@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
@@ -22,22 +22,27 @@ const StyledParagraph = styled.p`
 const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chatLoadingStop }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
-  const [message, setMessage] = useState('');
-  const [isInRoom, setRoomID] = useState(false);
-
   useEffect(() => {
-    if (!currentRoom) {
-      namespaceSocket.emit('join_room', match.params.roomID);
-    }
-
-    console.log('should emit join');
-
-    console.log(match.params);
+    console.log('match params changed');
+    setCurrentRoom(match.params.roomID);
 
     namespaceSocket.on('user_joined', roomID => {
       console.log(`user joined room ${roomID}`);
       setCurrentRoom(roomID);
       chatLoadingStop();
+    });
+
+    return () => {
+      namespaceSocket.emit('leave_room', match.params.roomID);
+      setCurrentRoom(null);
+    };
+  }, [match.params.roomID]);
+
+  useEffect(() => {
+    console.log(currentRoom);
+
+    namespaceSocket.on('room_info', data => {
+      console.log(data);
     });
 
     namespaceSocket.on('update_members', clientsCounter => {
@@ -47,19 +52,8 @@ const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chat
 
     namespaceSocket.on('user_left', roomID => {
       console.log(`user left room ${roomID}`);
-      // setCurrentRoom('empty');
     });
-
-    return () => {
-      if (match.params.roomID) {
-        console.log('should emit leave');
-        setCurrentRoom(match.params.roomID);
-      } else {
-        namespaceSocket.emit('leave_room', match.params.roomID);
-        setCurrentRoom(null);
-      }
-    };
-  }, [match.params.roomID]);
+  }, [currentRoom]);
 
   return (
     <StyledWrapper>
