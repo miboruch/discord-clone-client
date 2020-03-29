@@ -70,6 +70,7 @@ const StyledLinkWrapper = styled.div`
   justify-content: center;
   margin-bottom: 1rem;
   transition: color 0.3s ease;
+  cursor: pointer;
 `;
 
 const StyledRoomNameParagraph = styled.p`
@@ -136,6 +137,13 @@ const RoomsTemplate = ({
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
+  useEffect(() => {
+    namespaceSocket.on('user_joined', roomID => {
+      console.log(`user joined room ${roomID}`);
+      setCurrentRoom(roomID);
+    });
+  });
+
   return (
     <>
       <CreateRoomBox />
@@ -152,6 +160,7 @@ const RoomsTemplate = ({
                   onClick={() => {
                     history.push(`${match.url}/room/${item._id}`);
                     namespaceSocket.emit('join_room', item._id.toString());
+                    // chatLoadingStart();
                   }}
                 >
                   <StyledHashIcon />

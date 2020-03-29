@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { setCurrentNamespace } from '../actions/namespaceActions';
 import queryString from 'query-string';
 import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoom } from '../actions/roomActions';
@@ -114,7 +114,9 @@ const ServerContentPage = ({
       <StyledWrapper>
         <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
         <StyledChatWrapper>
-          <Route exact path={`${match.url}/room/:roomID`} component={ChatPage} />
+          <BrowserRouter forceRefresh={true}>
+            <Route exact path={`${match.url}/room/:roomID`} component={ChatPage} />
+          </BrowserRouter>
         </StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>

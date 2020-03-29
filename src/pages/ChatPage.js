@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
 import { chatLoadingStop, setCurrentRoom } from '../actions/roomActions';
 import Spinner from '../components/atoms/Spinner/Spinner';
+import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -21,17 +22,17 @@ const StyledParagraph = styled.p`
 
 const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chatLoadingStop }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
+  const [message, setMessage] = useState(['initial']);
+  const [inputMessage, setInputMessage] = useState('');
+
+  console.log(namespaceSocket);
+
+  const handleChange = e => {
+    setInputMessage(e.target.value);
+    console.log(e.target.value);
+  };
 
   useEffect(() => {
-    console.log('match params changed');
-    setCurrentRoom(match.params.roomID);
-
-    namespaceSocket.on('user_joined', roomID => {
-      console.log(`user joined room ${roomID}`);
-      setCurrentRoom(roomID);
-      chatLoadingStop();
-    });
-
     return () => {
       namespaceSocket.emit('leave_room', match.params.roomID);
       setCurrentRoom(null);
@@ -53,6 +54,14 @@ const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chat
     namespaceSocket.on('user_left', roomID => {
       console.log(`user left room ${roomID}`);
     });
+
+    namespaceSocket.on('history_catchup', history => {
+      console.log(history);
+    });
+
+    namespaceSocket.on('new_message', newMessage => {
+      setMessage(array => [...array, newMessage]);
+    });
   }, [currentRoom]);
 
   return (
@@ -65,12 +74,16 @@ const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chat
             <StyledParagraph>
               {currentRoom ? `You have joined to room ${currentRoom}` : 'Welcome on the main page'}
             </StyledParagraph>
+            {message.map(item => (
+              <StyledParagraph>{item}</StyledParagraph>
+            ))}
+            <input type='text' onChange={e => handleChange(e)} />
             <button
               onClick={() => {
-                namespaceSocket.emit('leave_room', match.params.roomID);
+                namespaceSocket.emit('send_message', { message: inputMessage, room: currentRoom });
               }}
             >
-              leave
+              send
             </button>
           </>
         )}
