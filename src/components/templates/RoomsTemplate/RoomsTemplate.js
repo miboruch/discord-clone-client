@@ -9,7 +9,7 @@ import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
 import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
 import ChatPage from '../../../pages/ChatPage';
-import { chatLoadingStart, setCurrentRoom } from '../../../actions/roomActions';
+import { chatLoadingStart, chatLoadingStop, setCurrentRoom } from '../../../actions/roomActions';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -36,7 +36,7 @@ const RoomsNavbar = styled.div`
   }
 `;
 
-const RoomName = styled.div`
+const NamespaceName = styled.div`
   width: 100%;
   height: 60px;
   display: flex;
@@ -60,17 +60,7 @@ const StyledLink = styled(Link)`
   justify-content: center;
   margin-bottom: 1rem;
   transition: color 0.3s ease;
-`;
-
-const StyledLinkWrapper = styled.div`
-  color: ${({ isCurrent, theme }) => (isCurrent ? '#fff' : theme.color.darkThemeFontColor)};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  transition: color 0.3s ease;
-  cursor: pointer;
+  cursor: ${({ isCurrent }) => (isCurrent ? 'default' : 'pointer')};
 `;
 
 const StyledRoomNameParagraph = styled.p`
@@ -133,6 +123,7 @@ const RoomsTemplate = ({
   setCurrentRoom,
   match,
   chatLoadingStart,
+  chatLoadingStop,
   currentRoom
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
@@ -141,6 +132,7 @@ const RoomsTemplate = ({
     namespaceSocket.on('user_joined', roomID => {
       console.log(`user joined room ${roomID}`);
       setCurrentRoom(roomID);
+      chatLoadingStop();
     });
   });
 
@@ -148,25 +140,32 @@ const RoomsTemplate = ({
     <>
       <CreateRoomBox />
       <RoomsNavbar isOpen={isMenuOpen}>
-        <RoomName>
+        <NamespaceName>
           <p>{namespaceName}</p>
-        </RoomName>
+        </NamespaceName>
         <RoomWrapper>
           {currentNamespaceID ? (
             <>
-              {rooms.map(item => (
-                <StyledLinkWrapper
-                  isCurrent={currentRoom === item._id}
-                  onClick={() => {
-                    history.push(`${match.url}/room/${item._id}`);
-                    namespaceSocket.emit('join_room', item._id.toString());
-                    // chatLoadingStart();
-                  }}
-                >
-                  <StyledHashIcon />
-                  <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
-                </StyledLinkWrapper>
-              ))}
+              {rooms.map(item => {
+                return currentRoom === item._id ? (
+                  <StyledLink isCurrent={true} onClick={event => event.preventDefault()}>
+                    <StyledHashIcon />
+                    <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
+                  </StyledLink>
+                ) : (
+                  <StyledLink
+                    isCurrent={currentRoom === item._id}
+                    onClick={() => {
+                      namespaceSocket.emit('join_room', item._id.toString());
+                      history.push(`${match.url}/room/${item._id}`);
+                      chatLoadingStart();
+                    }}
+                  >
+                    <StyledHashIcon />
+                    <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
+                  </StyledLink>
+                );
+              })}
             </>
           ) : (
             <p>You are not in the server</p>
@@ -192,7 +191,8 @@ const mapDispatchToProps = dispatch => {
   return {
     openCreateRoomBox: () => dispatch(openCreateRoom()),
     setCurrentRoom: roomID => dispatch(setCurrentRoom(roomID)),
-    chatLoadingStart: () => dispatch(chatLoadingStart())
+    chatLoadingStart: () => dispatch(chatLoadingStart()),
+    chatLoadingStop: () => dispatch(chatLoadingStop())
   };
 };
 

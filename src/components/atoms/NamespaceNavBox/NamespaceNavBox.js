@@ -6,12 +6,14 @@ const StyledNamespaceBox = styled.div`
   width: 60px;
   height: 60px;
   border-radius: 8px;
+  border: ${({ isCurrent }) => (isCurrent ? '2px solid #fff' : 'none')};
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : 'rgba(83, 212, 172, 0.7)')};
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 2rem;
+  transition: border 0.5s ease;
 `;
 
 const StyledParagraph = styled.p`
@@ -21,9 +23,9 @@ const StyledParagraph = styled.p`
   color: #fff;
 `;
 
-const NamespaceNavBox = ({ firstLetter, backgroundColor, ...props }) => {
+const NamespaceNavBox = ({ firstLetter, backgroundColor, isCurrent, ...props }) => {
   return (
-    <StyledNamespaceBox backgroundColor={backgroundColor} {...props}>
+    <StyledNamespaceBox backgroundColor={backgroundColor} isCurrent={isCurrent} {...props}>
       <StyledParagraph>{firstLetter}</StyledParagraph>
     </StyledNamespaceBox>
   );

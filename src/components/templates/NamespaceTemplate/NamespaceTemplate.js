@@ -80,7 +80,7 @@ const StyledParagraph = styled.p`
   }
 `;
 
-const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamespace, isMenuOpen }) => {
+const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamespace, isMenuOpen, currentNamespaceID }) => {
   return (
     <StyledWrapper>
       <NavbarWrapper>
@@ -91,7 +91,7 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
               <>
                 {namespaces.created.map(item => (
                   <Link to={`/server/${item._id}`} key={item._id}>
-                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
+                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} isCurrent={currentNamespaceID === item._id.toString()} />
                   </Link>
                 ))}
               </>
@@ -115,8 +115,8 @@ const NamespaceTemplate = ({ children, namespaces, isDarkTheme, openCreateNamesp
   );
 };
 
-const mapStateToProps = ({ namespaceReducer: { namespaces }, toggleReducer: { isDarkTheme, isMenuOpen } }) => {
-  return { namespaces, isDarkTheme, isMenuOpen };
+const mapStateToProps = ({ namespaceReducer: { namespaces, currentNamespaceID }, toggleReducer: { isDarkTheme, isMenuOpen } }) => {
+  return { namespaces, isDarkTheme, isMenuOpen, currentNamespaceID };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -14,18 +14,28 @@ const StyledWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   background-color: transparent;
+  position: relative;
 `;
 
 const StyledParagraph = styled.p`
   color: inherit;
 `;
 
+const StyledInfoBox = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+`;
+
 const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chatLoadingStop }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
   const [message, setMessage] = useState(['initial']);
+  const [members, setMembers] = useState(0);
+  const [roomInfo, setRoomInfo] = useState(null);
   const [inputMessage, setInputMessage] = useState('');
-
-  console.log(namespaceSocket);
 
   const handleChange = e => {
     setInputMessage(e.target.value);
@@ -36,19 +46,15 @@ const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chat
     return () => {
       namespaceSocket.emit('leave_room', match.params.roomID);
       setCurrentRoom(null);
+      setMessage(['left']);
     };
   }, [match.params.roomID]);
 
   useEffect(() => {
-    console.log(currentRoom);
-
-    namespaceSocket.on('room_info', data => {
-      console.log(data);
-    });
-
-    namespaceSocket.on('update_members', clientsCounter => {
-      console.log('Users online: ');
-      console.log(clientsCounter);
+    namespaceSocket.on('room_info', ({ members, room }) => {
+      setMembers(members);
+      setRoomInfo(room[0]);
+      console.log(room);
     });
 
     namespaceSocket.on('user_left', roomID => {
@@ -71,6 +77,11 @@ const ChatPage = ({ match, rooms, setCurrentRoom, currentRoom, chatLoading, chat
           <Spinner />
         ) : (
           <>
+            <StyledInfoBox>
+              <StyledParagraph>Users online: {members}</StyledParagraph>
+              <StyledParagraph>Name: {roomInfo && roomInfo.name}</StyledParagraph>
+              <StyledParagraph>Description: {roomInfo && roomInfo.description}</StyledParagraph>
+            </StyledInfoBox>
             <StyledParagraph>
               {currentRoom ? `You have joined to room ${currentRoom}` : 'Welcome on the main page'}
             </StyledParagraph>

@@ -2,15 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { setCurrentNamespace } from '../actions/namespaceActions';
-import queryString from 'query-string';
 import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoom } from '../actions/roomActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
-import Spinner from '../components/atoms/Spinner/Spinner';
-import CreateRoomBox from '../components/molecules/CreateRoomBox/CreateRoomBox';
 import ChatPage from './ChatPage';
 
 const StyledWrapper = styled.div`
@@ -85,10 +82,10 @@ const ServerContentPage = ({
 
     namespaceSocket.on('load_rooms', rooms => {
       fetchRoomsSuccess(rooms);
-      if (rooms) {
-        namespaceSocket.emit('join_room', rooms[0]._id.toString());
-        history.push(`${match.url}/room/${rooms[0]._id.toString()}`);
-      }
+      // if (rooms) {
+      //   namespaceSocket.emit('join_room', rooms[0]._id.toString());
+      //   history.push(`${match.url}/room/${rooms[0]._id}`);
+      // }
     });
 
     namespaceSocket.on('room_created', room => {
@@ -97,11 +94,6 @@ const ServerContentPage = ({
 
     namespaceSocket.on('disconnect', () => {
       console.log('Namespace disconnected');
-    });
-
-    namespaceSocket.on('user_joined', roomID => {
-      console.log(`user joined room ${roomID}`);
-      setCurrentRoom(roomID);
     });
 
     return () => {
@@ -114,9 +106,7 @@ const ServerContentPage = ({
       <StyledWrapper>
         <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
         <StyledChatWrapper>
-          <BrowserRouter forceRefresh={true}>
-            <Route exact path={`${match.url}/room/:roomID`} component={ChatPage} />
-          </BrowserRouter>
+          <Route exact path={`${match.url}/room/:roomID`} component={ChatPage} />
         </StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>
