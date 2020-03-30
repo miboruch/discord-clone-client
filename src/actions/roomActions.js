@@ -3,10 +3,12 @@ import {
   FETCH_ROOMS_SUCCESS,
   ADD_ROOM,
   REMOVE_ROOM,
-  SET_CURRENT_ROOM,
+  SET_CURRENT_ROOM_ID,
+  SET_ROOM_MEMBERS,
   RESET_ROOMS,
   CHAT_LOADING_START,
-  CHAT_LOADING_STOP
+  CHAT_LOADING_STOP,
+  SET_ROOM_INFO
 } from '../reducers/roomReducer';
 
 export const fetchRoomsStart = () => {
@@ -38,10 +40,24 @@ export const removeRoom = roomID => {
   };
 };
 
-export const setCurrentRoom = roomID => {
+export const setCurrentRoomID = roomID => {
   return {
-    type: SET_CURRENT_ROOM,
+    type: SET_CURRENT_ROOM_ID,
     payload: roomID
+  };
+};
+
+export const setRoomMembers = members => {
+  return {
+    type: SET_ROOM_MEMBERS,
+    payload: members
+  };
+};
+
+export const setRoomInfo = roomInfo => {
+  return {
+    type: SET_ROOM_INFO,
+    payload: roomInfo
   };
 };
 

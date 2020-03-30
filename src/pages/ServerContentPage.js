@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { setCurrentNamespace } from '../actions/namespaceActions';
-import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoom } from '../actions/roomActions';
+import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoomID } from '../actions/roomActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
@@ -48,7 +48,7 @@ const ServerContentPage = ({
   match,
   location,
   setCurrentNamespace,
-  setCurrentRoom,
+  setCurrentRoomID,
   token,
   fetchRoomsStart,
   fetchRoomsSuccess,
@@ -82,10 +82,8 @@ const ServerContentPage = ({
 
     namespaceSocket.on('load_rooms', rooms => {
       fetchRoomsSuccess(rooms);
-      // if (rooms) {
-      //   namespaceSocket.emit('join_room', rooms[0]._id.toString());
-      //   history.push(`${match.url}/room/${rooms[0]._id}`);
-      // }
+      namespaceSocket.emit('join_room', rooms[0]._id.toString());
+      history.push(`${match.url}/room/${rooms[0]._id}`);
     });
 
     namespaceSocket.on('room_created', room => {
@@ -120,7 +118,7 @@ const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { room
 const mapDispatchToProps = dispatch => {
   return {
     setCurrentNamespace: namespaceID => dispatch(setCurrentNamespace(namespaceID)),
-    setCurrentRoom: roomID => dispatch(setCurrentRoom(roomID)),
+    setCurrentRoomID: roomID => dispatch(setCurrentRoomID(roomID)),
     fetchRoomsStart: () => dispatch(fetchRoomsStart()),
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
     resetRooms: () => dispatch(resetRooms()),

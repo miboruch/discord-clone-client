@@ -9,7 +9,13 @@ import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
 import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
 import ChatPage from '../../../pages/ChatPage';
-import { chatLoadingStart, chatLoadingStop, setCurrentRoom } from '../../../actions/roomActions';
+import {
+  chatLoadingStart,
+  chatLoadingStop,
+  setCurrentRoomID,
+  setRoomMembers,
+  setRoomInfo
+} from '../../../actions/roomActions';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -120,18 +126,20 @@ const RoomsTemplate = ({
   isMenuOpen,
   rooms,
   namespaceName,
-  setCurrentRoom,
+  setCurrentRoomID,
   match,
   chatLoadingStart,
   chatLoadingStop,
-  currentRoom
+  currentRoomID,
+  setRoomMembers,
+  setRoomInfo
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
   useEffect(() => {
-    namespaceSocket.on('user_joined', roomID => {
-      console.log(`user joined room ${roomID}`);
-      setCurrentRoom(roomID);
+    namespaceSocket.on('user_joined', ({ room }) => {
+      setCurrentRoomID(room._id.toString());
+      setRoomInfo(room);
       chatLoadingStop();
     });
   });
@@ -147,14 +155,14 @@ const RoomsTemplate = ({
           {currentNamespaceID ? (
             <>
               {rooms.map(item => {
-                return currentRoom === item._id ? (
+                return currentRoomID === item._id ? (
                   <StyledLink isCurrent={true} onClick={event => event.preventDefault()}>
                     <StyledHashIcon />
                     <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
                   </StyledLink>
                 ) : (
                   <StyledLink
-                    isCurrent={currentRoom === item._id}
+                    isCurrent={currentRoomID === item._id}
                     onClick={() => {
                       namespaceSocket.emit('join_room', item._id.toString());
                       history.push(`${match.url}/room/${item._id}`);
@@ -182,17 +190,19 @@ const RoomsTemplate = ({
 const mapStateToProps = ({
   namespaceReducer: { namespaces, currentNamespaceID },
   toggleReducer: { isMenuOpen },
-  roomReducer: { roomsLoading, rooms, currentRoom }
+  roomReducer: { roomsLoading, rooms, currentRoomID }
 }) => {
-  return { namespaces, currentNamespaceID, isMenuOpen, roomsLoading, rooms, currentRoom };
+  return { namespaces, currentNamespaceID, isMenuOpen, roomsLoading, rooms, currentRoomID };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     openCreateRoomBox: () => dispatch(openCreateRoom()),
-    setCurrentRoom: roomID => dispatch(setCurrentRoom(roomID)),
+    setCurrentRoomID: roomID => dispatch(setCurrentRoomID(roomID)),
     chatLoadingStart: () => dispatch(chatLoadingStart()),
-    chatLoadingStop: () => dispatch(chatLoadingStop())
+    chatLoadingStop: () => dispatch(chatLoadingStop()),
+    setRoomMembers: members => dispatch(setRoomMembers(members)),
+    setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo))
   };
 };
 
