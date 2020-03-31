@@ -2,7 +2,7 @@ export const FETCH_ROOMS_START = 'FETCH_ROOMS_START';
 export const FETCH_ROOMS_SUCCESS = 'FETCH_ROOMS_SUCCESS';
 export const ADD_ROOM = 'ADD_ROOM';
 export const REMOVE_ROOM = 'REMOVE_ROOM';
-export const SET_CURRENT_ROOM_ID = 'SET_CURRENT_ROOM_ID';
+export const SET_CURRENT_ROOM_NAME = 'SET_CURRENT_ROOM_NAME';
 export const SET_ROOM_MEMBERS = 'SET_ROOM_MEMBERS';
 export const SET_ROOM_INFO = 'SET_ROOM_INFO';
 export const RESET_ROOMS = 'RESET_ROOMS';
@@ -12,7 +12,7 @@ export const CHAT_LOADING_STOP = 'CHAT_LOADING_STOP';
 const initialState = {
   rooms: [],
   roomsLoading: false,
-  currentRoomID: null,
+  currentRoomName: null,
   currentRoomInfo: {},
   roomMembers: 0,
   chatLoading: false
@@ -41,10 +41,10 @@ export const roomReducer = (state = initialState, action) => {
         ...state,
         rooms: [...state.rooms.filter(item => item._id !== action.payload.id)]
       };
-    case SET_CURRENT_ROOM_ID:
+    case SET_CURRENT_ROOM_NAME:
       return {
         ...state,
-        currentRoomID: action.payload
+        currentRoomName: action.payload
       };
     case SET_ROOM_MEMBERS:
       return {

@@ -4,11 +4,12 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { setCurrentNamespace } from '../actions/namespaceActions';
-import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoomID } from '../actions/roomActions';
+import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoomName } from '../actions/roomActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
 import ChatPage from './ChatPage';
+import slugify from 'slugify';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -48,7 +49,7 @@ const ServerContentPage = ({
   match,
   location,
   setCurrentNamespace,
-  setCurrentRoomID,
+  setCurrentRoomName,
   token,
   fetchRoomsStart,
   fetchRoomsSuccess,
@@ -82,8 +83,8 @@ const ServerContentPage = ({
 
     namespaceSocket.on('load_rooms', rooms => {
       fetchRoomsSuccess(rooms);
-      namespaceSocket.emit('join_room', rooms[0]._id.toString());
-      history.push(`${match.url}/room/${rooms[0]._id}`);
+      namespaceSocket.emit('join_room', { roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`, roomID: rooms[0]._id });
+      history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
     });
 
     namespaceSocket.on('room_created', room => {
@@ -104,7 +105,7 @@ const ServerContentPage = ({
       <StyledWrapper>
         <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
         <StyledChatWrapper>
-          <Route exact path={`${match.url}/room/:roomID`} component={ChatPage} />
+          <Route exact path={`${match.url}/room/:roomName`} component={ChatPage} />
         </StyledChatWrapper>
       </StyledWrapper>
     </NamespaceSocketContext.Provider>
@@ -118,7 +119,7 @@ const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { room
 const mapDispatchToProps = dispatch => {
   return {
     setCurrentNamespace: namespaceID => dispatch(setCurrentNamespace(namespaceID)),
-    setCurrentRoomID: roomID => dispatch(setCurrentRoomID(roomID)),
+    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     fetchRoomsStart: () => dispatch(fetchRoomsStart()),
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
     resetRooms: () => dispatch(resetRooms()),

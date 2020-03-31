@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
-import { chatLoadingStop, setCurrentRoomID, setRoomInfo, setRoomMembers } from '../actions/roomActions';
+import { chatLoadingStop, setCurrentRoomName, setRoomInfo, setRoomMembers } from '../actions/roomActions';
 import Spinner from '../components/atoms/Spinner/Spinner';
 
 const StyledWrapper = styled.div`
@@ -32,8 +32,8 @@ const StyledInfoBox = styled.div`
 const ChatPage = ({
   match,
   rooms,
-  setCurrentRoomID,
-  currentRoomID,
+  setCurrentRoomName,
+  currentRoomName,
   chatLoading,
   chatLoadingStop,
   setRoomMembers,
@@ -51,13 +51,13 @@ const ChatPage = ({
   };
 
   useEffect(() => {
-    return () => {
-      namespaceSocket.emit('leave_room', match.params.roomID);
-      setCurrentRoomID(null);
-      setRoomInfo({});
-      setMessage(['left']);
-    };
-  }, [match.params.roomID]);
+    // return () => {
+    //   namespaceSocket.emit('leave_room', match.params.roomName);
+    //   setCurrentRoomName(null);
+    //   setRoomInfo({});
+    //   setMessage(['left']);
+    // };
+  }, [match.params.roomName]);
 
   useEffect(() => {
     namespaceSocket.on('user_left', ({ roomID }) => {
@@ -69,13 +69,14 @@ const ChatPage = ({
     });
 
     namespaceSocket.on('new_message', newMessage => {
+      console.log(newMessage);
       setMessage(array => [...array, newMessage]);
     });
 
     namespaceSocket.on('members_update', members => {
       setRoomMembers(members);
     });
-  }, [currentRoomID]);
+  }, [currentRoomName]);
 
   return (
     <StyledWrapper>
@@ -90,7 +91,7 @@ const ChatPage = ({
               <StyledParagraph>Description: {currentRoomInfo && currentRoomInfo.description}</StyledParagraph>
             </StyledInfoBox>
             <StyledParagraph>
-              {currentRoomID ? `You have joined to room ${currentRoomID}` : 'Welcome on the main page'}
+              {currentRoomName ? `You have joined to room ${currentRoomName}` : 'Welcome on the main page'}
             </StyledParagraph>
             {message.map(item => (
               <StyledParagraph>{item}</StyledParagraph>
@@ -98,18 +99,18 @@ const ChatPage = ({
             <input type='text' onChange={e => handleChange(e)} />
             <button
               onClick={() => {
-                namespaceSocket.emit('send_message', { message: inputMessage, room: currentRoomID });
+                namespaceSocket.emit('send_message', { message: inputMessage, room: currentRoomName });
               }}
             >
               send
             </button>
-            <button
-              onClick={() => {
-                namespaceSocket.emit('leave_room', currentRoomID);
-              }}
-            >
-              leave
-            </button>
+            {/*<button*/}
+            {/*  onClick={() => {*/}
+            {/*    namespaceSocket.emit('leave_room', currentRoomID);*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  leave*/}
+            {/*</button>*/}
           </>
         )}
       </>
@@ -117,13 +118,13 @@ const ChatPage = ({
   );
 };
 
-const mapStateToProps = ({ roomReducer: { currentRoomID, chatLoading, rooms, currentRoomInfo, roomMembers } }) => {
-  return { currentRoomID, chatLoading, rooms, currentRoomInfo, roomMembers };
+const mapStateToProps = ({ roomReducer: { currentRoomName, chatLoading, rooms, currentRoomInfo, roomMembers } }) => {
+  return { currentRoomName, chatLoading, rooms, currentRoomInfo, roomMembers };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    setCurrentRoomID: roomID => dispatch(setCurrentRoomID(roomID)),
+    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     chatLoadingStop: () => dispatch(chatLoadingStop()),
     setRoomMembers: members => dispatch(setRoomMembers(members)),
     setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo))

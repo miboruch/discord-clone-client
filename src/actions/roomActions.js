@@ -3,7 +3,7 @@ import {
   FETCH_ROOMS_SUCCESS,
   ADD_ROOM,
   REMOVE_ROOM,
-  SET_CURRENT_ROOM_ID,
+  SET_CURRENT_ROOM_NAME,
   SET_ROOM_MEMBERS,
   RESET_ROOMS,
   CHAT_LOADING_START,
@@ -40,10 +40,10 @@ export const removeRoom = roomID => {
   };
 };
 
-export const setCurrentRoomID = roomID => {
+export const setCurrentRoomName = roomName => {
   return {
-    type: SET_CURRENT_ROOM_ID,
-    payload: roomID
+    type: SET_CURRENT_ROOM_NAME,
+    payload: roomName
   };
 };
 
