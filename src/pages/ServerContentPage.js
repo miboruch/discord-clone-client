@@ -68,6 +68,13 @@ const ServerContentPage = ({
   });
 
   useEffect(() => {
+    namespaceSocket.on('connect', () => {
+      console.log('SERVER CONTENT PAGE SOCKET ID');
+      console.log(namespaceSocket.id);
+    });
+  }, []);
+
+  useEffect(() => {
     namespaceSocket.on('namespace_joined', namespaceID => {
       setCurrentNamespace(namespaceID);
     });
@@ -75,6 +82,8 @@ const ServerContentPage = ({
     namespaceSocket.on('connect', () => {
       resetRooms();
       fetchRoomsStart();
+      console.log('SERVER CONTENT PAGE SOCKET ID');
+      console.log(namespaceSocket.id);
     });
 
     namespaceSocket.on('namespace_data', namespace => {

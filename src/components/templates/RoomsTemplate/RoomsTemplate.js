@@ -146,6 +146,13 @@ const RoomsTemplate = ({
     });
   });
 
+  useEffect(() => {
+    namespaceSocket.on('connect', () => {
+      console.log('ROOM TEMPLATE SOCKET ID');
+      console.log(namespaceSocket.id);
+    });
+  }, []);
+
   return (
     <>
       <CreateRoomBox />

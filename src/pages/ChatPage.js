@@ -47,25 +47,34 @@ const ChatPage = ({
 
   const handleChange = e => {
     setInputMessage(e.target.value);
-    console.log(e.target.value);
   };
 
   useEffect(() => {
-    // return () => {
-    //   namespaceSocket.emit('leave_room', match.params.roomName);
-    //   setCurrentRoomName(null);
-    //   setRoomInfo({});
-    //   setMessage(['left']);
-    // };
+    return () => {
+      namespaceSocket.emit('leave_room', match.params.roomName);
+    };
   }, [match.params.roomName]);
 
   useEffect(() => {
-    namespaceSocket.on('user_left', ({ roomID }) => {
-      console.log(`user left room ${roomID}`);
+    namespaceSocket.on('connect', () => {
+      console.log('CHAT PAGE SOCKET ID');
+      console.log(namespaceSocket.id);
+    });
+  }, []);
+
+  useEffect(() => {
+    namespaceSocket.on('user_left', roomName => {
+      console.log(`user left room ${roomName}`);
+      setCurrentRoomName(null);
+      setRoomInfo({});
     });
 
     namespaceSocket.on('history_catchup', history => {
       console.log(history);
+    });
+
+    namespaceSocket.on('members_update', members => {
+      setRoomMembers(members);
     });
 
     namespaceSocket.on('new_message', newMessage => {
@@ -73,9 +82,10 @@ const ChatPage = ({
       setMessage(array => [...array, newMessage]);
     });
 
-    namespaceSocket.on('members_update', members => {
-      setRoomMembers(members);
-    });
+    return () => {
+      console.log('DISC');
+      // namespaceSocket.close();
+    };
   }, [currentRoomName]);
 
   return (
@@ -104,13 +114,6 @@ const ChatPage = ({
             >
               send
             </button>
-            {/*<button*/}
-            {/*  onClick={() => {*/}
-            {/*    namespaceSocket.emit('leave_room', currentRoomID);*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  leave*/}
-            {/*</button>*/}
           </>
         )}
       </>
