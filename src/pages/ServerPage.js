@@ -16,31 +16,36 @@ const StyledWrapper = styled.div`
   height: 100vh;
 `;
 
+let socket;
 const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace }) => {
-  const socket = io(`${API_URL}`, {
-    query: {
-      token
-    }
-  });
+  useEffect(() => {
+    socket = io(`${API_URL}`, {
+      query: {
+        token
+      }
+    });
+  }, []);
 
   useEffect(() => {
-    socket.on('connect', () => {
-      socket.emit('user_connected', {
-        socketID: socket.id
-        // username: socket.query.username
+    if (socket) {
+      socket.on('connect', () => {
+        socket.emit('user_connected', {
+          socketID: socket.id
+          // username: socket.query.username
+        });
+        socket.on('load_rooms', data => {
+          console.log(data);
+        });
+        socket.on('load_namespaces', namespaces => {
+          fetchNamespaces(namespaces);
+          console.log(namespaces);
+        });
+        socket.on('namespace_created', namespace => {
+          console.log(namespace);
+          addCreatedNamespace(namespace);
+        });
       });
-      socket.on('load_rooms', data => {
-        console.log(data);
-      });
-      socket.on('load_namespaces', namespaces => {
-        fetchNamespaces(namespaces);
-        console.log(namespaces);
-      });
-      socket.on('namespace_created', namespace => {
-        console.log(namespace);
-        addCreatedNamespace(namespace);
-      });
-    });
+    }
   }, []);
 
   return (

@@ -138,20 +138,38 @@ const RoomsTemplate = ({
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
   useEffect(() => {
-    namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
-      setCurrentRoomName(roomName);
-      setRoomInfo(roomInfo);
-      chatLoadingStop();
-      console.log(`user joined room ${roomName}`);
-    });
-  });
+    if (namespaceSocket) {
+      namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
+        setCurrentRoomName(roomName);
+        setRoomInfo(roomInfo);
+        chatLoadingStop();
+        console.log(`JOINED ROOM ${roomName}`);
+      });
+
+      namespaceSocket.on('user_left', roomName => {
+        console.log(`user left room ${roomName}`);
+        setCurrentRoomName(null);
+        setRoomInfo({});
+      });
+
+      namespaceSocket.on('history_catchup', history => {
+        console.log(history);
+      });
+
+    }
+  }, [namespaceSocket]);
 
   useEffect(() => {
-    namespaceSocket.on('connect', () => {
-      console.log('ROOM TEMPLATE SOCKET ID');
-      console.log(namespaceSocket.id);
-    });
-  }, []);
+    console.log(!!namespaceSocket);
+    console.log('ROOM TEMPLATE NAMESPACE SOCKET CHANGED');
+  }, [namespaceSocket]);
+
+  // useEffect(() => {
+  //   namespaceSocket.on('connect', () => {
+  //     console.log('ROOM TEMPLATE SOCKET ID');
+  //     console.log(namespaceSocket.id);
+  //   });
+  // }, []);
 
   return (
     <>

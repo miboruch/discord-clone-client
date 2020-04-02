@@ -49,43 +49,30 @@ const ChatPage = ({
     setInputMessage(e.target.value);
   };
 
-  useEffect(() => {
-    return () => {
-      namespaceSocket.emit('leave_room', match.params.roomName);
-    };
-  }, [match.params.roomName]);
+  // useEffect(() => {
+  //   namespaceSocket.on('connect', () => {
+  //     console.log('CHAT PAGE SOCKET ID');
+  //     console.log(namespaceSocket.id);
+  //   });
+  // }, []);
 
   useEffect(() => {
-    namespaceSocket.on('connect', () => {
-      console.log('CHAT PAGE SOCKET ID');
-      console.log(namespaceSocket.id);
-    });
-  }, []);
+    if (namespaceSocket) {
 
-  useEffect(() => {
-    namespaceSocket.on('user_left', roomName => {
-      console.log(`user left room ${roomName}`);
-      setCurrentRoomName(null);
-      setRoomInfo({});
-    });
+      namespaceSocket.on('members_update', members => {
+        setRoomMembers(members);
+      });
 
-    namespaceSocket.on('history_catchup', history => {
-      console.log(history);
-    });
+      namespaceSocket.on('new_message', newMessage => {
+        console.log(newMessage);
+        setMessage(array => [...array, newMessage]);
+      });
 
-    namespaceSocket.on('members_update', members => {
-      setRoomMembers(members);
-    });
-
-    namespaceSocket.on('new_message', newMessage => {
-      console.log(newMessage);
-      setMessage(array => [...array, newMessage]);
-    });
-
-    return () => {
-      console.log('DISC');
-      // namespaceSocket.close();
-    };
+      return () => {
+        namespaceSocket.emit('leave_room', currentRoomName);
+        console.log(`LEFT ROOM ${currentRoomName}`);
+      };
+    }
   }, [currentRoomName]);
 
   return (
