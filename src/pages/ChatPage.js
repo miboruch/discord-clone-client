@@ -49,23 +49,10 @@ const ChatPage = ({
     setInputMessage(e.target.value);
   };
 
-  // useEffect(() => {
-  //   namespaceSocket.on('connect', () => {
-  //     console.log('CHAT PAGE SOCKET ID');
-  //     console.log(namespaceSocket.id);
-  //   });
-  // }, []);
-
   useEffect(() => {
     if (namespaceSocket) {
-
       namespaceSocket.on('members_update', members => {
         setRoomMembers(members);
-      });
-
-      namespaceSocket.on('new_message', newMessage => {
-        console.log(newMessage);
-        setMessage(array => [...array, newMessage]);
       });
 
       return () => {
@@ -74,6 +61,15 @@ const ChatPage = ({
       };
     }
   }, [currentRoomName]);
+
+  useEffect(() => {
+    if (namespaceSocket) {
+      namespaceSocket.on('new_message', newMessage => {
+        console.log(newMessage);
+        setMessage(array => [...array, newMessage]);
+      });
+    }
+  }, [namespaceSocket]);
 
   return (
     <StyledWrapper>

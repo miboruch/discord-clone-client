@@ -155,21 +155,8 @@ const RoomsTemplate = ({
       namespaceSocket.on('history_catchup', history => {
         console.log(history);
       });
-
     }
   }, [namespaceSocket]);
-
-  useEffect(() => {
-    console.log(!!namespaceSocket);
-    console.log('ROOM TEMPLATE NAMESPACE SOCKET CHANGED');
-  }, [namespaceSocket]);
-
-  // useEffect(() => {
-  //   namespaceSocket.on('connect', () => {
-  //     console.log('ROOM TEMPLATE SOCKET ID');
-  //     console.log(namespaceSocket.id);
-  //   });
-  // }, []);
 
   return (
     <>

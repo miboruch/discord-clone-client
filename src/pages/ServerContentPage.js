@@ -82,8 +82,6 @@ const ServerContentPage = ({
       namespaceSocket.on('connect', () => {
         resetRooms();
         fetchRoomsStart();
-        console.log('SERVER CONTENT PAGE SOCKET ID');
-        console.log(namespaceSocket.id);
       });
 
       namespaceSocket.on('namespace_data', namespace => {
@@ -92,11 +90,11 @@ const ServerContentPage = ({
 
       namespaceSocket.on('load_rooms', rooms => {
         fetchRoomsSuccess(rooms);
-        // namespaceSocket.emit('join_room', {
-        //   roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
-        //   roomID: rooms[0]._id
-        // });
-        // history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
+        namespaceSocket.emit('join_room', {
+          roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
+          roomID: rooms[0]._id
+        });
+        history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
       });
 
       namespaceSocket.on('room_created', room => {
@@ -107,12 +105,12 @@ const ServerContentPage = ({
         console.log('Namespace disconnected');
       });
 
-      return () => {
-        setCurrentNamespace(null);
-        // namespaceSocket.emit('namespace_disconnect');
-      };
+      // return () => {
+      //   setCurrentNamespace(null);
+      //   // namespaceSocket.emit('namespace_disconnect');
+      // };
     }
-  }, [namespaceSocket]);
+  }, [match.params.id, namespaceSocket]);
 
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
