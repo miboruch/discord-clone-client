@@ -176,13 +176,13 @@ const RoomsTemplate = ({
                   </StyledLink>
                 ) : (
                   <StyledLink
+                    to={`${match.url}/room/${item._id}${slugify(item.name)}`}
                     isCurrent={false}
                     onClick={() => {
                       namespaceSocket.emit('join_room', {
                         roomName: `${item._id}${slugify(item.name)}`,
                         roomID: item._id
                       });
-                      history.push(`${match.url}/room/${item._id}${slugify(item.name)}`);
                       chatLoadingStart();
                     }}
                   >

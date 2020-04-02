@@ -60,7 +60,8 @@ const ServerContentPage = ({
   roomsLoading,
   addRoom,
   history,
-  rooms
+  rooms,
+  currentNamespaceID
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
 
@@ -70,13 +71,14 @@ const ServerContentPage = ({
         token
       }
     });
-  }, []);
+  }, [match.params.id]);
 
   useEffect(() => {
     if (namespaceSocket) {
       console.log(namespaceSocket);
       namespaceSocket.on('namespace_joined', namespaceID => {
         setCurrentNamespace(namespaceID);
+        console.log('NAMESPACE JOINED');
       });
 
       namespaceSocket.on('connect', () => {
@@ -105,12 +107,12 @@ const ServerContentPage = ({
         console.log('Namespace disconnected');
       });
 
-      // return () => {
-      //   setCurrentNamespace(null);
-      //   // namespaceSocket.emit('namespace_disconnect');
-      // };
+      return () => {
+        setCurrentNamespace(null);
+        namespaceSocket.emit('namespace_disconnect');
+      };
     }
-  }, [match.params.id, namespaceSocket]);
+  }, [match.params.id]);
 
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
@@ -124,8 +126,12 @@ const ServerContentPage = ({
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { roomsLoading, rooms } }) => {
-  return { token, roomsLoading, rooms };
+const mapStateToProps = ({
+  authenticationReducer: { token },
+  roomReducer: { roomsLoading, rooms },
+  namespaceReducer: { currentNamespaceID }
+}) => {
+  return { token, roomsLoading, rooms, currentNamespaceID };
 };
 
 const mapDispatchToProps = dispatch => {

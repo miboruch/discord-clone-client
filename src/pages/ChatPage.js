@@ -86,8 +86,8 @@ const ChatPage = ({
             <StyledParagraph>
               {currentRoomName ? `You have joined to room ${currentRoomName}` : 'Welcome on the main page'}
             </StyledParagraph>
-            {message.map(item => (
-              <StyledParagraph>{item}</StyledParagraph>
+            {message.map((item, index) => (
+              <StyledParagraph key={index}>{item}</StyledParagraph>
             ))}
             <input type='text' onChange={e => handleChange(e)} />
             <button
