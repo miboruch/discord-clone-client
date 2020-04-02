@@ -6,8 +6,6 @@ import {
   SET_CURRENT_ROOM_NAME,
   SET_ROOM_MEMBERS,
   RESET_ROOMS,
-  CHAT_LOADING_START,
-  CHAT_LOADING_STOP,
   SET_ROOM_INFO
 } from '../reducers/roomReducer';
 
@@ -64,17 +62,5 @@ export const setRoomInfo = roomInfo => {
 export const resetRooms = () => {
   return {
     type: RESET_ROOMS
-  };
-};
-
-export const chatLoadingStart = () => {
-  return {
-    type: CHAT_LOADING_START
-  };
-};
-
-export const chatLoadingStop = () => {
-  return {
-    type: CHAT_LOADING_STOP
   };
 };

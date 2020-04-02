@@ -6,16 +6,13 @@ export const SET_CURRENT_ROOM_NAME = 'SET_CURRENT_ROOM_NAME';
 export const SET_ROOM_MEMBERS = 'SET_ROOM_MEMBERS';
 export const SET_ROOM_INFO = 'SET_ROOM_INFO';
 export const RESET_ROOMS = 'RESET_ROOMS';
-export const CHAT_LOADING_START = 'CHAT_LOADING_START';
-export const CHAT_LOADING_STOP = 'CHAT_LOADING_STOP';
 
 const initialState = {
   rooms: [],
   roomsLoading: false,
   currentRoomName: null,
   currentRoomInfo: {},
-  roomMembers: 0,
-  chatLoading: false
+  roomMembers: 0
 };
 
 export const roomReducer = (state = initialState, action) => {
@@ -60,16 +57,6 @@ export const roomReducer = (state = initialState, action) => {
       return {
         ...state,
         rooms: []
-      };
-    case CHAT_LOADING_START:
-      return {
-        ...state,
-        chatLoading: true
-      };
-    case CHAT_LOADING_STOP:
-      return {
-        ...state,
-        chatLoading: false
       };
     default:
       return state;

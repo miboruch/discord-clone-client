@@ -10,13 +10,8 @@ import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
 import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
 import slugify from 'slugify';
 import ChatPage from '../../../pages/ChatPage';
-import {
-  chatLoadingStart,
-  chatLoadingStop,
-  setCurrentRoomName,
-  setRoomMembers,
-  setRoomInfo
-} from '../../../actions/roomActions';
+import { setCurrentRoomName, setRoomMembers, setRoomInfo } from '../../../actions/roomActions';
+import { chatLoading } from '../../../actions/chatActions';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -120,7 +115,6 @@ const StyledHashIcon = styled(HashIcon)`
 `;
 
 const RoomsTemplate = ({
-  history,
   namespaces,
   currentNamespaceID,
   openCreateRoomBox,
@@ -129,11 +123,9 @@ const RoomsTemplate = ({
   namespaceName,
   setCurrentRoomName,
   match,
-  chatLoadingStart,
-  chatLoadingStop,
   currentRoomName,
-  setRoomMembers,
-  setRoomInfo
+  setRoomInfo,
+  chatLoading
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
@@ -142,7 +134,7 @@ const RoomsTemplate = ({
       namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
         setCurrentRoomName(roomName);
         setRoomInfo(roomInfo);
-        chatLoadingStop();
+        chatLoading(false);
         console.log(`JOINED ROOM ${roomName}`);
       });
 
@@ -183,7 +175,7 @@ const RoomsTemplate = ({
                         roomName: `${item._id}${slugify(item.name)}`,
                         roomID: item._id
                       });
-                      chatLoadingStart();
+                      chatLoading(true);
                     }}
                   >
                     <StyledHashIcon />
@@ -216,8 +208,7 @@ const mapDispatchToProps = dispatch => {
   return {
     openCreateRoomBox: () => dispatch(openCreateRoom()),
     setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
-    chatLoadingStart: () => dispatch(chatLoadingStart()),
-    chatLoadingStop: () => dispatch(chatLoadingStop()),
+    chatLoading: isLoading => dispatch(chatLoading(isLoading)),
     setRoomMembers: members => dispatch(setRoomMembers(members)),
     setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo))
   };
