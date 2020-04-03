@@ -26,7 +26,7 @@ const MessageInputWrapper = styled.section`
   width: 96%;
   height: 40px;
   position: absolute;
-  bottom: 2rem;
+  bottom: 4rem;
   left: 50%;
   transform: translateX(-50%);
 `;
