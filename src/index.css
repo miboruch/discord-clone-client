@@ -21,3 +21,20 @@
   src: url('./fonts/FuturaPT-Light.woff') format('woff');
   font-weight: 200;
 }
+
+aside.emoji-picker-react {
+  background-color: #282c34 !important;
+  border: 1px solid #232c34 !important;
+  box-shadow: 0 5px 10px #232c34 !important;
+}
+
+.emoji-group::before {
+  background-color: #282c34 !important;
+}
+
+.emoji-search {
+  background-color: #282c34 !important;
+  border: 1px solid #aaa !important;
+  color: #aaa !important;
+  font-family: Futura !important;
+}

@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { setCurrentNamespace } from '../actions/namespaceActions';
-import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms } from '../actions/roomActions';
+import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoomName } from '../actions/roomActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/namespaceSocketContext';
@@ -49,6 +49,11 @@ const StyledTestBox = styled.div`
   width: 150px;
   height: 100vh;
   border-left: 1px solid #000;
+  display: none;
+
+  ${({ theme }) => theme.mq.standard} {
+    display: block;
+  }
 `;
 
 let namespaceSocket;
@@ -61,7 +66,9 @@ const ServerContentPage = ({
   fetchRoomsSuccess,
   resetRooms,
   addRoom,
-  history
+  history,
+  setCurrentRoomName,
+  currentRoomName
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
 
@@ -109,6 +116,10 @@ const ServerContentPage = ({
 
       return () => {
         setCurrentNamespace(null);
+        if (currentRoomName) {
+          namespaceSocket.emit('leave_room', currentRoomName);
+        }
+        setCurrentRoomName(null);
         namespaceSocket.emit('namespace_disconnect');
       };
     }
@@ -127,8 +138,8 @@ const ServerContentPage = ({
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token } }) => {
-  return { token };
+const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { currentRoomName } }) => {
+  return { token, currentRoomName };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -137,7 +148,8 @@ const mapDispatchToProps = dispatch => {
     fetchRoomsStart: () => dispatch(fetchRoomsStart()),
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
     resetRooms: () => dispatch(resetRooms()),
-    addRoom: room => dispatch(addRoom(room))
+    addRoom: room => dispatch(addRoom(room)),
+    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName))
   };
 };
 

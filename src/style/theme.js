@@ -20,6 +20,8 @@ export const theme = {
     backgroundDark: '#222529',
     backgroundLight: '#f5f5f5',
     darkThemeFontColor: '#8e9297',
+    inputBackgroundDark: '#40444b',
+    inputBackgroundLight: '#f9f9f9'
   },
   mq: {
     mobileL: '@media all and (min-height: 740px)',

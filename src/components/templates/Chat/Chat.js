@@ -5,6 +5,7 @@ import { chatLoading } from '../../../actions/chatActions';
 import Spinner from '../../atoms/Spinner/Spinner';
 import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
 import { setCurrentRoomName, setRoomInfo, setRoomMembers } from '../../../actions/roomActions';
+import MessageInput from '../../molecules/MessageInput/MessageInput';
 
 const StyledChatWrapper = styled.section`
   width: 100%;
@@ -14,10 +15,20 @@ const StyledChatWrapper = styled.section`
   align-items: center;
   flex-direction: column;
   background-color: transparent;
+  position: relative;
 `;
 
 const StyledParagraph = styled.p`
   color: inherit;
+`;
+
+const MessageInputWrapper = styled.section`
+  width: 96%;
+  height: 40px;
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const Chat = ({ isChatLoading, chatLoading, currentRoomName }) => {
@@ -59,6 +70,9 @@ const Chat = ({ isChatLoading, chatLoading, currentRoomName }) => {
       >
         send
       </button>
+      <MessageInputWrapper>
+        <MessageInput />
+      </MessageInputWrapper>
     </StyledChatWrapper>
   );
 };
