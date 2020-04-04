@@ -17,7 +17,7 @@ const StyledWrapper = styled.div`
   position: relative;
 `;
 
-const ChatPage = ({ currentRoomName, setRoomMembers }) => {
+const ChatPage = ({ currentRoomName, setRoomMembers, isChatLoading }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
   useEffect(() => {
@@ -35,14 +35,14 @@ const ChatPage = ({ currentRoomName, setRoomMembers }) => {
 
   return (
     <StyledWrapper>
-      <RoomInfo />
+      {!isChatLoading && <RoomInfo />}
       <Chat />
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ roomReducer: { currentRoomName } }) => {
-  return { currentRoomName };
+const mapStateToProps = ({ roomReducer: { currentRoomName }, chatReducer: { isChatLoading } }) => {
+  return { currentRoomName, isChatLoading };
 };
 
 const mapDispatchToProps = dispatch => {
