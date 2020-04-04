@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
@@ -67,21 +67,10 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName }) => {
   const emojiWrapperRef = useRef(null);
   const inputRef = useRef(null);
   const [isEmojiOpen, setEmojiOpen] = useState(false);
-  const [message, setMessage] = useState([]);
 
   const toggleEmoji = () => {
     setEmojiOpen(!isEmojiOpen);
   };
-
-  /* Move to Chat.js when Redux message state is created */
-  useEffect(() => {
-    if (namespaceSocket) {
-      namespaceSocket.on('new_message', newMessage => {
-        console.log(newMessage);
-        setMessage(array => [...array, newMessage]);
-      });
-    }
-  }, [namespaceSocket]);
 
   useOutsideClick(emojiWrapperRef, isEmojiOpen, toggleEmoji);
 
@@ -90,14 +79,12 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName }) => {
       <Formik
         initialValues={{ message: '' }}
         onSubmit={({ message }, { resetForm }) => {
-          console.log(message);
           namespaceSocket.emit('send_message', { message: message, room: currentRoomName });
           resetForm();
         }}
       >
         {({ handleChange, handleBlur, values, setFieldValue }) => {
           const handleEmojiClick = event => {
-            console.log(event);
             setFieldValue('message', values.message + event.native);
             toggleEmoji();
           };
