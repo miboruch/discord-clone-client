@@ -34,8 +34,6 @@ const MessageInputWrapper = styled.section`
 const Chat = ({ isChatLoading, chatLoading, currentRoomName }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
-  const [inputMessage, setInputMessage] = useState('');
-
   return (
     <StyledChatWrapper>
       <p>Chat Component</p>

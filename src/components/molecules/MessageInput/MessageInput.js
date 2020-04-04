@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Formik, Form, Field } from 'formik';
-import Picker from 'emoji-picker-react';
+import { Formik, Form } from 'formik';
+import { Picker } from 'emoji-mart';
+import 'emoji-mart/css/emoji-mart.css';
 import { useOutsideClick } from '../../../utils/customHooks';
 import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
+import { ReactComponent as EmojiIcon } from '../../../assets/icons/emoji.svg';
 
 const MessageInputWrapper = styled.div`
   width: 100%;
@@ -17,7 +19,7 @@ const StyledTextArea = styled.input`
   height: 100%;
   font-size: 16px;
   border-radius: 10px;
-  border: none;
+  border: ${({ isDarkTheme }) => (isDarkTheme ? 'none' : '1px solid #aaa')};
   color: ${({ isDarkTheme }) => (isDarkTheme ? '#fff' : '#000')};
   background-color: ${({ isDarkTheme, theme }) =>
     isDarkTheme ? theme.color.inputBackgroundDark : theme.color.inputBackgroundLight};
@@ -39,8 +41,8 @@ const EmojiWrapper = styled.div`
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
   pointer-events: ${({ isOpen }) => (isOpen ? 'auto' : 'none')};
-  transition: opacity 0.3s ease, visibility 0.3s ease;
   transform: translateY(-100%);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 `;
 
 const StyledForm = styled(Form)`
@@ -52,18 +54,20 @@ const StyledForm = styled(Form)`
   align-items: center;
 `;
 
+const StyledEmojiIcon = styled(EmojiIcon)`
+  width: 25px;
+  height: 25px;
+  margin: 0 1.5rem;
+  cursor: pointer;
+`;
+
 const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
   const emojiWrapperRef = useRef(null);
   const inputRef = useRef(null);
   const [isEmojiOpen, setEmojiOpen] = useState(false);
-  const [chosenEmoji, setChosenEmoji] = useState(null);
   const [message, setMessage] = useState([]);
-
-  const onEmojiClick = (event, emojiObject) => {
-    setChosenEmoji(emojiObject);
-  };
 
   const toggleEmoji = () => {
     setEmojiOpen(!isEmojiOpen);
@@ -87,34 +91,37 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName }) => {
         initialValues={{ message: '' }}
         onSubmit={({ message }, { resetForm }) => {
           console.log(message);
-          console.log('Test \n hello');
           namespaceSocket.emit('send_message', { message: message, room: currentRoomName });
           resetForm();
         }}
       >
-        {({ handleChange, handleBlur, handleSubmit, values }) => {
+        {({ handleChange, handleBlur, values, setFieldValue }) => {
+          const handleEmojiClick = event => {
+            console.log(event);
+            setFieldValue('message', values.message + event.native);
+            toggleEmoji();
+          };
           return (
-            <StyledForm>
-              <StyledTextArea
-                ref={inputRef}
-                placeholder={`Message #${currentRoomInfo.name}`}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                isDarkTheme={isDarkTheme}
-                value={values.message}
-                name={'message'}
-              />
-              <p onClick={() => toggleEmoji()}>{isEmojiOpen ? 'Close' : 'Open'}</p>
-              <button type='submit' onClick={handleSubmit}>
-                send
-              </button>
-            </StyledForm>
+            <>
+              <StyledForm autocomplete='off'>
+                <StyledTextArea
+                  ref={inputRef}
+                  placeholder={`Message #${currentRoomInfo.name}`}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isDarkTheme={isDarkTheme}
+                  value={values.message}
+                  name={'message'}
+                />
+                <StyledEmojiIcon onClick={() => toggleEmoji()} />
+              </StyledForm>
+              <EmojiWrapper isOpen={isEmojiOpen} ref={emojiWrapperRef}>
+                <Picker onSelect={handleEmojiClick} theme={isDarkTheme ? 'dark' : 'light'} title='Emoji' />
+              </EmojiWrapper>
+            </>
           );
         }}
       </Formik>
-      <EmojiWrapper isOpen={isEmojiOpen} ref={emojiWrapperRef}>
-        <Picker onEmojiClick={onEmojiClick} />
-      </EmojiWrapper>
     </MessageInputWrapper>
   );
 };
