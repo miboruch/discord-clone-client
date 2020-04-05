@@ -61,7 +61,7 @@ const StyledEmojiIcon = styled(EmojiIcon)`
   cursor: pointer;
 `;
 
-const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName }) => {
+const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, userName }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
   const emojiWrapperRef = useRef(null);
@@ -79,7 +79,12 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName }) => {
       <Formik
         initialValues={{ message: '' }}
         onSubmit={({ message }, { resetForm }) => {
-          namespaceSocket.emit('send_message', { message: message, room: currentRoomName });
+          namespaceSocket.emit('send_message', {
+            message: message,
+            room: currentRoomName,
+            userName,
+            date: new Date().toLocaleDateString()
+          });
           resetForm();
         }}
       >
@@ -114,8 +119,12 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName }) => {
   );
 };
 
-const mapStateToProps = ({ toggleReducer: { isDarkTheme }, roomReducer: { currentRoomInfo, currentRoomName } }) => {
-  return { isDarkTheme, currentRoomInfo, currentRoomName };
+const mapStateToProps = ({
+  toggleReducer: { isDarkTheme },
+  roomReducer: { currentRoomInfo, currentRoomName },
+  authenticationReducer: { userID, userName }
+}) => {
+  return { isDarkTheme, currentRoomInfo, currentRoomName, userID, userName };
 };
 
 export default connect(mapStateToProps)(MessageInput);

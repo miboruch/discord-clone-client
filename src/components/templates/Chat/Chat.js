@@ -49,7 +49,12 @@ const Chat = ({ isChatLoading, chatLoading, currentRoomName, addMessage, message
       {/*MessageInputComponent*/}
 
       {messages.map((item, index) => (
-        <StyledParagraph key={index}>{item}</StyledParagraph>
+        <>
+          <StyledParagraph key={index}>
+            {item.name} {item.lastName} {item.date}
+          </StyledParagraph>
+          <StyledParagraph key={index}>{item.message}</StyledParagraph>
+        </>
       ))}
       <StyledParagraph>
         {currentRoomName ? `You have joined to room ${currentRoomName}` : 'Welcome on the main page'}

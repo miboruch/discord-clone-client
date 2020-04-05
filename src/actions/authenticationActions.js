@@ -89,7 +89,7 @@ export const userRegister = (email, password, name, lastName) => async dispatch 
       name,
       lastName
     });
-    console.log(data);
+
     dispatch(authSuccess(data.token, data._doc._id, data.name, data.lastName));
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data._doc._id);
@@ -104,7 +104,17 @@ export const authenticationCheck = () => async dispatch => {
   const userID = localStorage.getItem('userID');
 
   if (token && userID) {
-    dispatch(authSuccess(token, userID));
+    try {
+      const { data } = await axios.get(`${API_URL}/user/user-name`, {
+        headers: {
+          'auth-token': token
+        }
+      });
+
+      dispatch(authSuccess(token, userID, data.name, data.lastName));
+    } catch (error) {
+      dispatch(authStop());
+    }
   } else {
     dispatch(authStop());
   }

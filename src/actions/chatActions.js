@@ -15,8 +15,6 @@ export const setMessages = messages => {
 };
 
 export const addMessage = message => {
-  console.log('ADD MESSAGE MESSAGE');
-  console.log(message);
   return {
     type: ADD_MESSAGE,
     payload: message
