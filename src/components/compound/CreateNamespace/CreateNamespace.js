@@ -1,15 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
 import * as NamespaceMultiStep from './MultiStep/NamespaceMultiStep';
 import { connect } from 'react-redux';
-import { closeCreateNamespace } from '../../../actions/toggleActions';
+import { toggleCreateNamespace } from '../../../actions/toggleActions';
 import ModalBox from '../../molecules/ModalBox/ModalBox';
 import { StyledHeading } from './styles/multiStepStyles';
 import CreateNamespaceForm from '../../molecules/CreateNamespaceForm/CreateNamespaceForm';
 
-const CreateNamespace = ({ isCreateNamespaceOpen, closeCreateNamespace }) => {
+const CreateNamespace = ({ isCreateNamespaceOpen, toggleCreateNamespace }) => {
   return (
-    <ModalBox isOpen={isCreateNamespaceOpen} closeFunction={closeCreateNamespace}>
+    <ModalBox isOpen={isCreateNamespaceOpen} closeFunction={toggleCreateNamespace}>
       <NamespaceMultiStep.Wizard>
         <NamespaceMultiStep.Page pageIndex={0}>
           <NamespaceMultiStep.Controls />
@@ -32,7 +31,7 @@ const mapStateToProps = ({ toggleReducer: { isCreateNamespaceOpen } }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    closeCreateNamespace: () => dispatch(closeCreateNamespace())
+    toggleCreateNamespace: isOpen => dispatch(toggleCreateNamespace(isOpen))
   };
 };
 

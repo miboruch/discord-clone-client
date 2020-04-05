@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { openCreateNamespace } from '../../../actions/toggleActions';
+import { toggleCreateNamespace } from '../../../actions/toggleActions';
 import NamespaceNavBox from '../../atoms/NamespaceNavBox/NamespaceNavBox';
 import { getFirstLetter } from '../../../utils/helpers';
 
@@ -84,9 +84,9 @@ const NamespaceTemplate = ({
   children,
   namespaces,
   isDarkTheme,
-  openCreateNamespace,
+  toggleCreateNamespace,
   isMenuOpen,
-  currentNamespaceID,
+  currentNamespaceID
 }) => {
   return (
     <StyledWrapper>
@@ -97,10 +97,7 @@ const NamespaceTemplate = ({
             {namespaces.created && (
               <>
                 {namespaces.created.map(item => (
-                  <Link
-                    to={`/server/${item._id}`}
-                    key={item._id}
-                  >
+                  <Link to={`/server/${item._id}`} key={item._id}>
                     <NamespaceNavBox
                       firstLetter={getFirstLetter(item.name)}
                       isCurrent={currentNamespaceID === item._id.toString()}
@@ -119,7 +116,7 @@ const NamespaceTemplate = ({
                 ))}
               </>
             )}
-            <NamespaceNavBox firstLetter={'+'} onClick={() => openCreateNamespace()} backgroundColor={'#888'} />
+            <NamespaceNavBox firstLetter={'+'} onClick={() => toggleCreateNamespace(true)} backgroundColor={'#888'} />
           </>
         </StyledNavbar>
       </NavbarWrapper>
@@ -137,7 +134,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    openCreateNamespace: () => dispatch(openCreateNamespace())
+    toggleCreateNamespace: isOpen => dispatch(toggleCreateNamespace(isOpen))
   };
 };
 

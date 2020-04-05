@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import NamespaceSocketContext from '../providers/namespaceSocketContext';
+import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import { setRoomMembers } from '../actions/roomActions';
 import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';

@@ -1,34 +1,22 @@
 import {
-  OPEN_CREATE_NAMESPACE,
-  CLOSE_CREATE_NAMESPACE,
-  OPEN_CREATE_ROOM,
-  CLOSE_CREATE_ROOM,
+  TOGGLE_CREATE_NAMESPACE,
+  TOGGLE_CREATE_ROOM,
   TOGGLE_DARK_THEME,
   SET_DARK_THEME,
   TOGGLE_MENU
 } from '../reducers/toggleReducer';
 
-export const openCreateNamespace = () => {
+export const toggleCreateNamespace = isOpen => {
   return {
-    type: OPEN_CREATE_NAMESPACE
+    type: TOGGLE_CREATE_NAMESPACE,
+    payload: isOpen
   };
 };
 
-export const closeCreateNamespace = () => {
+export const toggleCreateRoom = isOpen => {
   return {
-    type: CLOSE_CREATE_NAMESPACE
-  };
-};
-
-export const openCreateRoom = () => {
-  return {
-    type: OPEN_CREATE_ROOM
-  };
-};
-
-export const closeCreateRoom = () => {
-  return {
-    type: CLOSE_CREATE_ROOM
+    type: TOGGLE_CREATE_ROOM,
+    payload: isOpen
   };
 };
 

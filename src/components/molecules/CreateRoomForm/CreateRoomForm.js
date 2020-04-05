@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import { CreateRoomSchema } from '../../../utils/validationSchema';
-import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
+import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import { StyledButton, StyledForm } from '../AuthContent/styles';
 import FormInput from '../FormInput/FormInput';
-import { closeCreateRoom } from '../../../actions/toggleActions';
+import { toggleCreateRoom } from '../../../actions/toggleActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -24,7 +24,7 @@ const StyledHeading = styled.h1`
   margin-bottom: 3rem;
 `;
 
-const CreateRoomForm = ({ closeCreateRoomBox }) => {
+const CreateRoomForm = ({ toggleCreateRoom }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
   return (
@@ -37,7 +37,7 @@ const CreateRoomForm = ({ closeCreateRoomBox }) => {
         }}
         onSubmit={({ name, description }) => {
           namespaceSocket.emit('create_room', { name, description });
-          closeCreateRoomBox();
+          toggleCreateRoom(false);
         }}
         validationSchema={CreateRoomSchema}
       >
@@ -67,7 +67,7 @@ const CreateRoomForm = ({ closeCreateRoomBox }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    closeCreateRoomBox: () => dispatch(closeCreateRoom())
+    toggleCreateRoom: (isOpen) => dispatch(toggleCreateRoom(isOpen))
   };
 };
 

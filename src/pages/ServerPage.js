@@ -7,9 +7,10 @@ import { API_URL } from '../utils/helpers';
 import { addCreatedNamespace, fetchNamespacesSuccess } from '../actions/namespaceActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
 import ServerContentPage from './ServerContentPage';
-import { closeCreateRoom } from '../actions/toggleActions';
+import { toggleCreateNamespace } from '../actions/toggleActions';
 import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespace';
-import MainSocketContext from '../providers/mainSocketContext';
+import MainSocketContext from '../providers/MainSocketContext';
+import Spinner from '../components/atoms/Spinner/Spinner';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -17,13 +18,16 @@ const StyledWrapper = styled.div`
 `;
 
 let socket;
-const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace }) => {
+
+const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, history, toggleCreateNamespace }) => {
+  const [isSocketLoading, setSocketLoading] = useState(true);
   useEffect(() => {
     socket = io(`${API_URL}`, {
       query: {
         token
       }
     });
+    setSocketLoading(false);
   }, []);
 
   useEffect(() => {
@@ -38,7 +42,12 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace }) => {
         });
         socket.on('load_namespaces', namespaces => {
           fetchNamespaces(namespaces);
-          console.log(namespaces);
+
+          if (namespaces.created.length !== 0) {
+            history.push(`server/${namespaces.created[0]._id}`);
+          } else {
+            toggleCreateNamespace(true);
+          }
         });
         socket.on('namespace_created', namespace => {
           console.log(namespace);
@@ -49,16 +58,22 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace }) => {
   }, []);
 
   return (
-    <MainSocketContext.Provider value={{ socket }}>
-      <StyledWrapper>
-        <CreateNamespace />
-        <NamespaceTemplate>
-          <Switch>
-            <Route path={'/server/:id'} component={ServerContentPage} />
-          </Switch>
-        </NamespaceTemplate>
-      </StyledWrapper>
-    </MainSocketContext.Provider>
+    <>
+      {isSocketLoading ? (
+        <Spinner />
+      ) : (
+        <MainSocketContext.Provider value={{ socket }}>
+          <StyledWrapper>
+            <CreateNamespace />
+            <NamespaceTemplate>
+              <Switch>
+                <Route path={'/server/:id'} component={ServerContentPage} />
+              </Switch>
+            </NamespaceTemplate>
+          </StyledWrapper>
+        </MainSocketContext.Provider>
+      )}
+    </>
   );
 };
 
@@ -69,7 +84,7 @@ const mapStateToProps = ({ authenticationReducer: { token }, toggleReducer: { is
 const mapDispatchToProps = dispatch => {
   return {
     fetchNamespaces: namespaces => dispatch(fetchNamespacesSuccess(namespaces)),
-    closeCreateRoomBox: () => dispatch(closeCreateRoom()),
+    toggleCreateNamespace: isOpen => dispatch(toggleCreateNamespace(isOpen)),
     addCreatedNamespace: namespace => dispatch(addCreatedNamespace(namespace))
   };
 };

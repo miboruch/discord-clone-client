@@ -5,7 +5,7 @@ import { Formik, Form } from 'formik';
 import { Picker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
 import { useOutsideClick } from '../../../utils/customHooks';
-import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
+import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import { ReactComponent as EmojiIcon } from '../../../assets/icons/emoji.svg';
 
 const MessageInputWrapper = styled.div`
@@ -87,6 +87,7 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName }) => {
           const handleEmojiClick = event => {
             setFieldValue('message', values.message + event.native);
             toggleEmoji();
+            inputRef.current.focus();
           };
           return (
             <>

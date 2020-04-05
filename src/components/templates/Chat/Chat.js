@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { addMessage, chatLoading } from '../../../actions/chatActions';
 import Spinner from '../../atoms/Spinner/Spinner';
-import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
+import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import MessageInput from '../../molecules/MessageInput/MessageInput';
 
 const StyledChatWrapper = styled.section`

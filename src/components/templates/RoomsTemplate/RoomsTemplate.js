@@ -1,15 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link, Redirect, withRouter } from 'react-router-dom';
-import { Route } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { openCreateRoom } from '../../../actions/toggleActions';
+import { toggleCreateRoom } from '../../../actions/toggleActions';
 import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
-import NamespaceSocketContext from '../../../providers/namespaceSocketContext';
+import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import slugify from 'slugify';
-import ChatPage from '../../../pages/ChatPage';
 import { setCurrentRoomName, setRoomMembers, setRoomInfo } from '../../../actions/roomActions';
 import { chatLoading } from '../../../actions/chatActions';
 
@@ -117,7 +115,7 @@ const StyledHashIcon = styled(HashIcon)`
 const RoomsTemplate = ({
   namespaces,
   currentNamespaceID,
-  openCreateRoomBox,
+  toggleCreateRoom,
   isMenuOpen,
   rooms,
   namespaceName,
@@ -189,7 +187,7 @@ const RoomsTemplate = ({
           )}
         </RoomWrapper>
         {namespaces.created.some(item => item._id.includes(currentNamespaceID)) && (
-          <StyledCreateParagraph onClick={() => openCreateRoomBox()}>Create new room</StyledCreateParagraph>
+          <StyledCreateParagraph onClick={() => toggleCreateRoom(true)}>Create new room</StyledCreateParagraph>
         )}
       </RoomsNavbar>
     </>
@@ -206,7 +204,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    openCreateRoomBox: () => dispatch(openCreateRoom()),
+    toggleCreateRoom: isOpen => dispatch(toggleCreateRoom(isOpen)),
     setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     chatLoading: isLoading => dispatch(chatLoading(isLoading)),
     setRoomMembers: members => dispatch(setRoomMembers(members)),

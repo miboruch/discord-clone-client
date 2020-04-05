@@ -9,6 +9,7 @@ const initialState = {
   isLoggedIn: false,
   token: null,
   userID: null,
+  userName: {},
   loading: true,
   loginError: null,
   registerError: null
@@ -22,15 +23,16 @@ export const authenticationReducer = (state = initialState, action) => {
         loading: true
       };
     case AUTH_STOP:
-      return{
+      return {
         ...state,
         loading: false
-      }
+      };
     case AUTH_SUCCESS:
       return {
         ...state,
         token: action.payload.token,
         userID: action.payload.userID,
+        userName: { name: action.payload.name, lastName: action.payload.lastName },
         isLoggedIn: true,
         loading: false,
         loginError: null,

@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
-import { closeCreateRoom } from '../../../actions/toggleActions';
+import { toggleCreateRoom } from '../../../actions/toggleActions';
 import ModalBox from '../ModalBox/ModalBox';
 import CreateRoomForm from '../CreateRoomForm/CreateRoomForm';
 
-const CreateRoomBox = ({ isCreateRoomOpen, closeCreateRoomBox }) => {
+const CreateRoomBox = ({ isCreateRoomOpen, toggleCreateRoom }) => {
   return (
-    <ModalBox closeFunction={closeCreateRoomBox} isOpen={isCreateRoomOpen}>
+    <ModalBox closeFunction={toggleCreateRoom} isOpen={isCreateRoomOpen}>
       <CreateRoomForm />
     </ModalBox>
   );
@@ -19,7 +18,7 @@ const mapStateToProps = ({ toggleReducer: { isCreateRoomOpen } }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    closeCreateRoomBox: () => dispatch(closeCreateRoom())
+    toggleCreateRoom: isOpen => dispatch(toggleCreateRoom(isOpen))
   };
 };
 

@@ -1,7 +1,5 @@
-export const OPEN_CREATE_NAMESPACE = 'OPEN_CREATE_NAMESPACE';
-export const CLOSE_CREATE_NAMESPACE = 'CLOSE_CREATE_NAMESPACE';
-export const OPEN_CREATE_ROOM = 'OPEN_CREATE_ROOM';
-export const CLOSE_CREATE_ROOM = 'CLOSE_CREATE_ROOM';
+export const TOGGLE_CREATE_NAMESPACE = 'TOGGLE_CREATE_NAMESPACE';
+export const TOGGLE_CREATE_ROOM = 'TOGGLE_CREATE_ROOM';
 export const TOGGLE_DARK_THEME = 'TOGGLE_DARK_THEME';
 export const SET_DARK_THEME = 'SET_DARK_THEME';
 export const TOGGLE_MENU = 'TOGGLE_MENU';
@@ -15,25 +13,15 @@ const initialState = {
 
 export const toggleReducer = (state = initialState, action) => {
   switch (action.type) {
-    case OPEN_CREATE_NAMESPACE:
+    case TOGGLE_CREATE_NAMESPACE:
       return {
         ...state,
-        isCreateNamespaceOpen: true
+        isCreateNamespaceOpen: action.payload
       };
-    case CLOSE_CREATE_NAMESPACE:
+    case TOGGLE_CREATE_ROOM:
       return {
         ...state,
-        isCreateNamespaceOpen: false
-      };
-    case OPEN_CREATE_ROOM:
-      return {
-        ...state,
-        isCreateRoomOpen: true
-      };
-    case CLOSE_CREATE_ROOM:
-      return {
-        ...state,
-        isCreateRoomOpen: false
+        isCreateRoomOpen: action.payload
       };
     case TOGGLE_DARK_THEME:
       localStorage.setItem('isDarkTheme', `${!state.isDarkTheme}`);

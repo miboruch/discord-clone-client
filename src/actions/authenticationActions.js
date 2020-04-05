@@ -21,12 +21,14 @@ export const authStop = () => {
   };
 };
 
-export const authSuccess = (token, userID) => {
+export const authSuccess = (token, userID, name, lastName) => {
   return {
     type: AUTH_SUCCESS,
     payload: {
-      token: token,
-      userID: userID
+      token,
+      userID,
+      name,
+      lastName
     }
   };
 };
@@ -68,11 +70,10 @@ export const userLogin = (email, password) => async dispatch => {
 
   try {
     const { data } = await axios.post(`${API_URL}/user/login`, { email, password });
-    dispatch(authSuccess(data.token, data.id));
+    dispatch(authSuccess(data.token, data.id, data.name, data.lastName));
 
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data.id);
-    // history.push('/');
   } catch (error) {
     dispatch(authLoginFailure(error));
   }
@@ -89,10 +90,9 @@ export const userRegister = (email, password, name, lastName) => async dispatch 
       lastName
     });
     console.log(data);
-    dispatch(authSuccess(data.token, data._doc._id));
+    dispatch(authSuccess(data.token, data._doc._id, data.name, data.lastName));
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data._doc._id);
-    // history.push('/');
   } catch (error) {
     dispatch(authRegisterFailure(error));
   }

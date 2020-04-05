@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
@@ -7,9 +7,10 @@ import { setCurrentNamespace } from '../actions/namespaceActions';
 import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoomName } from '../actions/roomActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
-import NamespaceSocketContext from '../providers/namespaceSocketContext';
+import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
 import slugify from 'slugify';
+import MainSocketContext from '../providers/MainSocketContext';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -99,11 +100,13 @@ const ServerContentPage = ({
 
       namespaceSocket.on('load_rooms', rooms => {
         fetchRoomsSuccess(rooms);
-        namespaceSocket.emit('join_room', {
-          roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
-          roomID: rooms[0]._id
-        });
-        history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
+        if (rooms.length !== 0) {
+          namespaceSocket.emit('join_room', {
+            roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
+            roomID: rooms[0]._id
+          });
+          history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
+        }
       });
 
       namespaceSocket.on('room_created', room => {

@@ -6,7 +6,7 @@ import { CreateNamespaceSchema } from '../../../utils/validationSchema';
 import FormInput from '../FormInput/FormInput';
 import ToggleCheckbox from '../../atoms/ToggleCheckbox/ToggleCheckbox';
 import { StyledForm, StyledButton } from '../AuthContent/styles';
-import MainSocketContext from '../../../providers/mainSocketContext';
+import MainSocketContext from '../../../providers/MainSocketContext';
 
 const CheckboxWrapper = styled.div`
   margin-bottom: 2rem;
