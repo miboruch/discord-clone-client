@@ -82,7 +82,7 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
         lastName: userName.lastName
       });
     }
-  }, [isTyping]);
+  }, [namespaceSocket, isTyping]);
 
   useOutsideClick(emojiWrapperRef, isEmojiOpen, toggleEmoji);
 
@@ -106,14 +106,17 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
             toggleEmoji();
             inputRef.current.focus();
           };
-          // values.message !== '' ? setIsTyping(true) : setIsTyping(false);
+          
           return (
             <>
               <StyledForm autocomplete='off'>
                 <StyledTextArea
                   ref={inputRef}
                   placeholder={currentRoomInfo && `Message #${currentRoomInfo.name}`}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    values.message !== '' ? setIsTyping(true) : setIsTyping(false);
+                  }}
                   onBlur={handleBlur}
                   isDarkTheme={isDarkTheme}
                   value={values.message}

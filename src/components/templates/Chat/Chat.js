@@ -35,7 +35,7 @@ const BoldSpan = styled.span`
   font-weight: bold;
 `;
 
-const Chat = ({ isChatLoading, chatLoading, addMessage }) => {
+const Chat = ({ isChatLoading, chatLoading, addMessage, currentRoomName }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
   const [typingUser, setTypingUser] = useState(null);
 
@@ -45,6 +45,7 @@ const Chat = ({ isChatLoading, chatLoading, addMessage }) => {
       console.log(namespaceSocket);
       namespaceSocket.on('new_message', newMessage => {
         addMessage(newMessage);
+        console.log(newMessage);
       });
 
       namespaceSocket.on('user_is_typing', ({ name, lastName }) => {

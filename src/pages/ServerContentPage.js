@@ -103,12 +103,12 @@ const ServerContentPage = ({
       namespaceSocket.on('load_rooms', rooms => {
         fetchRoomsSuccess(rooms);
         if (rooms.length !== 0) {
+          chatLoading(true);
           namespaceSocket.emit('join_room', {
             roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
             roomID: rooms[0]._id
           });
           history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
-          chatLoading(true);
         }
       });
 
