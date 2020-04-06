@@ -82,8 +82,7 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
           namespaceSocket.emit('send_message', {
             message: message,
             room: currentRoomName,
-            userName,
-            date: new Date().toLocaleDateString()
+            userName
           });
           resetForm();
         }}

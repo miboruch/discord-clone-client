@@ -59,9 +59,7 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, history, togg
 
   return (
     <>
-      {isSocketLoading ? (
-        <Spinner />
-      ) : (
+      {!isSocketLoading && (
         <MainSocketContext.Provider value={{ socket }}>
           <StyledWrapper>
             <CreateNamespace />

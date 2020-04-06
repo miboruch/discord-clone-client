@@ -5,6 +5,7 @@ import { addMessage, chatLoading } from '../../../actions/chatActions';
 import Spinner from '../../atoms/Spinner/Spinner';
 import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import MessageInput from '../../molecules/MessageInput/MessageInput';
+import MessagesComponent from '../../molecules/MessagesComponent/MessagesComponent';
 
 const StyledChatWrapper = styled.section`
   width: 100%;
@@ -22,10 +23,10 @@ const StyledParagraph = styled.p`
 `;
 
 const MessageInputWrapper = styled.section`
-  width: 96%;
+  width: 100%;
   height: 40px;
   position: absolute;
-  bottom: 4rem;
+  bottom: 3rem;
   left: 50%;
   transform: translateX(-50%);
 `;
@@ -37,7 +38,6 @@ const Chat = ({ isChatLoading, chatLoading, currentRoomName, addMessage, message
     if (namespaceSocket) {
       namespaceSocket.on('new_message', newMessage => {
         addMessage(newMessage);
-        console.log(newMessage);
       });
     }
   }, [namespaceSocket]);
@@ -47,18 +47,19 @@ const Chat = ({ isChatLoading, chatLoading, currentRoomName, addMessage, message
       <p>Chat Component</p>
       {/*While loading spinner, else messages*/}
       {/*MessageInputComponent*/}
-
-      {messages.map((item, index) => (
-        <>
-          <StyledParagraph key={index}>
-            {item.name} {item.lastName} {item.date}
-          </StyledParagraph>
-          <StyledParagraph key={index}>{item.message}</StyledParagraph>
-        </>
-      ))}
-      <StyledParagraph>
-        {currentRoomName ? `You have joined to room ${currentRoomName}` : 'Welcome on the main page'}
-      </StyledParagraph>
+      <MessagesComponent>
+        {/*{messages.map((item, index) => (*/}
+        {/*  <>*/}
+        {/*    <StyledParagraph key={index}>*/}
+        {/*      {item.name} {item.lastName} {item.date}*/}
+        {/*    </StyledParagraph>*/}
+        {/*    <StyledParagraph key={index}>{item.message}</StyledParagraph>*/}
+        {/*  </>*/}
+        {/*))}*/}
+        {/*<StyledParagraph>*/}
+        {/*  {currentRoomName ? `You have joined to room ${currentRoomName}` : 'Welcome on the main page'}*/}
+        {/*</StyledParagraph>*/}
+      </MessagesComponent>
       <MessageInputWrapper>
         <MessageInput />
       </MessageInputWrapper>

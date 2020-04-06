@@ -4,13 +4,17 @@ import { connect } from 'react-redux';
 
 const StyledWrapper = styled.div`
   position: absolute;
-  top: 0;
+  top: 60px;
   left: 0;
   height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
+
+  ${({ theme }) => theme.mq.tablet} {
+    top: 0;
+  }
 `;
 
 const StyledParagraph = styled.p`
