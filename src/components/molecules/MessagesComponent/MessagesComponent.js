@@ -11,14 +11,24 @@ const StyledMessagesWrapper = styled.div`
   height: calc(100vh - 220px);
   padding: 0 2rem;
   overflow-y: scroll;
+
+  ${({ theme }) => theme.mq.standard} {
+    top: 85px;
+    height: calc(100vh - 165px);
+  }
 `;
 
 const MessagesComponent = ({ children, messages }) => {
-  console.log(messages);
   return (
     <StyledMessagesWrapper>
       {messages.map(item => (
-        <Message name={item.name} lastName={item.lastName} date={item.date} message={item.message} />
+        <Message
+          name={item.name}
+          lastName={item.lastName}
+          date={item.date}
+          message={item.message}
+          messageSenderID={item.userID}
+        />
       ))}
     </StyledMessagesWrapper>
   );

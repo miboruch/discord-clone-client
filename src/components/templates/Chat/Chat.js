@@ -10,16 +10,8 @@ import MessagesComponent from '../../molecules/MessagesComponent/MessagesCompone
 const StyledChatWrapper = styled.section`
   width: 100%;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   background-color: transparent;
   position: relative;
-`;
-
-const StyledParagraph = styled.p`
-  color: inherit;
 `;
 
 const MessageInputWrapper = styled.section`
@@ -31,7 +23,7 @@ const MessageInputWrapper = styled.section`
   transform: translateX(-50%);
 `;
 
-const Chat = ({ isChatLoading, chatLoading, currentRoomName, addMessage, messages }) => {
+const Chat = ({ isChatLoading, chatLoading, addMessage }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
   useEffect(() => {
@@ -44,22 +36,9 @@ const Chat = ({ isChatLoading, chatLoading, currentRoomName, addMessage, message
 
   return (
     <StyledChatWrapper>
-      <p>Chat Component</p>
       {/*While loading spinner, else messages*/}
       {/*MessageInputComponent*/}
-      <MessagesComponent>
-        {/*{messages.map((item, index) => (*/}
-        {/*  <>*/}
-        {/*    <StyledParagraph key={index}>*/}
-        {/*      {item.name} {item.lastName} {item.date}*/}
-        {/*    </StyledParagraph>*/}
-        {/*    <StyledParagraph key={index}>{item.message}</StyledParagraph>*/}
-        {/*  </>*/}
-        {/*))}*/}
-        {/*<StyledParagraph>*/}
-        {/*  {currentRoomName ? `You have joined to room ${currentRoomName}` : 'Welcome on the main page'}*/}
-        {/*</StyledParagraph>*/}
-      </MessagesComponent>
+      <MessagesComponent />
       <MessageInputWrapper>
         <MessageInput />
       </MessageInputWrapper>
