@@ -143,7 +143,7 @@ const RoomsTemplate = ({
       });
 
       namespaceSocket.on('history_catchup', history => {
-        console.log(history);
+        chatLoading(false);
       });
     }
   }, [namespaceSocket]);

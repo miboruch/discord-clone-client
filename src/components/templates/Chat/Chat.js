@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { addMessage, chatLoading } from '../../../actions/chatActions';
@@ -23,25 +23,54 @@ const MessageInputWrapper = styled.section`
   transform: translateX(-50%);
 `;
 
+const TypingUserParagraph = styled.p`
+  position: absolute;
+  left: 2.5rem;
+  bottom: 0.5rem;
+  font-size: 12px;
+  color: inherit;
+`;
+
+const BoldSpan = styled.span`
+  font-weight: bold;
+`;
+
 const Chat = ({ isChatLoading, chatLoading, addMessage }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
+  const [typingUser, setTypingUser] = useState(null);
 
   useEffect(() => {
     if (namespaceSocket) {
+      console.log('socket listener changed');
+      console.log(namespaceSocket);
       namespaceSocket.on('new_message', newMessage => {
         addMessage(newMessage);
+      });
+
+      namespaceSocket.on('user_is_typing', ({ name, lastName }) => {
+        setTypingUser({ name, lastName });
+      });
+
+      namespaceSocket.on('user_is_not_typing', () => {
+        setTypingUser(null);
       });
     }
   }, [namespaceSocket]);
 
   return (
     <StyledChatWrapper>
-      {/*While loading spinner, else messages*/}
-      {/*MessageInputComponent*/}
       <MessagesComponent />
       <MessageInputWrapper>
         <MessageInput />
       </MessageInputWrapper>
+      {typingUser && (
+        <TypingUserParagraph>
+          <BoldSpan>
+            {typingUser.name} {typingUser.lastName}
+          </BoldSpan>{' '}
+          is typing...
+        </TypingUserParagraph>
+      )}
     </StyledChatWrapper>
   );
 };

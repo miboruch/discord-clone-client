@@ -11,6 +11,7 @@ import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
 import slugify from 'slugify';
 import MainSocketContext from '../providers/MainSocketContext';
+import { chatLoading } from '../actions/chatActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -69,7 +70,8 @@ const ServerContentPage = ({
   addRoom,
   history,
   setCurrentRoomName,
-  currentRoomName
+  currentRoomName,
+  chatLoading
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
 
@@ -106,6 +108,7 @@ const ServerContentPage = ({
             roomID: rooms[0]._id
           });
           history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
+          chatLoading(true);
         }
       });
 
@@ -152,7 +155,8 @@ const mapDispatchToProps = dispatch => {
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
     resetRooms: () => dispatch(resetRooms()),
     addRoom: room => dispatch(addRoom(room)),
-    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName))
+    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
+    chatLoading: isLoading => dispatch(chatLoading(isLoading))
   };
 };
 

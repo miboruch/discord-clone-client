@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
@@ -67,10 +67,22 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
   const emojiWrapperRef = useRef(null);
   const inputRef = useRef(null);
   const [isEmojiOpen, setEmojiOpen] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   const toggleEmoji = () => {
     setEmojiOpen(!isEmojiOpen);
   };
+
+  useEffect(() => {
+    if (namespaceSocket) {
+      namespaceSocket.emit(isTyping ? 'user_typing' : 'user_finished_typing', {
+        room: currentRoomName,
+        userID: userID,
+        name: userName.name,
+        lastName: userName.lastName
+      });
+    }
+  }, [isTyping]);
 
   useOutsideClick(emojiWrapperRef, isEmojiOpen, toggleEmoji);
 
@@ -94,12 +106,13 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
             toggleEmoji();
             inputRef.current.focus();
           };
+          // values.message !== '' ? setIsTyping(true) : setIsTyping(false);
           return (
             <>
               <StyledForm autocomplete='off'>
                 <StyledTextArea
                   ref={inputRef}
-                  placeholder={`Message #${currentRoomInfo.name}`}
+                  placeholder={currentRoomInfo && `Message #${currentRoomInfo.name}`}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   isDarkTheme={isDarkTheme}

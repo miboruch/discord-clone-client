@@ -5,6 +5,7 @@ import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import { setRoomMembers } from '../actions/roomActions';
 import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';
+import Spinner from '../components/atoms/Spinner/Spinner';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -35,8 +36,14 @@ const ChatPage = ({ currentRoomName, setRoomMembers, isChatLoading }) => {
 
   return (
     <StyledWrapper>
-      {!isChatLoading && <RoomInfo />}
-      <Chat />
+      {isChatLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <RoomInfo />
+          <Chat />
+        </>
+      )}
     </StyledWrapper>
   );
 };
