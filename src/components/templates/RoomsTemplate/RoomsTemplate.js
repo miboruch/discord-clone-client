@@ -146,6 +146,10 @@ const RoomsTemplate = ({
         // chatLoading(false);
         console.log(history);
       });
+
+      return () => {
+        /* user left, clear fetched history */
+      };
     }
   }, [namespaceSocket]);
 

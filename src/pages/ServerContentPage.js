@@ -70,8 +70,8 @@ const ServerContentPage = ({
   addRoom,
   history,
   setCurrentRoomName,
-  currentRoomName,
-  chatLoading
+  currentRoomName
+  // chatLoading
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
 
@@ -84,6 +84,7 @@ const ServerContentPage = ({
   }, [match.params.id]);
 
   useEffect(() => {
+    console.log('SERVER CONTENT PAGE MOUNTS');
     if (namespaceSocket) {
       console.log(namespaceSocket);
       namespaceSocket.on('namespace_joined', namespaceID => {
@@ -103,7 +104,7 @@ const ServerContentPage = ({
       namespaceSocket.on('load_rooms', rooms => {
         fetchRoomsSuccess(rooms);
         if (rooms.length !== 0) {
-          chatLoading(true);
+          // chatLoading(true);
           namespaceSocket.emit('join_room', {
             roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
             roomID: rooms[0]._id
@@ -121,11 +122,11 @@ const ServerContentPage = ({
       });
 
       return () => {
+        console.log('SERVER CONTENT PAGE UNMOUNTS');
         setCurrentNamespace(null);
         if (currentRoomName) {
           namespaceSocket.emit('leave_room', currentRoomName);
         }
-        setCurrentRoomName(null);
         namespaceSocket.emit('namespace_disconnect');
       };
     }
@@ -155,8 +156,8 @@ const mapDispatchToProps = dispatch => {
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
     resetRooms: () => dispatch(resetRooms()),
     addRoom: room => dispatch(addRoom(room)),
-    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
-    chatLoading: isLoading => dispatch(chatLoading(isLoading))
+    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName))
+    // chatLoading: isLoading => dispatch(chatLoading(isLoading))
   };
 };
 

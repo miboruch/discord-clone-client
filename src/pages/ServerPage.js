@@ -35,11 +35,8 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, history, togg
       socket.on('connect', () => {
         socket.emit('user_connected', {
           socketID: socket.id
-          // username: socket.query.username
         });
-        socket.on('load_rooms', data => {
-          console.log(data);
-        });
+
         socket.on('load_namespaces', namespaces => {
           fetchNamespaces(namespaces);
 
@@ -49,6 +46,7 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, history, togg
             toggleCreateNamespace(true);
           }
         });
+
         socket.on('namespace_created', namespace => {
           console.log(namespace);
           addCreatedNamespace(namespace);

@@ -41,11 +41,8 @@ const Chat = ({ isChatLoading, chatLoading, addMessage, currentRoomName }) => {
 
   useEffect(() => {
     if (namespaceSocket) {
-      console.log('socket listener changed');
-      console.log(namespaceSocket);
       namespaceSocket.on('new_message', newMessage => {
         addMessage(newMessage);
-        console.log(newMessage);
       });
 
       namespaceSocket.on('user_is_typing', ({ name, lastName }) => {
@@ -64,14 +61,14 @@ const Chat = ({ isChatLoading, chatLoading, addMessage, currentRoomName }) => {
       <MessageInputWrapper>
         <MessageInput />
       </MessageInputWrapper>
-      {typingUser && (
+      {typingUser ? (
         <TypingUserParagraph>
           <BoldSpan>
             {typingUser.name} {typingUser.lastName}
           </BoldSpan>{' '}
           is typing...
         </TypingUserParagraph>
-      )}
+      ) : null}
     </StyledChatWrapper>
   );
 };

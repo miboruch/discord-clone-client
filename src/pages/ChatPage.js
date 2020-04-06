@@ -6,6 +6,7 @@ import { setRoomMembers } from '../actions/roomActions';
 import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';
 import Spinner from '../components/atoms/Spinner/Spinner';
+import { addMessage } from '../actions/chatActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -18,16 +19,18 @@ const StyledWrapper = styled.div`
   position: relative;
 `;
 
-const ChatPage = ({ currentRoomName, setRoomMembers, isChatLoading }) => {
+const ChatPage = ({ currentRoomName, setRoomMembers, isChatLoading, addMessage, match }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
 
   useEffect(() => {
+    console.log('CHAT PAGE MOUNTS');
     if (namespaceSocket) {
       namespaceSocket.on('members_update', members => {
         setRoomMembers(members);
       });
 
       return () => {
+        console.log('CHAT PAGE UNMOUNTS');
         namespaceSocket.emit('leave_room', currentRoomName);
         console.log(`LEFT ROOM ${currentRoomName}`);
       };
@@ -36,14 +39,16 @@ const ChatPage = ({ currentRoomName, setRoomMembers, isChatLoading }) => {
 
   return (
     <StyledWrapper>
-      {isChatLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          <RoomInfo />
-          <Chat />
-        </>
-      )}
+      {/*{isChatLoading ? (*/}
+      {/*  <Spinner />*/}
+      {/*) : (*/}
+      {/*  <>*/}
+      {/*    <RoomInfo />*/}
+      {/*    <Chat />*/}
+      {/*  </>*/}
+      {/*)}*/}
+      {!isChatLoading && <RoomInfo />}
+      <Chat />
     </StyledWrapper>
   );
 };
@@ -54,7 +59,8 @@ const mapStateToProps = ({ roomReducer: { currentRoomName }, chatReducer: { isCh
 
 const mapDispatchToProps = dispatch => {
   return {
-    setRoomMembers: members => dispatch(setRoomMembers(members))
+    setRoomMembers: members => dispatch(setRoomMembers(members)),
+    addMessage: message => dispatch(addMessage(message))
   };
 };
 
