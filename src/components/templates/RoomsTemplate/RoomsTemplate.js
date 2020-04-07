@@ -119,39 +119,11 @@ const RoomsTemplate = ({
   isMenuOpen,
   rooms,
   namespaceName,
-  setCurrentRoomName,
   match,
   currentRoomName,
-  setRoomInfo,
   chatLoading
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
-
-  useEffect(() => {
-    if (namespaceSocket) {
-      namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
-        setCurrentRoomName(roomName);
-        setRoomInfo(roomInfo);
-        chatLoading(false);
-        console.log(`JOINED ROOM ${roomName}`);
-      });
-
-      namespaceSocket.on('user_left', roomName => {
-        console.log(`user left room ${roomName}`);
-        setCurrentRoomName(null);
-        setRoomInfo({});
-      });
-
-      namespaceSocket.on('history_catchup', history => {
-        // chatLoading(false);
-        console.log(history);
-      });
-
-      return () => {
-        /* user left, clear fetched history */
-      };
-    }
-  }, [namespaceSocket]);
 
   return (
     <>

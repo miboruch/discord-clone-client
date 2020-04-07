@@ -15,10 +15,10 @@ const StyledSpinner = styled.div`
   width: 100px;
   height: 100px;
   background-color: transparent;
-  //position: absolute;
-  //top: 50%;
-  //left: 50%;
-  //transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border: ${({ isDarkTheme }) => (isDarkTheme ? '2px solid rgba(255,255,255, 0.4)' : '2px solid rgba(0,0,0, 0.4)')};
   border-top: 2px solid rgba(23, 23, 23, 1);
   border-radius: 50%;

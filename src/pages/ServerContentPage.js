@@ -4,7 +4,15 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { setCurrentNamespace } from '../actions/namespaceActions';
-import { addRoom, fetchRoomsStart, fetchRoomsSuccess, resetRooms, setCurrentRoomName } from '../actions/roomActions';
+import { setRoomMembers } from '../actions/roomActions';
+import {
+  addRoom,
+  fetchRoomsStart,
+  fetchRoomsSuccess,
+  resetRooms,
+  setCurrentRoomName,
+  setRoomInfo
+} from '../actions/roomActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
@@ -70,8 +78,10 @@ const ServerContentPage = ({
   addRoom,
   history,
   setCurrentRoomName,
-  currentRoomName
-  // chatLoading
+  currentRoomName,
+  setRoomInfo,
+  setRoomMembers,
+  chatLoading
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
 
@@ -104,7 +114,6 @@ const ServerContentPage = ({
       namespaceSocket.on('load_rooms', rooms => {
         fetchRoomsSuccess(rooms);
         if (rooms.length !== 0) {
-          // chatLoading(true);
           namespaceSocket.emit('join_room', {
             roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
             roomID: rooms[0]._id
@@ -132,6 +141,30 @@ const ServerContentPage = ({
     }
   }, [match.params.id]);
 
+  useEffect(() => {
+    if (namespaceSocket) {
+      namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
+        setCurrentRoomName(roomName);
+        setRoomInfo(roomInfo);
+        chatLoading(true);
+        console.log(`JOINED ROOM ${roomName}`);
+      });
+
+      namespaceSocket.on('history_catchup', history => {
+        console.log(history);
+      });
+
+      namespaceSocket.on('members_update', members => {
+        setRoomMembers(members);
+        chatLoading(false);
+      });
+
+      return () => {
+        namespaceSocket.emit('leave_room', currentRoomName);
+      };
+    }
+  }, [namespaceSocket]);
+
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
       <StyledWrapper>
@@ -156,8 +189,10 @@ const mapDispatchToProps = dispatch => {
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
     resetRooms: () => dispatch(resetRooms()),
     addRoom: room => dispatch(addRoom(room)),
-    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName))
-    // chatLoading: isLoading => dispatch(chatLoading(isLoading))
+    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
+    setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo)),
+    setRoomMembers: members => dispatch(setRoomMembers(members)),
+    chatLoading: isLoading => dispatch(chatLoading(isLoading))
   };
 };
 
