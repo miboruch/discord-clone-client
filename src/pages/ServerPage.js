@@ -40,9 +40,7 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, history, togg
         socket.on('load_namespaces', namespaces => {
           fetchNamespaces(namespaces);
 
-          if (namespaces.created.length !== 0) {
-            history.push(`/server/${namespaces.created[0]._id}`);
-          } else {
+          if (namespaces.created.length === 0) {
             toggleCreateNamespace(true);
           }
         });
@@ -53,7 +51,7 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, history, togg
         });
       });
     }
-  }, [socket]);
+  }, []);
 
   return (
     <>

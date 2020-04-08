@@ -5,7 +5,6 @@ import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import { setCurrentRoomName, setRoomInfo, setRoomMembers } from '../actions/roomActions';
 import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';
-import Spinner from '../components/atoms/Spinner/Spinner';
 import { addMessage, chatLoading } from '../actions/chatActions';
 
 const StyledWrapper = styled.div`
@@ -19,17 +18,20 @@ const StyledWrapper = styled.div`
   position: relative;
 `;
 
-const ChatPage = ({ currentRoomName, setRoomMembers, isChatLoading, addMessage, chatLoading }) => {
+const ChatPage = ({
+  currentRoomName,
+  setRoomMembers,
+  isChatLoading,
+  addMessage,
+  chatLoading,
+  setRoomInfo,
+  currentRoomInfo
+}) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
   const [typingUser, setTypingUser] = useState(null);
 
   useEffect(() => {
-    console.log('CHAT PAGE MOUNTS');
     if (namespaceSocket) {
-      namespaceSocket.on('members_update', members => {
-        setRoomMembers(members);
-      });
-
       namespaceSocket.on('new_message', newMessage => {
         addMessage(newMessage);
       });
@@ -47,8 +49,8 @@ const ChatPage = ({ currentRoomName, setRoomMembers, isChatLoading, addMessage, 
   useEffect(() => {
     return () => {
       if (namespaceSocket) {
-        console.log('CHAT PAGE UNMOUNTS');
         namespaceSocket.emit('leave_room', currentRoomName);
+        setRoomInfo({});
         chatLoading(false);
         console.log(`LEFT ROOM ${currentRoomName}`);
       }
@@ -57,14 +59,14 @@ const ChatPage = ({ currentRoomName, setRoomMembers, isChatLoading, addMessage, 
 
   return (
     <StyledWrapper>
-      {!isChatLoading && <RoomInfo />}
+      {!isChatLoading && currentRoomInfo !== {} ? <RoomInfo roomInfo={currentRoomInfo} /> : null}
       <Chat typingUser={typingUser} />
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ roomReducer: { currentRoomName }, chatReducer: { isChatLoading } }) => {
-  return { currentRoomName, isChatLoading };
+const mapStateToProps = ({ roomReducer: { currentRoomName, currentRoomInfo }, chatReducer: { isChatLoading } }) => {
+  return { currentRoomName, isChatLoading, currentRoomInfo };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -72,8 +74,8 @@ const mapDispatchToProps = dispatch => {
     setRoomMembers: members => dispatch(setRoomMembers(members)),
     addMessage: message => dispatch(addMessage(message)),
     setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
-    setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo)),
-    chatLoading: isLoading => dispatch(chatLoading(isLoading))
+    chatLoading: isLoading => dispatch(chatLoading(isLoading)),
+    setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo))
   };
 };
 

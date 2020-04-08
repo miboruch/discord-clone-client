@@ -22,24 +22,20 @@ const StyledParagraph = styled.p`
   padding: 0 1.2rem;
 `;
 
-const RoomInfo = ({ currentRoomInfo, roomMembers }) => {
+const RoomInfo = ({ roomInfo, roomMembers }) => {
   return (
     <StyledWrapper>
-      {currentRoomInfo ? (
-        <>
-          <StyledParagraph>Users online: {roomMembers}</StyledParagraph>
-          <StyledParagraph>Name: {currentRoomInfo && currentRoomInfo.name}</StyledParagraph>
-          <StyledParagraph>Description: {currentRoomInfo && currentRoomInfo.description}</StyledParagraph>
-        </>
-      ) : (
-        <p>Loading...</p>
-      )}
+      <>
+        <StyledParagraph>Users online: {roomMembers}</StyledParagraph>
+        <StyledParagraph>Name: {roomInfo && roomInfo.name}</StyledParagraph>
+        <StyledParagraph>Description: {roomInfo && roomInfo.description}</StyledParagraph>
+      </>
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ roomReducer: { currentRoomInfo, roomMembers } }) => {
-  return { currentRoomInfo, roomMembers };
+const mapStateToProps = ({ roomReducer: { roomMembers } }) => {
+  return { roomMembers };
 };
 
 export default connect(mapStateToProps)(RoomInfo);

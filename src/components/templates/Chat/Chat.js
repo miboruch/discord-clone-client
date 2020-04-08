@@ -36,25 +36,6 @@ const BoldSpan = styled.span`
 `;
 
 const Chat = ({ isChatLoading, chatLoading, addMessage, currentRoomName, typingUser }) => {
-  const { namespaceSocket } = useContext(NamespaceSocketContext);
-  // const [typingUser, setTypingUser] = useState(null);
-
-  useEffect(() => {
-    if (namespaceSocket) {
-      // namespaceSocket.on('new_message', newMessage => {
-      //   addMessage(newMessage);
-      // });
-      //
-      // namespaceSocket.on('user_is_typing', ({ name, lastName }) => {
-      //   setTypingUser({ name, lastName });
-      // });
-      //
-      // namespaceSocket.on('user_is_not_typing', () => {
-      //   setTypingUser(null);
-      // });
-    }
-  }, [namespaceSocket]);
-
   return (
     <StyledChatWrapper>
       {isChatLoading ? (

@@ -146,7 +146,6 @@ const ServerContentPage = ({
       namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
         setCurrentRoomName(roomName);
         setRoomInfo(roomInfo);
-        chatLoading(true);
         console.log(`JOINED ROOM ${roomName}`);
       });
 
@@ -159,9 +158,7 @@ const ServerContentPage = ({
         chatLoading(false);
       });
 
-      return () => {
-        namespaceSocket.emit('leave_room', currentRoomName);
-      };
+      /* Cleanup function will be called from ChatPage.js (leave_room) */
     }
   }, [namespaceSocket]);
 
