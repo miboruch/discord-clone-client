@@ -115,7 +115,7 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
                   placeholder={currentRoomInfo && `Message #${currentRoomInfo.name}`}
                   onChange={event => {
                     handleChange(event);
-                    event.target.value !== '' ? setIsTyping(true) : setIsTyping(false);
+                    event.target.value ? setIsTyping(true) : setIsTyping(false);
                   }}
                   onBlur={handleBlur}
                   isDarkTheme={isDarkTheme}

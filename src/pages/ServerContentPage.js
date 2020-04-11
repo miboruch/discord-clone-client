@@ -6,7 +6,6 @@ import { Route } from 'react-router-dom';
 import { setCurrentNamespace } from '../actions/namespaceActions';
 import { setRoomMembers } from '../actions/roomActions';
 import {
-  addRoom,
   fetchRoomsStart,
   fetchRoomsSuccess,
   resetRooms,
@@ -73,7 +72,6 @@ const ServerContentPage = ({
   fetchRoomsStart,
   fetchRoomsSuccess,
   resetRooms,
-  addRoom,
   setCurrentRoomName,
   currentRoomName,
   setRoomInfo,
@@ -94,9 +92,6 @@ const ServerContentPage = ({
     console.log('SERVER CONTENT PAGE MOUNTS');
     if (namespaceSocket) {
       console.log(namespaceSocket);
-      console.log('--------------');
-      console.log('match params id reload');
-      console.log('--------------');
 
       namespaceSocket.on('namespace_joined', namespaceID => {
         setCurrentNamespace(namespaceID);
@@ -108,6 +103,12 @@ const ServerContentPage = ({
         fetchRoomsStart();
       });
 
+      namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
+        setCurrentRoomName(roomName);
+        setRoomInfo(roomInfo);
+        console.log(`JOINED ROOM ${roomName}`);
+      });
+
       namespaceSocket.on('namespace_data', namespace => {
         setCurrentNamespaceData(namespace);
       });
@@ -116,18 +117,8 @@ const ServerContentPage = ({
         fetchRoomsSuccess(rooms);
       });
 
-      namespaceSocket.on('room_created', room => {
-        addRoom(room);
-      });
-
       namespaceSocket.on('disconnect', () => {
         console.log('Namespace disconnected');
-      });
-
-      namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
-        setCurrentRoomName(roomName);
-        setRoomInfo(roomInfo);
-        console.log(`JOINED ROOM ${roomName}`);
       });
 
       namespaceSocket.on('history_catchup', history => {
@@ -150,6 +141,12 @@ const ServerContentPage = ({
     }
   }, [match.params.id]);
 
+  useEffect(() => {
+    namespaceSocket.on('room_created', rooms => {
+      fetchRoomsSuccess(rooms);
+    });
+  }, [namespaceSocket]);
+
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
       <StyledWrapper>
@@ -163,10 +160,7 @@ const ServerContentPage = ({
   );
 };
 
-const mapStateToProps = ({
-  authenticationReducer: { token },
-  roomReducer: { currentRoomName }
-}) => {
+const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { currentRoomName } }) => {
   return { token, currentRoomName };
 };
 
@@ -176,7 +170,6 @@ const mapDispatchToProps = dispatch => {
     fetchRoomsStart: () => dispatch(fetchRoomsStart()),
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
     resetRooms: () => dispatch(resetRooms()),
-    addRoom: room => dispatch(addRoom(room)),
     setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo)),
     setRoomMembers: members => dispatch(setRoomMembers(members)),

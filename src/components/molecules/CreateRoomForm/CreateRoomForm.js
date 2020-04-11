@@ -35,8 +35,9 @@ const CreateRoomForm = ({ toggleCreateRoom }) => {
           name: '',
           description: ''
         }}
-        onSubmit={({ name, description }) => {
+        onSubmit={({ name, description }, { resetForm }) => {
           namespaceSocket.emit('create_room', { name, description });
+          resetForm();
           toggleCreateRoom(false);
         }}
         validationSchema={CreateRoomSchema}
@@ -67,7 +68,7 @@ const CreateRoomForm = ({ toggleCreateRoom }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleCreateRoom: (isOpen) => dispatch(toggleCreateRoom(isOpen))
+    toggleCreateRoom: isOpen => dispatch(toggleCreateRoom(isOpen))
   };
 };
 
