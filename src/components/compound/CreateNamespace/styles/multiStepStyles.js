@@ -90,15 +90,16 @@ export const BackParagraph = styled.p`
 export const ChooseColorParagraph = styled(BackParagraph)`
   left: auto;
   right: 4rem;
-  position: relative;
+  bottom: 2rem;
 
-  &::after {
+  &::before {
     content: '';
     position: absolute;
-    top: 50%;
-    right: -20px;
-    width: 8px;
-    height: 8px;
+    top: 10%;
+    left: -20px;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #ccc;
     background-color: ${({ color }) => color};
   }
 `;

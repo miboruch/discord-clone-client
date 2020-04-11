@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { toggleCreateNamespace } from '../../../actions/toggleActions';
 import ModalBox from '../../molecules/ModalBox/ModalBox';
 import { StyledHeading } from './styles/multiStepStyles';
-import CreateNamespaceForm from '../../molecules/CreateNamespaceForm/CreateNamespaceForm';
 import CreateNamespaceContextProvider from './context/CreateNamespaceContext';
 import ControlPage from './pages/ControlPage';
 import PageTemplate from './templates/PageTemplate';
+import CreateNamespacePage from './pages/CreateNamespacePage';
 
 /*
  * indexes:
@@ -26,8 +26,7 @@ const CreateNamespaceWrapper = ({ isCreateNamespaceOpen, toggleCreateNamespace }
           <StyledHeading>Page 1</StyledHeading>
         </PageTemplate>
         <PageTemplate pageIndex={2}>
-          <StyledHeading>Create server</StyledHeading>
-          <CreateNamespaceForm />
+          <CreateNamespacePage />
         </PageTemplate>
       </CreateNamespaceContextProvider>
     </ModalBox>

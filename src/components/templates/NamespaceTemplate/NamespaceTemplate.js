@@ -96,7 +96,7 @@ const NamespaceTemplate = ({
           <>
             <Link to={`/home`}>
               <NamespaceNavBox
-                backgroundColor={generateRandomColor()}
+                backgroundColor={'#333'}
                 firstLetter={'H'}
                 isCurrent={currentNamespaceID === 'home'}
               />
@@ -107,7 +107,7 @@ const NamespaceTemplate = ({
                 {namespaces.created.map(item => (
                   <Link to={`/server/${item._id}`} key={item._id}>
                     <NamespaceNavBox
-                      backgroundColor={generateRandomColor()}
+                      backgroundColor={item.color ? item.color : generateRandomColor()}
                       firstLetter={getFirstLetter(item.name)}
                       isCurrent={currentNamespaceID === item._id.toString()}
                     />
@@ -120,7 +120,7 @@ const NamespaceTemplate = ({
               <>
                 {namespaces.joined.map(item => (
                   <Link to={`/server/${item._id}`}>
-                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} backgroundColor={generateRandomColor()} />
+                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} backgroundColor={item.color ? item.color : generateRandomColor()} />
                   </Link>
                 ))}
               </>

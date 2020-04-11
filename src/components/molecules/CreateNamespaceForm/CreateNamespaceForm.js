@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
@@ -7,8 +8,7 @@ import FormInput from '../FormInput/FormInput';
 import ToggleCheckbox from '../../atoms/ToggleCheckbox/ToggleCheckbox';
 import { StyledForm, StyledButton } from '../AuthContent/styles';
 import MainSocketContext from '../../../providers/MainSocketContext';
-import { ChromePicker } from 'react-color';
-import { CreateNamespaceContext } from '../../compound/CreateNamespace/context/CreateNamespaceContext';
+import { toggleCreateNamespace } from '../../../actions/toggleActions';
 
 const CheckboxWrapper = styled.div`
   margin-bottom: 2rem;
@@ -21,41 +21,21 @@ const StyledParagraph = styled.p`
   margin-left: 2rem;
 `;
 
-const PickerWrapper = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: -15px;
-  transform: translateX(100%);
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  border-radius: 100px;
-  z-index: -1;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-`;
-
-const CreateNamespaceForm = ({ userID }) => {
+const CreateNamespaceForm = ({ userID, color, toggleCreateNamespace }) => {
   const { socket } = useContext(MainSocketContext);
-  const { isChooseColorOpen } = useContext(CreateNamespaceContext);
-  const [color, setColor] = useState('#c721ba');
-
-  const handleChangeComplete = (color, event) => {
-    setColor(color.hex);
-  };
 
   return (
     <>
-      <PickerWrapper isOpen={isChooseColorOpen}>
-        <ChromePicker color={color} onChange={handleChangeComplete} />
-      </PickerWrapper>
-
       <Formik
         initialValues={{
           name: '',
           isPrivate: false,
           password: ''
         }}
-        onSubmit={({ name, isPrivate, password }) => {
-          socket.emit('create_namespace', { name, ownerID: userID, isPrivate, password });
+        onSubmit={({ name, isPrivate, password }, { resetForm }) => {
+          socket.emit('create_namespace', { name, ownerID: userID, isPrivate, password, color });
+          toggleCreateNamespace(false);
+          resetForm();
         }}
         validationSchema={CreateNamespaceSchema}
       >
@@ -99,4 +79,14 @@ const mapStateToProps = ({ authenticationReducer: { userID } }) => {
   return { userID };
 };
 
-export default connect(mapStateToProps)(CreateNamespaceForm);
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleCreateNamespace: isOpen => dispatch(toggleCreateNamespace(isOpen))
+  };
+};
+
+CreateNamespaceForm.propTypes = {
+  color: PropTypes.string.isRequired
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNamespaceForm);
