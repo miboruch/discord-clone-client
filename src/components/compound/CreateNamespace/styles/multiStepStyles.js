@@ -86,3 +86,19 @@ export const BackParagraph = styled.p`
   left: 4rem;
   cursor: pointer;
 `;
+
+export const ChooseColorParagraph = styled(BackParagraph)`
+  left: auto;
+  right: 4rem;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    width: 8px;
+    height: 8px;
+    background-color: ${({ color }) => color};
+  }
+`;

@@ -56,7 +56,7 @@ const StyledChatWrapper = styled.section`
 `;
 
 const StyledTestBox = styled.div`
-  width: 150px;
+  width: 300px;
   height: 100vh;
   border-left: 1px solid #000;
   display: none;

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { toggleCreateNamespace } from '../../../actions/toggleActions';
 import NamespaceNavBox from '../../atoms/NamespaceNavBox/NamespaceNavBox';
 import { getFirstLetter } from '../../../utils/helpers';
+import { generateRandomColor } from '../../../utils/helpers';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -93,12 +94,20 @@ const NamespaceTemplate = ({
       <NavbarWrapper>
         <StyledNavbar isOpen={isMenuOpen}>
           <>
+            <Link to={`/home`}>
+              <NamespaceNavBox
+                backgroundColor={generateRandomColor()}
+                firstLetter={'H'}
+                isCurrent={currentNamespaceID === 'home'}
+              />
+            </Link>
             <StyledParagraph>Your servers:</StyledParagraph>
             {namespaces.created && (
               <>
                 {namespaces.created.map(item => (
                   <Link to={`/server/${item._id}`} key={item._id}>
                     <NamespaceNavBox
+                      backgroundColor={generateRandomColor()}
                       firstLetter={getFirstLetter(item.name)}
                       isCurrent={currentNamespaceID === item._id.toString()}
                     />
@@ -111,7 +120,7 @@ const NamespaceTemplate = ({
               <>
                 {namespaces.joined.map(item => (
                   <Link to={`/server/${item._id}`}>
-                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} />
+                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} backgroundColor={generateRandomColor()} />
                   </Link>
                 ))}
               </>

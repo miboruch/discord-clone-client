@@ -8,8 +8,9 @@ import { addCreatedNamespace, fetchNamespacesSuccess } from '../actions/namespac
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
 import ServerContentPage from './ServerContentPage';
 import { toggleCreateNamespace } from '../actions/toggleActions';
-import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespace';
+import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespaceWrapper';
 import MainSocketContext from '../providers/MainSocketContext';
+import HomePage from './HomePage';
 import Spinner from '../components/atoms/Spinner/Spinner';
 
 const StyledWrapper = styled.div`
@@ -62,6 +63,7 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, history, togg
             <NamespaceTemplate>
               <Switch>
                 <Route path={'/server/:id'} component={ServerContentPage} />
+                <Route path={'/home'} component={HomePage} />
               </Switch>
             </NamespaceTemplate>
           </StyledWrapper>

@@ -3,14 +3,22 @@ import PropTypes from 'prop-types';
 
 export const CreateNamespaceContext = React.createContext({
   currentPage: 0,
-  changePage: index => {}
+  changePage: index => {},
+  isChooseColorOpen: false
 });
 
 const CreateNamespaceContextProvider = ({ children }) => {
   const [currentPage, changePage] = useState(0);
+  const [isChooseColorOpen, setChooseColorOpen] = useState(false);
+
+  const toggleColorChoose = () => {
+    setChooseColorOpen(!isChooseColorOpen);
+  };
 
   return (
-    <CreateNamespaceContext.Provider value={{ currentPage, changePage }}>{children}</CreateNamespaceContext.Provider>
+    <CreateNamespaceContext.Provider value={{ currentPage, changePage, isChooseColorOpen, toggleColorChoose }}>
+      {children}
+    </CreateNamespaceContext.Provider>
   );
 };
 
