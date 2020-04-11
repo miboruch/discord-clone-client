@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
@@ -13,13 +13,11 @@ import {
   setCurrentRoomName,
   setRoomInfo
 } from '../actions/roomActions';
+import { chatLoading } from '../actions/chatActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
-import slugify from 'slugify';
-import MainSocketContext from '../providers/MainSocketContext';
-import { chatLoading } from '../actions/chatActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -76,7 +74,6 @@ const ServerContentPage = ({
   fetchRoomsSuccess,
   resetRooms,
   addRoom,
-  history,
   setCurrentRoomName,
   currentRoomName,
   setRoomInfo,
@@ -97,6 +94,10 @@ const ServerContentPage = ({
     console.log('SERVER CONTENT PAGE MOUNTS');
     if (namespaceSocket) {
       console.log(namespaceSocket);
+      console.log('--------------');
+      console.log('match params id reload');
+      console.log('--------------');
+
       namespaceSocket.on('namespace_joined', namespaceID => {
         setCurrentNamespace(namespaceID);
         console.log('NAMESPACE JOINED');
@@ -113,13 +114,6 @@ const ServerContentPage = ({
 
       namespaceSocket.on('load_rooms', rooms => {
         fetchRoomsSuccess(rooms);
-        if (rooms.length !== 0) {
-          namespaceSocket.emit('join_room', {
-            roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
-            roomID: rooms[0]._id
-          });
-          history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
-        }
       });
 
       namespaceSocket.on('room_created', room => {
@@ -130,19 +124,6 @@ const ServerContentPage = ({
         console.log('Namespace disconnected');
       });
 
-      return () => {
-        console.log('SERVER CONTENT PAGE UNMOUNTS');
-        setCurrentNamespace(null);
-        if (currentRoomName) {
-          namespaceSocket.emit('leave_room', currentRoomName);
-        }
-        namespaceSocket.emit('namespace_disconnect');
-      };
-    }
-  }, [match.params.id]);
-
-  useEffect(() => {
-    if (namespaceSocket) {
       namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
         setCurrentRoomName(roomName);
         setRoomInfo(roomInfo);
@@ -158,9 +139,16 @@ const ServerContentPage = ({
         chatLoading(false);
       });
 
-      /* Cleanup function will be called from ChatPage.js (leave_room) */
+      return () => {
+        console.log('SERVER CONTENT PAGE UNMOUNTS');
+        setCurrentNamespace(null);
+        if (currentRoomName) {
+          namespaceSocket.emit('leave_room', currentRoomName);
+        }
+        namespaceSocket.emit('namespace_disconnect');
+      };
     }
-  }, [namespaceSocket]);
+  }, [match.params.id]);
 
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
@@ -175,7 +163,10 @@ const ServerContentPage = ({
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { currentRoomName } }) => {
+const mapStateToProps = ({
+  authenticationReducer: { token },
+  roomReducer: { currentRoomName }
+}) => {
   return { token, currentRoomName };
 };
 

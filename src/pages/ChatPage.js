@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
-import { setCurrentRoomName, setRoomInfo, setRoomMembers } from '../actions/roomActions';
+import { setCurrentRoomName, setRoomInfo } from '../actions/roomActions';
 import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';
 import { addMessage, chatLoading } from '../actions/chatActions';
@@ -20,7 +20,6 @@ const StyledWrapper = styled.div`
 
 const ChatPage = ({
   currentRoomName,
-  setRoomMembers,
   isChatLoading,
   addMessage,
   chatLoading,
@@ -38,10 +37,12 @@ const ChatPage = ({
 
       namespaceSocket.on('user_is_typing', ({ name, lastName }) => {
         setTypingUser({ name, lastName });
+        console.log('user typing');
       });
 
       namespaceSocket.on('user_is_not_typing', () => {
         setTypingUser(null);
+        console.log('user stop typing');
       });
     }
   }, [namespaceSocket]);
@@ -71,7 +72,6 @@ const mapStateToProps = ({ roomReducer: { currentRoomName, currentRoomInfo }, ch
 
 const mapDispatchToProps = dispatch => {
   return {
-    setRoomMembers: members => dispatch(setRoomMembers(members)),
     addMessage: message => dispatch(addMessage(message)),
     setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     chatLoading: isLoading => dispatch(chatLoading(isLoading)),

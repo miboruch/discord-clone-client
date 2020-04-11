@@ -107,19 +107,16 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
             inputRef.current.focus();
           };
 
-          /* fix this - warning */
-          values.message !== '' ? setIsTyping(true) : setIsTyping(false);
-
           return (
             <>
               <StyledForm autocomplete='off'>
                 <StyledTextArea
                   ref={inputRef}
                   placeholder={currentRoomInfo && `Message #${currentRoomInfo.name}`}
-                  onChange={e => {
-                    handleChange(e);
+                  onChange={event => {
+                    handleChange(event);
+                    event.target.value !== '' ? setIsTyping(true) : setIsTyping(false);
                   }}
-                  // onChange={handleChange}
                   onBlur={handleBlur}
                   isDarkTheme={isDarkTheme}
                   value={values.message}

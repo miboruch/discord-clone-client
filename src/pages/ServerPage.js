@@ -11,7 +11,6 @@ import { toggleCreateNamespace } from '../actions/toggleActions';
 import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespaceWrapper';
 import MainSocketContext from '../providers/MainSocketContext';
 import HomePage from './HomePage';
-import Spinner from '../components/atoms/Spinner/Spinner';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -20,7 +19,7 @@ const StyledWrapper = styled.div`
 
 let socket;
 
-const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, history, toggleCreateNamespace }) => {
+const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, toggleCreateNamespace }) => {
   const [isSocketLoading, setSocketLoading] = useState(true);
   useEffect(() => {
     socket = io(`${API_URL}`, {
