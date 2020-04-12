@@ -108,7 +108,7 @@ const StyledCreateParagraph = styled(StyledParagraph)`
 const StyledHashIcon = styled(HashIcon)`
   width: 25px;
   height: 25px;
-  fill: ${({ theme }) => theme.color.darkThemeFontColor};
+  fill: ${({ theme, isCurrent }) => (isCurrent ? '#fff' : theme.color.darkThemeFontColor)};
   margin: 0 1rem;
 `;
 
@@ -138,7 +138,7 @@ const RoomsTemplate = ({
               {rooms.map(item => {
                 return currentRoomName === `${item._id}${slugify(item.name)}` ? (
                   <StyledLink isCurrent={true} onClick={event => event.preventDefault()}>
-                    <StyledHashIcon />
+                    <StyledHashIcon isCurrent={true} />
                     <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
                   </StyledLink>
                 ) : (
@@ -153,7 +153,7 @@ const RoomsTemplate = ({
                       chatLoading(true);
                     }}
                   >
-                    <StyledHashIcon />
+                    <StyledHashIcon isCurrent={false} />
                     <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
                   </StyledLink>
                 );

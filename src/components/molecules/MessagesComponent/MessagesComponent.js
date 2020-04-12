@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Message from '../../atoms/Message/Message';
+import { dateOptions } from '../../../utils/helpers';
 
 const StyledMessagesWrapper = styled.div`
   position: absolute;
@@ -32,7 +33,7 @@ const MessagesComponent = ({ messages }) => {
         <Message
           name={item.name}
           lastName={item.lastName}
-          date={item.date}
+          date={new Date(item.date).toLocaleString('pl-PL', dateOptions)}
           message={item.message}
           messageSenderID={item.userID}
         />

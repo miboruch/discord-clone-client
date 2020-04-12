@@ -12,7 +12,7 @@ import {
   setCurrentRoomName,
   setRoomInfo
 } from '../actions/roomActions';
-import { chatLoading } from '../actions/chatActions';
+import { chatLoading, setMessages } from '../actions/chatActions';
 import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
@@ -78,7 +78,7 @@ const ServerContentPage = ({
   setRoomInfo,
   setRoomMembers,
   chatLoading,
-  history
+  setMessages
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
 
@@ -108,6 +108,7 @@ const ServerContentPage = ({
       namespaceSocket.on('user_joined', ({ roomName, roomInfo }) => {
         setCurrentRoomName(roomName);
         setRoomInfo(roomInfo);
+        chatLoading(false);
         console.log(`JOINED ROOM ${roomName}`);
       });
 
@@ -117,13 +118,6 @@ const ServerContentPage = ({
 
       namespaceSocket.on('load_rooms', rooms => {
         fetchRoomsSuccess(rooms);
-        if (rooms.length !== 0) {
-          namespaceSocket.emit('join_room', {
-            roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
-            roomID: rooms[0]._id
-          });
-          history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
-        }
       });
 
       namespaceSocket.on('disconnect', () => {
@@ -131,7 +125,7 @@ const ServerContentPage = ({
       });
 
       namespaceSocket.on('history_catchup', history => {
-        console.log(history);
+        setMessages(history)
       });
 
       namespaceSocket.on('members_update', members => {
@@ -144,6 +138,7 @@ const ServerContentPage = ({
         setCurrentNamespace(null);
         if (currentRoomName) {
           namespaceSocket.emit('leave_room', currentRoomName);
+          setCurrentRoomName(null);
         }
         namespaceSocket.emit('namespace_disconnect');
       };
@@ -182,7 +177,8 @@ const mapDispatchToProps = dispatch => {
     setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo)),
     setRoomMembers: members => dispatch(setRoomMembers(members)),
-    chatLoading: isLoading => dispatch(chatLoading(isLoading))
+    chatLoading: isLoading => dispatch(chatLoading(isLoading)),
+    setMessages: messages => dispatch(setMessages(messages))
   };
 };
 

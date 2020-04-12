@@ -65,7 +65,7 @@ export const StyledHeading = styled.h1`
   font-family: ${({ theme }) => theme.font.family.avanti};
   color: #000;
   position: absolute;
-  top: 2rem;
+  top: 4rem;
   left: 50%;
   transform: translateX(-50%);
 `;

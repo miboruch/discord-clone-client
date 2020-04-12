@@ -21,3 +21,13 @@ const colors = [
 export const generateRandomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)];
 };
+
+export const dateOptions = {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false
+};

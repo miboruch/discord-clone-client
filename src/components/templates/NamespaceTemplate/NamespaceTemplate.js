@@ -66,7 +66,7 @@ const ContentWrapper = styled.div`
 const StyledParagraph = styled.p`
   color: #fff;
   font-size: 12px;
-  margin-bottom: 2rem;
+  margin-top: 2rem;
   position: relative;
 
   &::before {
@@ -95,11 +95,7 @@ const NamespaceTemplate = ({
         <StyledNavbar isOpen={isMenuOpen}>
           <>
             <Link to={`/home`}>
-              <NamespaceNavBox
-                backgroundColor={'#333'}
-                firstLetter={'H'}
-                isCurrent={currentNamespaceID === 'home'}
-              />
+              <NamespaceNavBox backgroundColor={'#333'} name={'Home'} isCurrent={currentNamespaceID === 'home'} />
             </Link>
             <StyledParagraph>Your servers:</StyledParagraph>
             {namespaces.created && (
@@ -108,7 +104,7 @@ const NamespaceTemplate = ({
                   <Link to={`/server/${item._id}`} key={item._id}>
                     <NamespaceNavBox
                       backgroundColor={item.color ? item.color : generateRandomColor()}
-                      firstLetter={getFirstLetter(item.name)}
+                      name={item.name}
                       isCurrent={currentNamespaceID === item._id.toString()}
                     />
                   </Link>
@@ -120,12 +116,15 @@ const NamespaceTemplate = ({
               <>
                 {namespaces.joined.map(item => (
                   <Link to={`/server/${item._id}`}>
-                    <NamespaceNavBox firstLetter={getFirstLetter(item.name)} backgroundColor={item.color ? item.color : generateRandomColor()} />
+                    <NamespaceNavBox
+                      name={item.name}
+                      backgroundColor={item.color ? item.color : generateRandomColor()}
+                    />
                   </Link>
                 ))}
               </>
             )}
-            <NamespaceNavBox firstLetter={'+'} onClick={() => toggleCreateNamespace(true)} backgroundColor={'#888'} />
+            <NamespaceNavBox name={'+ Add new'} onClick={() => toggleCreateNamespace(true)} backgroundColor={'#555'} />
           </>
         </StyledNavbar>
       </NavbarWrapper>
