@@ -18,14 +18,7 @@ const StyledWrapper = styled.div`
   position: relative;
 `;
 
-const ChatPage = ({
-  currentRoomName,
-  isChatLoading,
-  addMessage,
-  chatLoading,
-  setRoomInfo,
-  currentRoomInfo
-}) => {
+const ChatPage = ({ currentRoomName, isChatLoading, addMessage, chatLoading, setRoomInfo, currentRoomInfo }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
   const [typingUser, setTypingUser] = useState(null);
 

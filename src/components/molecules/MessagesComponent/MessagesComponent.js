@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Message from '../../atoms/Message/Message';
@@ -11,6 +11,7 @@ const StyledMessagesWrapper = styled.div`
   height: calc(100vh - 220px);
   padding: 0 2rem;
   overflow-y: scroll;
+  scroll-behavior: smooth;
 
   ${({ theme }) => theme.mq.standard} {
     top: 85px;
@@ -18,9 +19,15 @@ const StyledMessagesWrapper = styled.div`
   }
 `;
 
-const MessagesComponent = ({ children, messages }) => {
+const MessagesComponent = ({ messages }) => {
+  const messageWrapperRef = useRef(null);
+  useEffect(() => {
+    const messageWrapper = messageWrapperRef.current;
+    messageWrapper.scrollTop = messageWrapper.scrollHeight - messageWrapper.clientHeight;
+  }, [messages]);
+
   return (
-    <StyledMessagesWrapper>
+    <StyledMessagesWrapper ref={messageWrapperRef}>
       {messages.map(item => (
         <Message
           name={item.name}

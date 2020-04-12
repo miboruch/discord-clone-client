@@ -17,6 +17,7 @@ import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
+import slugify from 'slugify';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -76,7 +77,8 @@ const ServerContentPage = ({
   currentRoomName,
   setRoomInfo,
   setRoomMembers,
-  chatLoading
+  chatLoading,
+  history
 }) => {
   const [currentNamespaceData, setCurrentNamespaceData] = useState({});
 
@@ -115,6 +117,13 @@ const ServerContentPage = ({
 
       namespaceSocket.on('load_rooms', rooms => {
         fetchRoomsSuccess(rooms);
+        if (rooms.length !== 0) {
+          namespaceSocket.emit('join_room', {
+            roomName: `${rooms[0]._id}${slugify(rooms[0].name)}`,
+            roomID: rooms[0]._id
+          });
+          history.push(`${match.url}/room/${rooms[0]._id}${slugify(rooms[0].name)}`);
+        }
       });
 
       namespaceSocket.on('disconnect', () => {

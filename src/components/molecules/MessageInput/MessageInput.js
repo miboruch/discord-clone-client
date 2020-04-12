@@ -84,6 +84,10 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
     }
   }, [isTyping]);
 
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   useOutsideClick(emojiWrapperRef, isEmojiOpen, toggleEmoji);
 
   return (
@@ -98,6 +102,7 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
             userID
           });
           resetForm();
+          setIsTyping(false);
         }}
       >
         {({ handleChange, handleBlur, values, setFieldValue }) => {
