@@ -11,7 +11,7 @@ import { NamespaceControllerContext } from '../context/NamespaceControllerContex
 
 const JoinNamespaceForm = ({ setSearchLoading }) => {
   const { socket } = useContext(MainSocketContext);
-  const {changePage} = useContext(NamespaceControllerContext);
+  const { changePage } = useContext(NamespaceControllerContext);
   const [currentFormFocused, setFormFocused] = useState(0);
   //* When the value is 1 - second form will be disabled, when 2 - first one will be disabled
 
@@ -22,6 +22,7 @@ const JoinNamespaceForm = ({ setSearchLoading }) => {
         onSubmit={({ namespaceID }) => {
           socket.emit('search_namespace_by_id', namespaceID);
           setSearchLoading(true);
+          changePage(3);
         }}
         validationSchema={SearchByIDNamespaceSchema}
       >
@@ -51,6 +52,7 @@ const JoinNamespaceForm = ({ setSearchLoading }) => {
         onSubmit={({ namespaceName }) => {
           socket.emit('search_namespace_by_name', namespaceName);
           setSearchLoading(true);
+          changePage(3);
         }}
         validationSchema={SearchByNameNamespaceSchema}
       >
