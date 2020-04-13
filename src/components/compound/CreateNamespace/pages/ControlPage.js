@@ -1,10 +1,10 @@
 /* Choose between join and create server */
 import React, { useContext } from 'react';
-import { CreateNamespaceContext } from '../context/CreateNamespaceContext';
+import { NamespaceControllerContext } from '../context/NamespaceControllerContext';
 import * as Styles from '../styles/multiStepStyles';
 
 const ControlPage = () => {
-  const { currentPage, changePage } = useContext(CreateNamespaceContext);
+  const { currentPage, changePage } = useContext(NamespaceControllerContext);
 
   return (
     currentPage === 0 && (

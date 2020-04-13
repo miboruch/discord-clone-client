@@ -4,7 +4,12 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { API_URL } from '../utils/helpers';
-import { addCreatedNamespace, fetchNamespacesSuccess } from '../actions/namespaceActions';
+import {
+  addCreatedNamespace,
+  fetchNamespacesSuccess,
+  setSearchedNamespaces,
+  setSearchLoading
+} from '../actions/namespaceActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
 import ServerContentPage from './ServerContentPage';
 import { toggleCreateNamespace } from '../actions/toggleActions';
@@ -19,7 +24,14 @@ const StyledWrapper = styled.div`
 
 let socket;
 
-const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, toggleCreateNamespace }) => {
+const ServerPage = ({
+  fetchNamespaces,
+  token,
+  addCreatedNamespace,
+  toggleCreateNamespace,
+  setSearchedNamespaces,
+  setSearchLoading
+}) => {
   const [isSocketLoading, setSocketLoading] = useState(true);
   useEffect(() => {
     socket = io(`${API_URL}`, {
@@ -48,6 +60,11 @@ const ServerPage = ({ fetchNamespaces, token, addCreatedNamespace, toggleCreateN
         socket.on('namespace_created', namespace => {
           console.log(namespace);
           addCreatedNamespace(namespace);
+        });
+
+        socket.on('namespace_search_finished', namespace => {
+          setSearchedNamespaces(namespace);
+          setSearchLoading(false);
         });
       });
     }
@@ -80,7 +97,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchNamespaces: namespaces => dispatch(fetchNamespacesSuccess(namespaces)),
     toggleCreateNamespace: isOpen => dispatch(toggleCreateNamespace(isOpen)),
-    addCreatedNamespace: namespace => dispatch(addCreatedNamespace(namespace))
+    addCreatedNamespace: namespace => dispatch(addCreatedNamespace(namespace)),
+    setSearchedNamespaces: namespaces => dispatch(setSearchedNamespaces(namespaces)),
+    setSearchLoading: isSearching => dispatch(setSearchLoading(isSearching))
   };
 };
 

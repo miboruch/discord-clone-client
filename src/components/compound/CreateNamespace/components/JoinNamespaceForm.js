@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import { StyledButton, StyledForm } from '../../../molecules/AuthContent/styles';
 import FormInput from '../../../molecules/FormInput/FormInput';
 import * as Styles from '../styles/multiStepStyles';
 import { SearchByIDNamespaceSchema, SearchByNameNamespaceSchema } from '../../../../utils/validationSchema';
+import MainSocketContext from '../../../../providers/MainSocketContext';
+import { setSearchLoading } from '../../../../actions/namespaceActions';
+import { NamespaceControllerContext } from '../context/NamespaceControllerContext';
 
-const JoinNamespaceForm = () => {
-  //* When the value is 1 - second form will be disabled, when 2 - first one will be disabled
+const JoinNamespaceForm = ({ setSearchLoading }) => {
+  const { socket } = useContext(MainSocketContext);
+  const {changePage} = useContext(NamespaceControllerContext);
   const [currentFormFocused, setFormFocused] = useState(0);
+  //* When the value is 1 - second form will be disabled, when 2 - first one will be disabled
+
   return (
     <>
       <Formik
         initialValues={{ namespaceID: '' }}
         onSubmit={({ namespaceID }) => {
-          console.log(namespaceID);
+          socket.emit('search_namespace_by_id', namespaceID);
+          setSearchLoading(true);
         }}
         validationSchema={SearchByIDNamespaceSchema}
       >
         {({ handleChange, handleBlur, errors }) => (
           <StyledForm isDisabled={currentFormFocused === 2} autocomplete={'off'}>
             <Styles.StyledInfoParagraph>
-              {errors.namespaceID ? errors.namespaceID : 'By server ID - you can ask server owner to send you server ID'}
+              {errors.namespaceID
+                ? errors.namespaceID
+                : 'By server ID - you can ask server owner to send you server ID'}
             </Styles.StyledInfoParagraph>
             <FormInput
               placeholder={'Server ID'}
@@ -41,12 +49,13 @@ const JoinNamespaceForm = () => {
       <Formik
         initialValues={{ namespaceName: '' }}
         onSubmit={({ namespaceName }) => {
-          console.log(namespaceName);
+          socket.emit('search_namespace_by_name', namespaceName);
+          setSearchLoading(true);
         }}
         validationSchema={SearchByNameNamespaceSchema}
       >
         {({ handleChange, handleBlur, errors }) => (
-          <StyledForm isDisabled={currentFormFocused === 1}  autocomplete={'off'}>
+          <StyledForm isDisabled={currentFormFocused === 1} autocomplete={'off'}>
             <Styles.StyledInfoParagraph>
               {errors.namespaceName ? errors.namespaceName : 'Or by the name'}
             </Styles.StyledInfoParagraph>
@@ -68,4 +77,10 @@ const JoinNamespaceForm = () => {
   );
 };
 
-export default JoinNamespaceForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    setSearchLoading: isSearching => dispatch(setSearchLoading(isSearching))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(JoinNamespaceForm);

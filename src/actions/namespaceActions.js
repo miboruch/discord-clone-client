@@ -4,7 +4,9 @@ import {
   ADD_CREATED_NAMESPACE,
   ADD_JOINED_NAMESPACE,
   REMOVE_NAMESPACE,
-  SET_CURRENT_NAMESPACE
+  SET_CURRENT_NAMESPACE,
+  SET_SEARCHED_NAMESPACES,
+  SET_SEARCH_LOADING
 } from '../reducers/namespaceReducer';
 
 export const fetchNamespacesStart = () => {
@@ -47,5 +49,19 @@ export const setCurrentNamespace = namespaceID => {
   return {
     type: SET_CURRENT_NAMESPACE,
     payload: namespaceID
+  };
+};
+
+export const setSearchedNamespaces = namespaces => {
+  return {
+    type: SET_SEARCHED_NAMESPACES,
+    payload: namespaces
+  };
+};
+
+export const setSearchLoading = isSearching => {
+  return {
+    type: SET_SEARCH_LOADING,
+    payload: isSearching
   };
 };

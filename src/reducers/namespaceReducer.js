@@ -4,12 +4,16 @@ export const ADD_CREATED_NAMESPACE = 'ADD_CREATED_NAMESPACE';
 export const ADD_JOINED_NAMESPACE = 'ADD_JOINED_NAMESPACE';
 export const REMOVE_NAMESPACE = 'REMOVE_NAMESPACE';
 export const SET_CURRENT_NAMESPACE = 'SET_CURRENT_NAMESPACE';
+export const SET_SEARCHED_NAMESPACES = 'SET_SEARCHED_NAMESPACES';
+export const SET_SEARCH_LOADING = 'SET_SEARCH_LOADING';
 
 const initialState = {
   namespaces: {
     joined: [],
     created: []
   },
+  searchedNamespaces: [],
+  isSearching: false,
   namespacesLoading: false,
   currentNamespaceID: ''
 };
@@ -46,6 +50,16 @@ export const namespaceReducer = (state = initialState, action) => {
       return {
         ...state,
         currentNamespaceID: action.payload
+      };
+    case SET_SEARCHED_NAMESPACES:
+      return {
+        ...state,
+        searchedNamespaces: action.payload
+      };
+    case SET_SEARCH_LOADING:
+      return {
+        ...state,
+        isSearching: action.payload
       };
     default:
       return state;

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export const CreateNamespaceContext = React.createContext({
+export const NamespaceControllerContext = React.createContext({
   currentPage: 0,
   changePage: index => {},
   isChooseColorOpen: false
 });
 
-const CreateNamespaceContextProvider = ({ children }) => {
+const NamespaceControllerContextProvider = ({ children }) => {
   const [currentPage, changePage] = useState(0);
   const [isChooseColorOpen, setChooseColorOpen] = useState(false);
 
@@ -16,14 +16,14 @@ const CreateNamespaceContextProvider = ({ children }) => {
   };
 
   return (
-    <CreateNamespaceContext.Provider value={{ currentPage, changePage, isChooseColorOpen, toggleColorChoose }}>
+    <NamespaceControllerContext.Provider value={{ currentPage, changePage, isChooseColorOpen, toggleColorChoose }}>
       {children}
-    </CreateNamespaceContext.Provider>
+    </NamespaceControllerContext.Provider>
   );
 };
 
-CreateNamespaceContextProvider.propTypes = {
+NamespaceControllerContextProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-export default CreateNamespaceContextProvider;
+export default NamespaceControllerContextProvider;

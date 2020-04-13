@@ -112,8 +112,9 @@ const ServerContentPage = ({
         console.log(`JOINED ROOM ${roomName}`);
       });
 
+      /* namespace is returned as an array with one fetched element */
       namespaceSocket.on('namespace_data', namespace => {
-        setCurrentNamespaceData(namespace);
+        setCurrentNamespaceData(namespace[0]);
       });
 
       namespaceSocket.on('load_rooms', rooms => {

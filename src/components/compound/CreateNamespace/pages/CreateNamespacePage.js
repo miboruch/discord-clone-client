@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import CreateNamespaceForm from '../../../molecules/CreateNamespaceForm/CreateNamespaceForm';
 import * as Styles from '../styles/multiStepStyles';
 import { StyledHeading } from '../styles/multiStepStyles';
-import { CreateNamespaceContext } from '../context/CreateNamespaceContext';
+import { NamespaceControllerContext } from '../context/NamespaceControllerContext';
 import { ChromePicker } from 'react-color';
 import { useOutsideClick } from '../../../../utils/customHooks';
 
@@ -20,7 +20,7 @@ const PickerWrapper = styled.div`
 `;
 
 const CreateNamespacePage = () => {
-  const { isChooseColorOpen, toggleColorChoose, changePage } = useContext(CreateNamespaceContext);
+  const { isChooseColorOpen, toggleColorChoose, changePage } = useContext(NamespaceControllerContext);
   const colorPickerRef = useRef(null);
   const [color, setColor] = useState('#53d4ac');
 

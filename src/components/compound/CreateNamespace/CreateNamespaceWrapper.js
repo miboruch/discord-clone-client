@@ -2,24 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { toggleCreateNamespace } from '../../../actions/toggleActions';
 import ModalBox from '../../molecules/ModalBox/ModalBox';
-import { StyledHeading } from './styles/multiStepStyles';
-import CreateNamespaceContextProvider from './context/CreateNamespaceContext';
+import NamespaceControllerContextProvider from './context/NamespaceControllerContext';
 import ControlPage from './pages/ControlPage';
 import PageTemplate from './templates/PageTemplate';
 import CreateNamespacePage from './pages/CreateNamespacePage';
 import JoinNamespacePage from './pages/JoinNamespacePage';
+import FoundNamespacesPage from './pages/FoundNamespacesPage';
 
 /*
  * indexes:
  * - 0. Main page (controls to which page should redirect)
  * - 1. Create new namespace
  * - 2. Join to the namespace
+ * - 3. Render searched namespaces
  */
 
 const CreateNamespaceWrapper = ({ isCreateNamespaceOpen, toggleCreateNamespace }) => {
   return (
     <ModalBox isOpen={isCreateNamespaceOpen} closeFunction={toggleCreateNamespace}>
-      <CreateNamespaceContextProvider>
+      <NamespaceControllerContextProvider>
         <PageTemplate pageIndex={0}>
           <ControlPage />
         </PageTemplate>
@@ -29,7 +30,10 @@ const CreateNamespaceWrapper = ({ isCreateNamespaceOpen, toggleCreateNamespace }
         <PageTemplate pageIndex={2}>
           <JoinNamespacePage />
         </PageTemplate>
-      </CreateNamespaceContextProvider>
+        <PageTemplate pageIndex={3}>
+          <FoundNamespacesPage />
+        </PageTemplate>
+      </NamespaceControllerContextProvider>
     </ModalBox>
   );
 };
