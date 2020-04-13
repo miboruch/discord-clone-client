@@ -15,6 +15,9 @@ export const StyledHeading = styled.h1`
 
 export const StyledForm = styled(Form)`
   width: 90%;
+  opacity: ${({ isDisabled }) => (isDisabled ? 0.7 : 1)};
+  pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'auto')};
+  transition: opacity 0.5s ease;
 `;
 
 export const StyledButton = styled.button`
@@ -23,7 +26,6 @@ export const StyledButton = styled.button`
   background: ${({ theme }) => theme.color.backgroundDark};
   border: none;
   font-family: ${({ theme }) => theme.font.family.futura};
-  margin-top: 1rem;
   color: #fff;
   font-size: 16px;
   cursor: pointer;

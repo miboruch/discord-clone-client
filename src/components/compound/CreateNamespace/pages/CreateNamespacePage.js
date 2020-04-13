@@ -20,7 +20,7 @@ const PickerWrapper = styled.div`
 `;
 
 const CreateNamespacePage = () => {
-  const { isChooseColorOpen, toggleColorChoose } = useContext(CreateNamespaceContext);
+  const { isChooseColorOpen, toggleColorChoose, changePage } = useContext(CreateNamespaceContext);
   const colorPickerRef = useRef(null);
   const [color, setColor] = useState('#53d4ac');
 
@@ -37,6 +37,7 @@ const CreateNamespacePage = () => {
       <PickerWrapper ref={colorPickerRef} isOpen={isChooseColorOpen}>
         <ChromePicker color={color} onChange={handleChangeComplete} />
       </PickerWrapper>
+      <Styles.BackParagraph onClick={() => changePage(0)}>GO BACK</Styles.BackParagraph>
       <Styles.ChooseColorParagraph onClick={() => toggleColorChoose()} color={color}>
         {isChooseColorOpen ? 'SAVE' : 'CHOOSE COLOR'}
       </Styles.ChooseColorParagraph>

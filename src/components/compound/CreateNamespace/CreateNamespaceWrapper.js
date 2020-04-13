@@ -7,12 +7,13 @@ import CreateNamespaceContextProvider from './context/CreateNamespaceContext';
 import ControlPage from './pages/ControlPage';
 import PageTemplate from './templates/PageTemplate';
 import CreateNamespacePage from './pages/CreateNamespacePage';
+import JoinNamespacePage from './pages/JoinNamespacePage';
 
 /*
  * indexes:
  * - 0. Main page (controls to which page should redirect)
- * - 1. Join to namespace
- * - 2. Create new namespace
+ * - 1. Create new namespace
+ * - 2. Join to the namespace
  */
 
 const CreateNamespaceWrapper = ({ isCreateNamespaceOpen, toggleCreateNamespace }) => {
@@ -23,10 +24,10 @@ const CreateNamespaceWrapper = ({ isCreateNamespaceOpen, toggleCreateNamespace }
           <ControlPage />
         </PageTemplate>
         <PageTemplate pageIndex={1}>
-          <StyledHeading>Page 1</StyledHeading>
+          <CreateNamespacePage />
         </PageTemplate>
         <PageTemplate pageIndex={2}>
-          <CreateNamespacePage />
+          <JoinNamespacePage />
         </PageTemplate>
       </CreateNamespaceContextProvider>
     </ModalBox>

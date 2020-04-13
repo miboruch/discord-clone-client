@@ -133,7 +133,7 @@ const RoomsTemplate = ({
           <p>{namespaceName}</p>
         </NamespaceName>
         <RoomWrapper>
-          {currentNamespaceID ? (
+          {currentNamespaceID && (
             <>
               {rooms.map(item => {
                 return currentRoomName === `${item._id}${slugify(item.name)}` ? (
@@ -159,8 +159,6 @@ const RoomsTemplate = ({
                 );
               })}
             </>
-          ) : (
-            <p>You are not in the server</p>
           )}
         </RoomWrapper>
         {namespaces.created.some(item => item._id.includes(currentNamespaceID)) && (

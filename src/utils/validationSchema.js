@@ -35,6 +35,18 @@ export const CreateNamespaceSchema = Yup.object().shape({
   password: Yup.string().min(3, 'Password is too short - 3 chars minimum')
 });
 
+export const SearchByIDNamespaceSchema = Yup.object().shape({
+  namespaceID: Yup.string()
+    .min(20, 'Namespace ID is too short - 20 chars minimum')
+    .required('One of this fields is required')
+});
+
+export const SearchByNameNamespaceSchema = Yup.object().shape({
+  namespaceName: Yup.string()
+    .min(2, 'Namespace name is too short - 2 chars minimum')
+    .required('One of this fields is required')
+});
+
 export const CreateRoomSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Room name is too short - 2 chars minimum')

@@ -9,6 +9,7 @@ import ToggleCheckbox from '../../atoms/ToggleCheckbox/ToggleCheckbox';
 import { StyledForm, StyledButton } from '../AuthContent/styles';
 import MainSocketContext from '../../../providers/MainSocketContext';
 import { toggleCreateNamespace } from '../../../actions/toggleActions';
+import { CreateNamespaceContext } from '../../compound/CreateNamespace/context/CreateNamespaceContext';
 
 const CheckboxWrapper = styled.div`
   margin-bottom: 2rem;
@@ -23,6 +24,7 @@ const StyledParagraph = styled.p`
 
 const CreateNamespaceForm = ({ userID, color, toggleCreateNamespace }) => {
   const { socket } = useContext(MainSocketContext);
+  const { changePage } = useContext(CreateNamespaceContext);
 
   return (
     <>
@@ -36,6 +38,7 @@ const CreateNamespaceForm = ({ userID, color, toggleCreateNamespace }) => {
           socket.emit('create_namespace', { name, ownerID: userID, isPrivate, password, color });
           toggleCreateNamespace(false);
           resetForm();
+          changePage(0);
         }}
         validationSchema={CreateNamespaceSchema}
       >

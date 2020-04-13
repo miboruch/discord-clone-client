@@ -40,6 +40,7 @@ const StyledInput = styled.input`
   &::placeholder{
     letter-spacing: 1px;
     padding-left: 0.2rem;
+    font-size: 14px;
   }
 `;
 

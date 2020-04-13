@@ -103,3 +103,9 @@ export const ChooseColorParagraph = styled(BackParagraph)`
     background-color: ${({ color }) => color};
   }
 `;
+
+export const StyledInfoParagraph = styled.p`
+  font-size: 14px;
+  color: #111;
+  margin: 1.3rem 0;
+`;

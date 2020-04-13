@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import gsap from 'gsap';
 import PropTypes from 'prop-types';
 import CloseButton from '../../atoms/CloseButton/CloseButton';
+import { useOutsideClick } from '../../../utils/customHooks';
 
 const StyledWrapper = styled.div`
   width: 100%;

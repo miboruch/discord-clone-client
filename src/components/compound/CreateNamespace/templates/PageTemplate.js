@@ -4,12 +4,11 @@ import { CreateNamespaceContext } from '../context/CreateNamespaceContext';
 import * as Styles from '../styles/multiStepStyles';
 
 const PageTemplate = ({ children, pageIndex }) => {
-  const { currentPage, changePage } = useContext(CreateNamespaceContext);
+  const { currentPage } = useContext(CreateNamespaceContext);
   return (
     currentPage === pageIndex && (
       <Styles.StyledContentWrapper>
         {children}
-        {currentPage !== 0 && <Styles.BackParagraph onClick={() => changePage(0)}>GO BACK</Styles.BackParagraph>}
       </Styles.StyledContentWrapper>
     )
   );

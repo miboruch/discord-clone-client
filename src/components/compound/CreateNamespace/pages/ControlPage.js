@@ -9,12 +9,12 @@ const ControlPage = () => {
   return (
     currentPage === 0 && (
       <Styles.StyledWrapper>
-        <Styles.StyledJoinSection onClick={() => changePage(1)}>
+        <Styles.StyledJoinSection onClick={() => changePage(2)}>
           <Styles.StyledHeading>Join</Styles.StyledHeading>
           <Styles.StyledParagraph>Join to the server</Styles.StyledParagraph>
           <Styles.StyledJoinIcon />
         </Styles.StyledJoinSection>
-        <Styles.StyledCreateSection onClick={() => changePage(2)}>
+        <Styles.StyledCreateSection onClick={() => changePage(1)}>
           <Styles.StyledHeading>Create</Styles.StyledHeading>
           <Styles.StyledParagraph>Create your own server</Styles.StyledParagraph>
           <Styles.StyledCreateIcon />
