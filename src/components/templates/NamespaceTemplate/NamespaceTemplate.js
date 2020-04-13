@@ -112,18 +112,11 @@ const NamespaceTemplate = ({
               </>
             )}
             <StyledParagraph>Joined servers:</StyledParagraph>
-            {namespaces.join && (
-              <>
-                {namespaces.joined.map(item => (
-                  <Link to={`/server/${item._id}`}>
-                    <NamespaceNavBox
-                      name={item.name}
-                      backgroundColor={item.color ? item.color : generateRandomColor()}
-                    />
-                  </Link>
-                ))}
-              </>
-            )}
+            {namespaces.joined.map(item => (
+              <Link to={`/server/${item._id}`}>
+                <NamespaceNavBox name={item.name} backgroundColor={item.color ? item.color : generateRandomColor()} />
+              </Link>
+            ))}
             <NamespaceNavBox name={'+ Add new'} onClick={() => toggleCreateNamespace(true)} backgroundColor={'#555'} />
           </>
         </StyledNavbar>

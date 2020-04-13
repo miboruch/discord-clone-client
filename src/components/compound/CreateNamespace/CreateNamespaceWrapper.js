@@ -8,6 +8,7 @@ import PageTemplate from './templates/PageTemplate';
 import CreateNamespacePage from './pages/CreateNamespacePage';
 import JoinNamespacePage from './pages/JoinNamespacePage';
 import FoundNamespacesPage from './pages/FoundNamespacesPage';
+import JoinNamespacePassword from './pages/JoinNamespacePassword';
 
 /*
  * indexes:
@@ -15,6 +16,7 @@ import FoundNamespacesPage from './pages/FoundNamespacesPage';
  * - 1. Create new namespace
  * - 2. Join to the namespace
  * - 3. Render searched namespaces
+ * - 4. Password page (if required)
  */
 
 const CreateNamespaceWrapper = ({ isCreateNamespaceOpen, toggleCreateNamespace }) => {
@@ -32,6 +34,9 @@ const CreateNamespaceWrapper = ({ isCreateNamespaceOpen, toggleCreateNamespace }
         </PageTemplate>
         <PageTemplate pageIndex={3}>
           <FoundNamespacesPage />
+        </PageTemplate>
+        <PageTemplate pageIndex={4}>
+          <JoinNamespacePassword />
         </PageTemplate>
       </NamespaceControllerContextProvider>
     </ModalBox>
