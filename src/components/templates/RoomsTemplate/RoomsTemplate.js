@@ -137,7 +137,7 @@ const RoomsTemplate = ({
             <>
               {rooms.map(item => {
                 return currentRoomName === `${item._id}${slugify(item.name)}` ? (
-                  <StyledLink isCurrent={true} onClick={event => event.preventDefault()}>
+                  <StyledLink isCurrent={true} onClick={event => event.preventDefault()} key={item._id}>
                     <StyledHashIcon isCurrent={true} />
                     <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
                   </StyledLink>
@@ -145,6 +145,7 @@ const RoomsTemplate = ({
                   <StyledLink
                     to={`${match.url}/room/${item._id}${slugify(item.name)}`}
                     isCurrent={false}
+                    key={item._id}
                     onClick={() => {
                       namespaceSocket.emit('join_room', {
                         roomName: `${item._id}${slugify(item.name)}`,

@@ -3,12 +3,14 @@ export const TOGGLE_CREATE_ROOM = 'TOGGLE_CREATE_ROOM';
 export const TOGGLE_DARK_THEME = 'TOGGLE_DARK_THEME';
 export const SET_DARK_THEME = 'SET_DARK_THEME';
 export const TOGGLE_MENU = 'TOGGLE_MENU';
+export const SET_INFORMATION_OBJECT = 'SET_INFORMATION_OBJECT';
 
 const initialState = {
   isCreateNamespaceOpen: false,
   isCreateRoomOpen: false,
   isDarkTheme: JSON.parse(localStorage.getItem('isDarkTheme')),
-  isMenuOpen: false
+  isMenuOpen: false,
+  informationObject: null
 };
 
 export const toggleReducer = (state = initialState, action) => {
@@ -38,6 +40,11 @@ export const toggleReducer = (state = initialState, action) => {
       return {
         ...state,
         isMenuOpen: !state.isMenuOpen
+      };
+    case SET_INFORMATION_OBJECT:
+      return {
+        ...state,
+        informationObject: action.payload
       };
     default:
       return state;

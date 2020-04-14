@@ -7,13 +7,12 @@ import { API_URL } from '../utils/helpers';
 import {
   addCreatedNamespace,
   fetchNamespacesSuccess,
-  setNamespaceError,
   setSearchedNamespaces,
   setSearchLoading
 } from '../actions/namespaceActions';
 import NamespaceTemplate from '../components/templates/NamespaceTemplate/NamespaceTemplate';
 import ServerContentPage from './ServerContentPage';
-import { toggleCreateNamespace } from '../actions/toggleActions';
+import { setInformationObject, toggleCreateNamespace } from '../actions/toggleActions';
 import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespaceWrapper';
 import MainSocketContext from '../providers/MainSocketContext';
 import HomePage from './HomePage';
@@ -33,7 +32,7 @@ const ServerPage = ({
   toggleCreateNamespace,
   setSearchedNamespaces,
   setSearchLoading,
-  setNamespaceError
+                      setInformationObject
 }) => {
   const [isSocketLoading, setSocketLoading] = useState(true);
   useEffect(() => {
@@ -70,8 +69,9 @@ const ServerPage = ({
           setSearchLoading(false);
         });
 
-        socket.on('namespace_error', errorMessage => {
-          setNamespaceError(errorMessage);
+        /* informationObject -> {type: enum['error', 'success'], message: String} */
+        socket.on('information', informationObject => {
+          setInformationObject(informationObject);
         });
       });
     }
@@ -89,7 +89,7 @@ const ServerPage = ({
                 <Route path={'/home'} component={HomePage} />
               </Switch>
             </NamespaceTemplate>
-            <InformationBox text={'hello'} isOpen={true} isSuccess={true} />
+            <InformationBox />
           </StyledWrapper>
         </MainSocketContext.Provider>
       )}
@@ -108,7 +108,7 @@ const mapDispatchToProps = dispatch => {
     addCreatedNamespace: namespace => dispatch(addCreatedNamespace(namespace)),
     setSearchedNamespaces: namespaces => dispatch(setSearchedNamespaces(namespaces)),
     setSearchLoading: isSearching => dispatch(setSearchLoading(isSearching)),
-    setNamespaceError: error => dispatch(setNamespaceError(error))
+    setInformationObject: message => dispatch(setInformationObject(message))
   };
 };
 

@@ -5,7 +5,6 @@ import Spinner from '../../../atoms/Spinner/Spinner';
 import NamespaceJoinBox from '../components/NamespaceJoinBox';
 import * as Styles from '../styles/multiStepStyles';
 import { NamespaceControllerContext } from '../context/NamespaceControllerContext';
-import { setNamespaceError } from '../../../../actions/namespaceActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -27,21 +26,19 @@ const FoundNamespacesWrapper = styled.section`
 const StyledHeading = styled.h1`
   font-size: 36px;
   font-family: ${({ theme }) => theme.font.family.avanti};
-  color: #000;
+  color: #222;
   margin-bottom: 2rem;
 `;
 
-const StyledInfoHeading = styled(StyledHeading)`
-  width: 100%;
-  padding: 0 4rem;
-  font-size: 42px;
+const StyledParagraph = styled.p`
+  color: #222;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 `;
 
-const FoundNamespacesPage = ({ isSearching, searchedNamespaces, namespaceError, setNamespaceError }) => {
+const FoundNamespacesPage = ({ isSearching, searchedNamespaces }) => {
   const { changePage } = useContext(NamespaceControllerContext);
   return (
     <StyledWrapper>
@@ -49,28 +46,21 @@ const FoundNamespacesPage = ({ isSearching, searchedNamespaces, namespaceError, 
         <Spinner />
       ) : (
         <>
-          {namespaceError ? (
-            <StyledInfoHeading>{namespaceError}</StyledInfoHeading>
-          ) : (
-            <>
-              <StyledHeading>Found servers</StyledHeading>
-              <FoundNamespacesWrapper>
+          <StyledHeading>Servers: </StyledHeading>
+          <FoundNamespacesWrapper>
+            {searchedNamespaces.length !== 0 ? (
+              <>
                 {searchedNamespaces.map(item => (
-                  <NamespaceJoinBox namespace={item} />
+                  <NamespaceJoinBox namespace={item} key={item._id} />
                 ))}
-              </FoundNamespacesWrapper>
-            </>
-          )}
+              </>
+            ) : (
+              <StyledParagraph>Servers not found</StyledParagraph>
+            )}
+          </FoundNamespacesWrapper>
         </>
       )}
-      <Styles.BackParagraph
-        onClick={() => {
-          changePage(2);
-          setNamespaceError(null);
-        }}
-      >
-        GO BACK
-      </Styles.BackParagraph>
+      <Styles.BackParagraph onClick={() => changePage(2)}>GO BACK</Styles.BackParagraph>
     </StyledWrapper>
   );
 };
@@ -79,10 +69,4 @@ const mapStateToProps = ({ namespaceReducer: { isSearching, searchedNamespaces, 
   return { isSearching, searchedNamespaces, namespaceError };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setNamespaceError: error => dispatch(setNamespaceError(error))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FoundNamespacesPage);
+export default connect(mapStateToProps)(FoundNamespacesPage);

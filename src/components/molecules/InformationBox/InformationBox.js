@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import gsap from 'gsap';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import CloseButton from '../../atoms/CloseButton/CloseButton';
 import { ReactComponent as ErrorIcon } from '../../../assets/icons/error.svg';
 import { ReactComponent as SuccessIcon } from '../../../assets/icons/success.svg';
+import { setInformationObject } from '../../../actions/toggleActions';
 
 const StyledWrapper = styled.div`
   position: fixed;
@@ -19,8 +20,6 @@ const StyledWrapper = styled.div`
   background-color: ${({ theme }) => theme.color.roomsPanel};
   color: #fff;
   padding: 0 2rem;
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
 `;
 
 const StyledParagraph = styled.p`
@@ -42,35 +41,51 @@ const StyledSuccessIcon = styled(SuccessIcon)`
   height: 40px;
 `;
 
-const InformationBox = ({ isOpen, text, isSuccess }) => {
+//* informationObject -> {type: enum['error', 'success'], message: String}
+const InformationBox = ({ informationObject, setInformationObject }) => {
   const wrapperRef = useRef(null);
-  const [shouldBoxOpen, setBoxOpen] = useState(isOpen);
+  const [shouldBoxOpen, setBoxOpen] = useState(false);
+  const [isSuccess, setSuccess] = useState(true);
+  const [tl] = useState(gsap.timeline({ defaults: { ease: 'power3.inOut' } }));
 
   useEffect(() => {
-    if (isOpen) {
+    if (informationObject) {
+      setBoxOpen(true);
+      informationObject.type === 'success' ? setSuccess(true) : setSuccess(false);
       setTimeout(() => {
         setBoxOpen(false);
-      }, 10000);
+        setInformationObject(null);
+      }, 3000);
     }
-  }, [isOpen]);
+  }, [informationObject]);
+
+  useEffect(() => {
+    const wrapperBox = wrapperRef.current;
+
+    tl.fromTo(wrapperBox, { autoAlpha: 0, y: '+=30' }, { autoAlpha: 1, y: '0', duration: 0.5 });
+  }, []);
+
+  useEffect(() => {
+    shouldBoxOpen ? tl.play() : tl.reverse();
+  }, [shouldBoxOpen]);
 
   return (
-    <StyledWrapper ref={wrapperRef} isOpen={shouldBoxOpen}>
+    <StyledWrapper ref={wrapperRef}>
       <CloseButton setBoxState={setBoxOpen} isSmall={true} theme={'dark'} />
       {isSuccess ? <StyledSuccessIcon /> : <StyledErrorIcon />}
-      <StyledParagraph>{text}</StyledParagraph>
+      <StyledParagraph>{informationObject && informationObject.message}</StyledParagraph>
     </StyledWrapper>
   );
 };
 
-InformationBox.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired,
-  isSuccess: PropTypes.bool
+const mapStateToProps = ({ toggleReducer: { informationObject } }) => {
+  return { informationObject };
 };
 
-InformationBox.defaultProps = {
-  isSuccess: false
+const mapDispatchToProps = dispatch => {
+  return {
+    setInformationObject: informationObject => dispatch(setInformationObject(informationObject))
+  };
 };
 
-export default InformationBox;
+export default connect(mapStateToProps, mapDispatchToProps)(InformationBox);
