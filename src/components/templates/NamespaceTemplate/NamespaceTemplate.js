@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toggleCreateNamespace } from '../../../actions/toggleActions';
 import NamespaceNavBox from '../../atoms/NamespaceNavBox/NamespaceNavBox';
-import { getFirstLetter } from '../../../utils/helpers';
-import { generateRandomColor } from '../../../utils/helpers';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -103,7 +101,7 @@ const NamespaceTemplate = ({
                 {namespaces.created.map(item => (
                   <Link to={`/server/${item._id}`} key={item._id}>
                     <NamespaceNavBox
-                      backgroundColor={item.color ? item.color : generateRandomColor()}
+                      backgroundColor={item.color}
                       name={item.name}
                       isCurrent={currentNamespaceID === item._id.toString()}
                     />
@@ -113,8 +111,8 @@ const NamespaceTemplate = ({
             )}
             <StyledParagraph>Joined servers:</StyledParagraph>
             {namespaces.joined.map(item => (
-              <Link to={`/server/${item._id}`}>
-                <NamespaceNavBox name={item.name} backgroundColor={item.color ? item.color : generateRandomColor()} />
+              <Link to={`/server/${item._id}`} key={item._id}>
+                <NamespaceNavBox name={item.name} backgroundColor={item.color} />
               </Link>
             ))}
             <NamespaceNavBox name={'+ Add new'} onClick={() => toggleCreateNamespace(true)} backgroundColor={'#555'} />

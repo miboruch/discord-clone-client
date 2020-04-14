@@ -5,6 +5,7 @@ import Spinner from '../../../atoms/Spinner/Spinner';
 import NamespaceJoinBox from '../components/NamespaceJoinBox';
 import * as Styles from '../styles/multiStepStyles';
 import { NamespaceControllerContext } from '../context/NamespaceControllerContext';
+import { setNamespaceError } from '../../../../actions/namespaceActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -30,7 +31,17 @@ const StyledHeading = styled.h1`
   margin-bottom: 2rem;
 `;
 
-const FoundNamespacesPage = ({ isSearching, searchedNamespaces }) => {
+const StyledInfoHeading = styled(StyledHeading)`
+  width: 100%;
+  padding: 0 4rem;
+  font-size: 42px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const FoundNamespacesPage = ({ isSearching, searchedNamespaces, namespaceError, setNamespaceError }) => {
   const { changePage } = useContext(NamespaceControllerContext);
   return (
     <StyledWrapper>
@@ -38,21 +49,40 @@ const FoundNamespacesPage = ({ isSearching, searchedNamespaces }) => {
         <Spinner />
       ) : (
         <>
-          <StyledHeading>Found servers</StyledHeading>
-          <FoundNamespacesWrapper>
-            {searchedNamespaces.map(item => (
-              <NamespaceJoinBox namespace={item} />
-            ))}
-          </FoundNamespacesWrapper>
+          {namespaceError ? (
+            <StyledInfoHeading>{namespaceError}</StyledInfoHeading>
+          ) : (
+            <>
+              <StyledHeading>Found servers</StyledHeading>
+              <FoundNamespacesWrapper>
+                {searchedNamespaces.map(item => (
+                  <NamespaceJoinBox namespace={item} />
+                ))}
+              </FoundNamespacesWrapper>
+            </>
+          )}
         </>
       )}
-      <Styles.BackParagraph onClick={() => changePage(2)}>GO BACK</Styles.BackParagraph>
+      <Styles.BackParagraph
+        onClick={() => {
+          changePage(2);
+          setNamespaceError(null);
+        }}
+      >
+        GO BACK
+      </Styles.BackParagraph>
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ namespaceReducer: { isSearching, searchedNamespaces } }) => {
-  return { isSearching, searchedNamespaces };
+const mapStateToProps = ({ namespaceReducer: { isSearching, searchedNamespaces, namespaceError } }) => {
+  return { isSearching, searchedNamespaces, namespaceError };
 };
 
-export default connect(mapStateToProps)(FoundNamespacesPage);
+const mapDispatchToProps = dispatch => {
+  return {
+    setNamespaceError: error => dispatch(setNamespaceError(error))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FoundNamespacesPage);

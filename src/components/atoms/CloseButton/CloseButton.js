@@ -9,8 +9,8 @@ const ButtonWrapper = styled.button`
   background: transparent;
   border: none;
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: ${({ isSmall }) => (isSmall ? '0' : '1rem')};
+  right: ${({ isSmall }) => (isSmall ? '0' : '1rem')};
   margin: 0 0.5rem;
   :focus {
     outline: none;
@@ -24,7 +24,7 @@ const InnerButton = styled.div`
     content: '';
     width: 24px;
     height: 1px;
-    background: #000;
+    background: ${({ theme }) => (theme === 'dark' ? '#fff' : '#000')};
     position: absolute;
     left: 0;
     transition: all 0.5s ease;
@@ -38,16 +38,23 @@ const InnerButton = styled.div`
   }
 `;
 
-const CloseButton = ({ setBoxState }) => {
+const CloseButton = ({ setBoxState, theme, isSmall }) => {
   return (
-    <ButtonWrapper type='button' onClick={() => setBoxState(false)}>
-      <InnerButton />
+    <ButtonWrapper type='button' isSmall={isSmall} onClick={() => setBoxState(false)}>
+      <InnerButton theme={theme} />
     </ButtonWrapper>
   );
 };
 
 CloseButton.propTypes = {
   setBoxState: PropTypes.func.isRequired,
+  theme: PropTypes.oneOf(['dark', 'light']),
+  isSmall: PropTypes.bool
+};
+
+CloseButton.defaultProps = {
+  theme: 'light',
+  isSmall: false
 };
 
 export default CloseButton;

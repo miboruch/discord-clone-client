@@ -6,7 +6,8 @@ import {
   REMOVE_NAMESPACE,
   SET_CURRENT_NAMESPACE,
   SET_SEARCHED_NAMESPACES,
-  SET_SEARCH_LOADING
+  SET_SEARCH_LOADING,
+  SET_ERROR
 } from '../reducers/namespaceReducer';
 
 export const fetchNamespacesStart = () => {
@@ -63,5 +64,12 @@ export const setSearchLoading = isSearching => {
   return {
     type: SET_SEARCH_LOADING,
     payload: isSearching
+  };
+};
+
+export const setNamespaceError = error => {
+  return {
+    type: SET_ERROR,
+    payload: error
   };
 };

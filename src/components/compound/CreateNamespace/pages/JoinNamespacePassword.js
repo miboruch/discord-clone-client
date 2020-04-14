@@ -27,7 +27,7 @@ const StyledHeading = styled.h1`
   margin-bottom: 2rem;
 `;
 
-const StyledCorrectHeading = styled(StyledHeading)`
+const StyledInfoHeading = styled(StyledHeading)`
   font-size: 54px;
 `;
 
@@ -40,7 +40,10 @@ const JoinNamespacePassword = ({ toggleCreateNamespace, userID }) => {
   return (
     <StyledWrapper>
       {isCorrect ? (
-        <StyledCorrectHeading>Correct password</StyledCorrectHeading>
+        <>
+          <StyledInfoHeading>Correct password</StyledInfoHeading>
+          <Styles.BackParagraph onClick={() => changePage(3)}>GO BACK</Styles.BackParagraph>
+        </>
       ) : (
         <>
           <Formik

@@ -7,6 +7,7 @@ import { API_URL } from '../utils/helpers';
 import {
   addCreatedNamespace,
   fetchNamespacesSuccess,
+  setNamespaceError,
   setSearchedNamespaces,
   setSearchLoading
 } from '../actions/namespaceActions';
@@ -16,6 +17,7 @@ import { toggleCreateNamespace } from '../actions/toggleActions';
 import CreateNamespace from '../components/compound/CreateNamespace/CreateNamespaceWrapper';
 import MainSocketContext from '../providers/MainSocketContext';
 import HomePage from './HomePage';
+import InformationBox from '../components/molecules/InformationBox/InformationBox';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -30,7 +32,8 @@ const ServerPage = ({
   addCreatedNamespace,
   toggleCreateNamespace,
   setSearchedNamespaces,
-  setSearchLoading
+  setSearchLoading,
+  setNamespaceError
 }) => {
   const [isSocketLoading, setSocketLoading] = useState(true);
   useEffect(() => {
@@ -52,7 +55,7 @@ const ServerPage = ({
         socket.on('load_namespaces', namespaces => {
           fetchNamespaces(namespaces);
 
-          if (namespaces.created.length === 0) {
+          if (namespaces.created.length === 0 && namespaces.joined.length === 0) {
             toggleCreateNamespace(true);
           }
         });
@@ -65,6 +68,10 @@ const ServerPage = ({
         socket.on('namespace_search_finished', namespace => {
           setSearchedNamespaces(namespace);
           setSearchLoading(false);
+        });
+
+        socket.on('namespace_error', errorMessage => {
+          setNamespaceError(errorMessage);
         });
       });
     }
@@ -82,6 +89,7 @@ const ServerPage = ({
                 <Route path={'/home'} component={HomePage} />
               </Switch>
             </NamespaceTemplate>
+            <InformationBox text={'hello'} isOpen={true} isSuccess={true} />
           </StyledWrapper>
         </MainSocketContext.Provider>
       )}
@@ -99,7 +107,8 @@ const mapDispatchToProps = dispatch => {
     toggleCreateNamespace: isOpen => dispatch(toggleCreateNamespace(isOpen)),
     addCreatedNamespace: namespace => dispatch(addCreatedNamespace(namespace)),
     setSearchedNamespaces: namespaces => dispatch(setSearchedNamespaces(namespaces)),
-    setSearchLoading: isSearching => dispatch(setSearchLoading(isSearching))
+    setSearchLoading: isSearching => dispatch(setSearchLoading(isSearching)),
+    setNamespaceError: error => dispatch(setNamespaceError(error))
   };
 };
 
