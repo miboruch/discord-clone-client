@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ReactComponent as CrownIcon } from '../../../assets/icons/crown.svg';
 
 const MessageWrapper = styled.div`
   width: 100%;
@@ -54,11 +55,19 @@ const StyledMessage = styled.p`
   color: inherit;
 `;
 
-const Message = ({ name, lastName, date, message, messageSenderID, userID, isDarkTheme }) => {
+const StyledCrownIcon = styled(CrownIcon)`
+  width: 15px;
+  height: 15px;
+  margin-bottom: 3px;
+  margin-right: 0.5rem;
+`;
+
+const Message = ({ name, lastName, date, message, messageSenderID, userID, isDarkTheme, currentNamespaceData }) => {
   return (
     <MessageWrapper isDarkTheme={isDarkTheme} isMessageSender={messageSenderID === userID}>
       <MessageBox isMessageSender={messageSenderID === userID}>
         <StyledMessageTop>
+          {currentNamespaceData.ownerID === messageSenderID && <StyledCrownIcon />}
           <Name isDarkTheme={isDarkTheme}>
             {name} {lastName}
           </Name>
@@ -70,8 +79,12 @@ const Message = ({ name, lastName, date, message, messageSenderID, userID, isDar
   );
 };
 
-const mapStateToProps = ({ toggleReducer: { isDarkTheme }, authenticationReducer: { userID } }) => {
-  return { isDarkTheme, userID };
+const mapStateToProps = ({
+  toggleReducer: { isDarkTheme },
+  authenticationReducer: { userID },
+  namespaceReducer: { currentNamespaceData }
+}) => {
+  return { isDarkTheme, userID, currentNamespaceData };
 };
 
 Message.propTypes = {

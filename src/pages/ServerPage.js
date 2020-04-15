@@ -61,7 +61,6 @@ const ServerPage = ({
         });
 
         socket.on('namespace_created', namespace => {
-          console.log(namespace);
           addCreatedNamespace(namespace);
         });
 
@@ -98,8 +97,8 @@ const ServerPage = ({
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token }, toggleReducer: { isCreateRoomOpen } }) => {
-  return { token, isCreateRoomOpen };
+const mapStateToProps = ({ authenticationReducer: { token } }) => {
+  return { token };
 };
 
 const mapDispatchToProps = dispatch => {

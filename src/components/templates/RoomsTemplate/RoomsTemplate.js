@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toggleCreateRoom } from '../../../actions/toggleActions';
@@ -10,7 +9,6 @@ import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import slugify from 'slugify';
 import { setCurrentRoomName, setRoomMembers, setRoomInfo } from '../../../actions/roomActions';
 import { chatLoading } from '../../../actions/chatActions';
-import SlideIcon from '../../atoms/SlideIcon/SlideIcon';
 import NamespaceMenu from '../../molecules/NamespaceMenu/NamespaceMenu';
 
 const RoomsNavbar = styled.div`
@@ -121,7 +119,6 @@ const StyledHashIcon = styled(HashIcon)`
 const RoomsTemplate = ({
   namespaces,
   currentNamespaceID,
-  currentNamespaceData,
   toggleCreateRoom,
   isMenuOpen,
   rooms,
@@ -130,17 +127,12 @@ const RoomsTemplate = ({
   chatLoading
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
-  const [isNamespaceMenuOpen, setNamespaceMenuOpen] = useState(false);
 
   return (
     <>
       <CreateRoomBox />
       <RoomsNavbar isOpen={isMenuOpen}>
-        <NamespaceName onClick={() => setNamespaceMenuOpen(!isNamespaceMenuOpen)}>
-          <p>{currentNamespaceData && currentNamespaceData.name}</p>
-          <SlideIcon isOpen={isNamespaceMenuOpen} />
-        </NamespaceName>
-        <NamespaceMenu isOpen={isNamespaceMenuOpen} />
+        <NamespaceMenu />
         <RoomWrapper>
           {currentNamespaceID && (
             <>
@@ -181,11 +173,11 @@ const RoomsTemplate = ({
 };
 
 const mapStateToProps = ({
-  namespaceReducer: { namespaces, currentNamespaceID, currentNamespaceData },
+  namespaceReducer: { namespaces, currentNamespaceID },
   toggleReducer: { isMenuOpen },
   roomReducer: { roomsLoading, rooms, currentRoomName }
 }) => {
-  return { namespaces, currentNamespaceID, currentNamespaceData, isMenuOpen, roomsLoading, rooms, currentRoomName };
+  return { namespaces, currentNamespaceID, isMenuOpen, roomsLoading, rooms, currentRoomName };
 };
 
 const mapDispatchToProps = dispatch => {

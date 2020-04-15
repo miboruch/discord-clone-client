@@ -63,8 +63,6 @@ const StyledTestBox = styled.div`
   }
 `;
 
-let namespaceSocket;
-
 const ServerContentPage = ({
   match,
   setCurrentNamespace,
@@ -93,12 +91,9 @@ const ServerContentPage = ({
 
   useEffect(() => {
     if (namespaceSocket) {
-      console.log(namespaceSocket);
-
       namespaceSocket.on('namespace_joined', namespace => {
         setCurrentNamespace(namespace._id);
         setCurrentNamespaceData(namespace);
-        console.log('NAMESPACE JOINED');
       });
 
       namespaceSocket.on('connect', () => {
@@ -110,7 +105,6 @@ const ServerContentPage = ({
         setCurrentRoomName(roomName);
         setRoomInfo(roomInfo);
         chatLoading(false);
-        console.log(`JOINED ROOM ${roomName}`);
       });
 
       /* namespace is returned as an array with one fetched element */
@@ -136,7 +130,6 @@ const ServerContentPage = ({
       });
 
       return () => {
-        console.log('SERVER CONTENT PAGE UNMOUNTS');
         setCurrentNamespace(null);
         if (currentRoomName) {
           namespaceSocket.emit('leave_room', currentRoomName);

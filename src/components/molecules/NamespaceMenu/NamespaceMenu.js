@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import gsap from 'gsap';
+import SlideIcon from '../../atoms/SlideIcon/SlideIcon';
+import { useOutsideClick } from '../../../utils/customHooks';
 
-const StyledWrapper = styled.ul`
+const StyledWrapper = styled.div`
+  width: 100%;
+`;
+
+const MenuWrapper = styled.ul`
   width: 100%;
   position: absolute;
   top: 60px;
@@ -17,6 +23,24 @@ const StyledWrapper = styled.ul`
   z-index: 9;
 `;
 
+const StyledParagraph = styled.p`
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+`;
+
+const NamespaceName = styled.div`
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  z-index: 10;
+  background-color: ${({ theme }) => theme.color.roomsPanel};
+`;
+
 const SingleMenuItem = styled.li`
   width: 100%;
   height: 60px;
@@ -27,6 +51,10 @@ const SingleMenuItem = styled.li`
   align-items: center;
   position: relative;
   cursor: pointer;
+  transition: background-color 0.5s ease;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 1px;
 
   &::after {
     content: '';
@@ -35,22 +63,31 @@ const SingleMenuItem = styled.li`
     left: 0;
     width: 0;
     height: 1px;
-    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   &:hover::after {
     width: 100%;
     transition: width 0.5s ease;
   }
-  
-  &:last-of-type{
-    border-bottom: 1px solid #000;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.color.namespacesPanel};
+  }
+
+  &:last-of-type {
+    border-bottom: 2px solid ${({ theme }) => theme.color.namespacesPanel};
   }
 `;
 
-const NamespaceMenu = ({ isOpen }) => {
+const NamespaceMenu = ({ currentNamespaceData, userID }) => {
   const wrapperRef = useRef(null);
+  const [isNamespaceMenuOpen, setNamespaceMenuOpen] = useState(false);
   const [tl] = useState(gsap.timeline({ defaults: { ease: 'power3.inOut' } }));
+
+  const toggleMenu = () => {
+    setNamespaceMenuOpen(!isNamespaceMenuOpen);
+  };
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -62,20 +99,31 @@ const NamespaceMenu = ({ isOpen }) => {
   }, []);
 
   useEffect(() => {
-    isOpen ? tl.play() : tl.reverse();
-  }, [isOpen]);
+    isNamespaceMenuOpen ? tl.play() : tl.reverse();
+  }, [isNamespaceMenuOpen]);
+
+  useOutsideClick(wrapperRef, isNamespaceMenuOpen, toggleMenu);
 
   return (
-    <StyledWrapper ref={wrapperRef} isOpen={isOpen}>
-      <SingleMenuItem>hey</SingleMenuItem>
-      <SingleMenuItem>whats</SingleMenuItem>
-      <SingleMenuItem>up</SingleMenuItem>
+    <StyledWrapper>
+      <NamespaceName onClick={() => toggleMenu()}>
+        <StyledParagraph>{currentNamespaceData && currentNamespaceData.name}</StyledParagraph>
+        <SlideIcon isOpen={isNamespaceMenuOpen} />
+      </NamespaceName>
+      <MenuWrapper ref={wrapperRef}>
+        <SingleMenuItem>copy server id</SingleMenuItem>
+        {currentNamespaceData && currentNamespaceData.ownerID === userID ? (
+          <SingleMenuItem>delete server</SingleMenuItem>
+        ) : (
+          <SingleMenuItem>leave server</SingleMenuItem>
+        )}
+      </MenuWrapper>
     </StyledWrapper>
   );
 };
 
-NamespaceMenu.propTypes = {
-  isOpen: PropTypes.bool.isRequired
+const mapStateToProps = ({ namespaceReducer: { currentNamespaceData }, authenticationReducer: { userID } }) => {
+  return { currentNamespaceData, userID };
 };
 
-export default NamespaceMenu;
+export default connect(mapStateToProps)(NamespaceMenu);
