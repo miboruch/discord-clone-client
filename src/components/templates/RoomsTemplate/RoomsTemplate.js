@@ -156,10 +156,11 @@ const RoomsTemplate = ({
                     isCurrent={false}
                     key={item._id}
                     onClick={() => {
-                      namespaceSocket.emit('join_room', {
-                        roomName: `${item._id}${slugify(item.name)}`,
-                        roomID: item._id
-                      });
+                      namespaceSocket &&
+                        namespaceSocket.emit('join_room', {
+                          roomName: `${item._id}${slugify(item.name)}`,
+                          roomID: item._id
+                        });
                       chatLoading(true);
                     }}
                   >

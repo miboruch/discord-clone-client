@@ -23,8 +23,6 @@ const StyledWrapper = styled.div`
   height: 100vh;
 `;
 
-let socket;
-
 const ServerPage = ({
   fetchNamespaces,
   token,
@@ -32,15 +30,18 @@ const ServerPage = ({
   toggleCreateNamespace,
   setSearchedNamespaces,
   setSearchLoading,
-                      setInformationObject
+  setInformationObject
 }) => {
+  const [socket, setSocket] = useState(null);
   const [isSocketLoading, setSocketLoading] = useState(true);
   useEffect(() => {
-    socket = io(`${API_URL}`, {
-      query: {
-        token
-      }
-    });
+    setSocket(
+      io(`${API_URL}`, {
+        query: {
+          token
+        }
+      })
+    );
     setSocketLoading(false);
   }, []);
 
@@ -75,7 +76,7 @@ const ServerPage = ({
         });
       });
     }
-  }, []);
+  }, [socket]);
 
   return (
     <>

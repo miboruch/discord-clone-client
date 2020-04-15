@@ -80,12 +80,15 @@ const ServerContentPage = ({
   chatLoading,
   setMessages
 }) => {
+  const [namespaceSocket, setNamespaceSocket] = useState(null);
   useEffect(() => {
-    namespaceSocket = io(`${API_URL}/${match.params.id}`, {
-      query: {
-        token
-      }
-    });
+    setNamespaceSocket(
+      io(`${API_URL}/${match.params.id}`, {
+        query: {
+          token
+        }
+      })
+    );
   }, [match.params.id]);
 
   useEffect(() => {
@@ -142,12 +145,14 @@ const ServerContentPage = ({
         namespaceSocket.emit('namespace_disconnect');
       };
     }
-  }, [match.params.id]);
+  }, [match.params.id, namespaceSocket]);
 
   useEffect(() => {
-    namespaceSocket.on('room_created', rooms => {
-      fetchRoomsSuccess(rooms);
-    });
+    if (namespaceSocket) {
+      namespaceSocket.on('room_created', rooms => {
+        fetchRoomsSuccess(rooms);
+      });
+    }
   }, [namespaceSocket]);
 
   return (
@@ -163,10 +168,7 @@ const ServerContentPage = ({
   );
 };
 
-const mapStateToProps = ({
-  authenticationReducer: { token },
-  roomReducer: { currentRoomName }
-}) => {
+const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { currentRoomName } }) => {
   return { token, currentRoomName };
 };
 
