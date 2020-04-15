@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
@@ -10,6 +10,8 @@ import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import slugify from 'slugify';
 import { setCurrentRoomName, setRoomMembers, setRoomInfo } from '../../../actions/roomActions';
 import { chatLoading } from '../../../actions/chatActions';
+import SlideIcon from '../../atoms/SlideIcon/SlideIcon';
+import NamespaceMenu from '../../molecules/NamespaceMenu/NamespaceMenu';
 
 const RoomsNavbar = styled.div`
   width: 230px;
@@ -40,8 +42,12 @@ const NamespaceName = styled.div`
   width: 100%;
   height: 60px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  position: relative;
+  cursor: pointer;
+  z-index: 10;
+  background-color: ${({ theme }) => theme.color.roomsPanel};
 `;
 
 const RoomWrapper = styled.div`
@@ -115,23 +121,26 @@ const StyledHashIcon = styled(HashIcon)`
 const RoomsTemplate = ({
   namespaces,
   currentNamespaceID,
+  currentNamespaceData,
   toggleCreateRoom,
   isMenuOpen,
   rooms,
-  namespaceName,
   match,
   currentRoomName,
   chatLoading
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
+  const [isNamespaceMenuOpen, setNamespaceMenuOpen] = useState(false);
 
   return (
     <>
       <CreateRoomBox />
       <RoomsNavbar isOpen={isMenuOpen}>
-        <NamespaceName>
-          <p>{namespaceName}</p>
+        <NamespaceName onClick={() => setNamespaceMenuOpen(!isNamespaceMenuOpen)}>
+          <p>{currentNamespaceData && currentNamespaceData.name}</p>
+          <SlideIcon isOpen={isNamespaceMenuOpen} />
         </NamespaceName>
+        <NamespaceMenu isOpen={isNamespaceMenuOpen} />
         <RoomWrapper>
           {currentNamespaceID && (
             <>
@@ -171,11 +180,11 @@ const RoomsTemplate = ({
 };
 
 const mapStateToProps = ({
-  namespaceReducer: { namespaces, currentNamespaceID },
+  namespaceReducer: { namespaces, currentNamespaceID, currentNamespaceData },
   toggleReducer: { isMenuOpen },
   roomReducer: { roomsLoading, rooms, currentRoomName }
 }) => {
-  return { namespaces, currentNamespaceID, isMenuOpen, roomsLoading, rooms, currentRoomName };
+  return { namespaces, currentNamespaceID, currentNamespaceData, isMenuOpen, roomsLoading, rooms, currentRoomName };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -186,10 +195,6 @@ const mapDispatchToProps = dispatch => {
     setRoomMembers: members => dispatch(setRoomMembers(members)),
     setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo))
   };
-};
-
-RoomsTemplate.propTypes = {
-  namespaceName: PropTypes.string.isRequired
 };
 
 const RoomsTemplateWithRouter = withRouter(RoomsTemplate);

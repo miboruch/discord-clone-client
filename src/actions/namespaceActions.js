@@ -5,6 +5,7 @@ import {
   ADD_JOINED_NAMESPACE,
   REMOVE_NAMESPACE,
   SET_CURRENT_NAMESPACE,
+  SET_CURRENT_NAMESPACE_DATA,
   SET_SEARCHED_NAMESPACES,
   SET_SEARCH_LOADING
 } from '../reducers/namespaceReducer';
@@ -49,6 +50,13 @@ export const setCurrentNamespace = namespaceID => {
   return {
     type: SET_CURRENT_NAMESPACE,
     payload: namespaceID
+  };
+};
+
+export const setCurrentNamespaceData = namespace => {
+  return {
+    type: SET_CURRENT_NAMESPACE_DATA,
+    payload: namespace
   };
 };
 

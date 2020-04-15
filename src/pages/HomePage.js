@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { setCurrentNamespace } from '../actions/namespaceActions';
+import { setCurrentNamespace, setCurrentNamespaceData } from '../actions/namespaceActions';
 
-const HomePage = ({ setCurrentNamespace }) => {
+const HomePage = ({ setCurrentNamespace, setCurrentNamespaceData }) => {
   useEffect(() => {
     setCurrentNamespace('home');
+    setCurrentNamespaceData(null);
   }, []);
 
   return (
@@ -17,7 +18,8 @@ const HomePage = ({ setCurrentNamespace }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setCurrentNamespace: namespace => dispatch(setCurrentNamespace(namespace))
+    setCurrentNamespace: namespaceID => dispatch(setCurrentNamespace(namespaceID)),
+    setCurrentNamespaceData: namespaces => dispatch(setCurrentNamespaceData(namespaces))
   };
 };
 

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { setCurrentNamespace } from '../actions/namespaceActions';
+import { setCurrentNamespace, setCurrentNamespaceData } from '../actions/namespaceActions';
 import { setRoomMembers } from '../actions/roomActions';
 import {
   fetchRoomsStart,
@@ -17,7 +17,6 @@ import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
-import slugify from 'slugify';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -69,6 +68,7 @@ let namespaceSocket;
 const ServerContentPage = ({
   match,
   setCurrentNamespace,
+  setCurrentNamespaceData,
   token,
   fetchRoomsStart,
   fetchRoomsSuccess,
@@ -80,8 +80,6 @@ const ServerContentPage = ({
   chatLoading,
   setMessages
 }) => {
-  const [currentNamespaceData, setCurrentNamespaceData] = useState({});
-
   useEffect(() => {
     namespaceSocket = io(`${API_URL}/${match.params.id}`, {
       query: {
@@ -91,12 +89,12 @@ const ServerContentPage = ({
   }, [match.params.id]);
 
   useEffect(() => {
-    console.log('SERVER CONTENT PAGE MOUNTS');
     if (namespaceSocket) {
       console.log(namespaceSocket);
 
-      namespaceSocket.on('namespace_joined', namespaceID => {
-        setCurrentNamespace(namespaceID);
+      namespaceSocket.on('namespace_joined', namespace => {
+        setCurrentNamespace(namespace._id);
+        setCurrentNamespaceData(namespace);
         console.log('NAMESPACE JOINED');
       });
 
@@ -126,7 +124,7 @@ const ServerContentPage = ({
       });
 
       namespaceSocket.on('history_catchup', history => {
-        setMessages(history)
+        setMessages(history);
       });
 
       namespaceSocket.on('members_update', members => {
@@ -155,7 +153,7 @@ const ServerContentPage = ({
   return (
     <NamespaceSocketContext.Provider value={{ namespaceSocket }}>
       <StyledWrapper>
-        <RoomsTemplate namespaceName={currentNamespaceData && currentNamespaceData.name} />
+        <RoomsTemplate />
         <StyledChatWrapper>
           <Route exact path={`${match.url}/room/:roomName`} component={ChatPage} />
         </StyledChatWrapper>
@@ -165,13 +163,17 @@ const ServerContentPage = ({
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { currentRoomName } }) => {
+const mapStateToProps = ({
+  authenticationReducer: { token },
+  roomReducer: { currentRoomName }
+}) => {
   return { token, currentRoomName };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     setCurrentNamespace: namespaceID => dispatch(setCurrentNamespace(namespaceID)),
+    setCurrentNamespaceData: namespace => dispatch(setCurrentNamespaceData(namespace)),
     fetchRoomsStart: () => dispatch(fetchRoomsStart()),
     fetchRoomsSuccess: rooms => dispatch(fetchRoomsSuccess(rooms)),
     resetRooms: () => dispatch(resetRooms()),

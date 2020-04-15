@@ -4,6 +4,7 @@ export const ADD_CREATED_NAMESPACE = 'ADD_CREATED_NAMESPACE';
 export const ADD_JOINED_NAMESPACE = 'ADD_JOINED_NAMESPACE';
 export const REMOVE_NAMESPACE = 'REMOVE_NAMESPACE';
 export const SET_CURRENT_NAMESPACE = 'SET_CURRENT_NAMESPACE';
+export const SET_CURRENT_NAMESPACE_DATA = 'SET_CURRENT_NAMESPACE_DATA';
 export const SET_SEARCHED_NAMESPACES = 'SET_SEARCHED_NAMESPACES';
 export const SET_SEARCH_LOADING = 'SET_SEARCH_LOADING';
 
@@ -15,8 +16,8 @@ const initialState = {
   searchedNamespaces: [],
   isSearching: false,
   namespacesLoading: false,
-  currentNamespaceID: ''
-  /* error store info about error while joining and creating new namespace */
+  currentNamespaceID: '',
+  currentNamespaceData: null
 };
 
 export const namespaceReducer = (state = initialState, action) => {
@@ -51,6 +52,11 @@ export const namespaceReducer = (state = initialState, action) => {
       return {
         ...state,
         currentNamespaceID: action.payload
+      };
+    case SET_CURRENT_NAMESPACE_DATA:
+      return {
+        ...state,
+        currentNamespaceData: action.payload
       };
     case SET_SEARCHED_NAMESPACES:
       return {

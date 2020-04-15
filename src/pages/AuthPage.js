@@ -7,6 +7,7 @@ import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import RegisterContent from '../components/molecules/AuthContent/RegisterContent/RegisterContent';
 import LoginContent from '../components/molecules/AuthContent/LoginContent/LoginContent';
+import Spinner from '../components/atoms/Spinner/Spinner';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -117,7 +118,7 @@ const AuthPage = ({ loading, location }) => {
       <ContentWrapper>
         <FormWrapper isRegister={isRegister}>
           {loading ? (
-            <p>Loading... (Spinner)</p>
+            <Spinner />
           ) : (
             <Switch>
               <Route path={'/login'} component={LoginContent} />
