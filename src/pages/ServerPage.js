@@ -7,6 +7,8 @@ import { API_URL } from '../utils/helpers';
 import {
   addCreatedNamespace,
   fetchNamespacesSuccess,
+  setCurrentNamespace,
+  setCurrentNamespaceData,
   setSearchedNamespaces,
   setSearchLoading
 } from '../actions/namespaceActions';
@@ -30,7 +32,10 @@ const ServerPage = ({
   toggleCreateNamespace,
   setSearchedNamespaces,
   setSearchLoading,
-  setInformationObject
+  setInformationObject,
+  setCurrentNamespaceData,
+  setCurrentNamespace,
+  history
 }) => {
   const [socket, setSocket] = useState(null);
   const [isSocketLoading, setSocketLoading] = useState(true);
@@ -67,6 +72,10 @@ const ServerPage = ({
         socket.on('namespace_search_finished', namespace => {
           setSearchedNamespaces(namespace);
           setSearchLoading(false);
+        });
+
+        socket.on('left_namespace', () => {
+          history.push('/home');
         });
 
         /* informationObject -> {type: enum['error', 'success'], message: String} */
@@ -108,7 +117,9 @@ const mapDispatchToProps = dispatch => {
     addCreatedNamespace: namespace => dispatch(addCreatedNamespace(namespace)),
     setSearchedNamespaces: namespaces => dispatch(setSearchedNamespaces(namespaces)),
     setSearchLoading: isSearching => dispatch(setSearchLoading(isSearching)),
-    setInformationObject: message => dispatch(setInformationObject(message))
+    setInformationObject: message => dispatch(setInformationObject(message)),
+    setCurrentNamespaceData: namespaceData => dispatch(setCurrentNamespaceData(namespaceData)),
+    setCurrentNamespace: namespaceID => dispatch(setCurrentNamespace(namespaceID))
   };
 };
 

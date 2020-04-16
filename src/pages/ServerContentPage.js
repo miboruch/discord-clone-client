@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { setCurrentNamespace, setCurrentNamespaceData } from '../actions/namespaceActions';
+import { fetchNamespacesSuccess, setCurrentNamespace, setCurrentNamespaceData } from '../actions/namespaceActions';
 import { setRoomMembers } from '../actions/roomActions';
 import {
   fetchRoomsStart,
@@ -17,6 +17,8 @@ import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
+import InformationBox from '../components/molecules/InformationBox/InformationBox';
+import { setInformationObject } from '../actions/toggleActions';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -68,6 +70,7 @@ const ServerContentPage = ({
   setCurrentNamespace,
   setCurrentNamespaceData,
   token,
+  userID,
   fetchRoomsStart,
   fetchRoomsSuccess,
   resetRooms,
@@ -76,7 +79,10 @@ const ServerContentPage = ({
   setRoomInfo,
   setRoomMembers,
   chatLoading,
-  setMessages
+  setMessages,
+  setInformationObject,
+  history,
+  fetchNamespaces
 }) => {
   const [namespaceSocket, setNamespaceSocket] = useState(null);
   useEffect(() => {
@@ -129,6 +135,24 @@ const ServerContentPage = ({
         chatLoading(false);
       });
 
+      namespaceSocket.on('information', informationObject => {
+        setInformationObject(informationObject);
+      });
+
+      namespaceSocket.on('leave_namespace', () => {
+        history.push('/home');
+        namespaceSocket.emit('reload_namespaces', { userID });
+      });
+
+      namespaceSocket.on('namespaces_reloaded', namespaces => {
+        fetchNamespaces(namespaces);
+      });
+
+      namespaceSocket.on('leave_room', () => {
+        history.push('/home');
+        setCurrentRoomName(null);
+      });
+
       return () => {
         setCurrentNamespace(null);
         if (currentRoomName) {
@@ -161,8 +185,8 @@ const ServerContentPage = ({
   );
 };
 
-const mapStateToProps = ({ authenticationReducer: { token }, roomReducer: { currentRoomName } }) => {
-  return { token, currentRoomName };
+const mapStateToProps = ({ authenticationReducer: { token, userID }, roomReducer: { currentRoomName } }) => {
+  return { token, userID, currentRoomName };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -176,7 +200,9 @@ const mapDispatchToProps = dispatch => {
     setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo)),
     setRoomMembers: members => dispatch(setRoomMembers(members)),
     chatLoading: isLoading => dispatch(chatLoading(isLoading)),
-    setMessages: messages => dispatch(setMessages(messages))
+    setMessages: messages => dispatch(setMessages(messages)),
+    setInformationObject: informationObject => dispatch(setInformationObject(informationObject)),
+    fetchNamespaces: namespaces => dispatch(fetchNamespacesSuccess(namespaces))
   };
 };
 

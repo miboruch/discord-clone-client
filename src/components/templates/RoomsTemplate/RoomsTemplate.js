@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { toggleCreateRoom } from '../../../actions/toggleActions';
 import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
+import { ReactComponent as RemoveIcon } from '../../../assets/icons/delete.svg';
 import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import slugify from 'slugify';
 import { setCurrentRoomName, setRoomMembers, setRoomInfo } from '../../../actions/roomActions';
@@ -36,40 +37,53 @@ const RoomsNavbar = styled.div`
   }
 `;
 
-const NamespaceName = styled.div`
-  width: 100%;
-  height: 60px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-  z-index: 10;
-  background-color: ${({ theme }) => theme.color.roomsPanel};
-`;
-
 const RoomWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  margin-top: 2rem;
+  margin-top: 1rem;
+`;
+
+const StyledTrashIcon = styled(RemoveIcon)`
+  width: 15px;
+  height: 15px;
+  fill: ${({ theme }) => theme.color.darkThemeFontColor};
+  position: absolute;
+  top: 50%;
+  right: 2.3rem;
+  transform: translate(100%, -50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 `;
 
 const StyledLink = styled(Link)`
+  width: 100%;
+  height: 45px;
+  position: relative;
   color: ${({ isCurrent, theme }) => (isCurrent ? '#fff' : theme.color.darkThemeFontColor)};
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  transition: color 0.3s ease;
+  justify-content: space-around;
+  transition: all 0.5s ease;
   cursor: ${({ isCurrent }) => (isCurrent ? 'default' : 'pointer')};
+  background-color: ${({ isCurrent, theme }) => (isCurrent ? theme.color.namespacesPanel : 'transparent')};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.color.namespacesPanel};
+  }
+
+  &:hover ${StyledTrashIcon} {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 
 const StyledRoomNameParagraph = styled.p`
-  font-size: 16px;
-  letter-spacing: 2px;
+  font-size: 13px;
+  letter-spacing: 1px;
 `;
 
 const StyledParagraph = styled.p`
@@ -114,6 +128,10 @@ const StyledHashIcon = styled(HashIcon)`
   height: 25px;
   fill: ${({ theme, isCurrent }) => (isCurrent ? '#fff' : theme.color.darkThemeFontColor)};
   margin: 0 1rem;
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translate(-50%, -50%);
 `;
 
 const RoomsTemplate = ({
@@ -141,6 +159,11 @@ const RoomsTemplate = ({
                   <StyledLink isCurrent={true} onClick={event => event.preventDefault()} key={item._id}>
                     <StyledHashIcon isCurrent={true} />
                     <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
+                    <StyledTrashIcon
+                      onClick={() => {
+                        namespaceSocket.emit('delete_room', { roomID: item._id, roomName: item.name });
+                      }}
+                    />
                   </StyledLink>
                 ) : (
                   <StyledLink
@@ -158,6 +181,7 @@ const RoomsTemplate = ({
                   >
                     <StyledHashIcon isCurrent={false} />
                     <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
+                    <StyledTrashIcon />
                   </StyledLink>
                 );
               })}

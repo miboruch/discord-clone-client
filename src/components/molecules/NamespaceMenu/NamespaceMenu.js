@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import gsap from 'gsap';
 import SlideIcon from '../../atoms/SlideIcon/SlideIcon';
 import { useOutsideClick } from '../../../utils/customHooks';
+import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
+import MainSocketContext from '../../../providers/MainSocketContext';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -81,6 +83,8 @@ const SingleMenuItem = styled.li`
 `;
 
 const NamespaceMenu = ({ currentNamespaceData, userID }) => {
+  const { namespaceSocket } = useContext(NamespaceSocketContext);
+  const { socket } = useContext(MainSocketContext);
   const wrapperRef = useRef(null);
   const [isNamespaceMenuOpen, setNamespaceMenuOpen] = useState(false);
   const [tl] = useState(gsap.timeline({ defaults: { ease: 'power3.inOut' } }));
@@ -113,9 +117,21 @@ const NamespaceMenu = ({ currentNamespaceData, userID }) => {
       <MenuWrapper ref={wrapperRef}>
         <SingleMenuItem>copy server id</SingleMenuItem>
         {currentNamespaceData && currentNamespaceData.ownerID === userID ? (
-          <SingleMenuItem>delete server</SingleMenuItem>
+          <SingleMenuItem
+            onClick={() => {
+              namespaceSocket.emit('delete_namespace', { namespaceID: currentNamespaceData._id });
+            }}
+          >
+            delete server
+          </SingleMenuItem>
         ) : (
-          <SingleMenuItem>leave server</SingleMenuItem>
+          <SingleMenuItem
+            onClick={() => {
+              socket.emit('leave_namespace', { namespaceID: currentNamespaceData._id, userID: userID });
+            }}
+          >
+            leave server
+          </SingleMenuItem>
         )}
       </MenuWrapper>
     </StyledWrapper>
