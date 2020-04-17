@@ -33,8 +33,6 @@ const ServerPage = ({
   setSearchedNamespaces,
   setSearchLoading,
   setInformationObject,
-  setCurrentNamespaceData,
-  setCurrentNamespace,
   history
 }) => {
   const [socket, setSocket] = useState(null);

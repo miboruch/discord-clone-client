@@ -35,7 +35,8 @@ const NamespaceName = styled.div`
   width: 100%;
   height: 60px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding-left: 1.5rem;
   align-items: center;
   position: relative;
   cursor: pointer;

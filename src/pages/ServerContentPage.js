@@ -17,7 +17,6 @@ import { API_URL } from '../utils/helpers';
 import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
-import InformationBox from '../components/molecules/InformationBox/InformationBox';
 import { setInformationObject } from '../actions/toggleActions';
 
 const StyledWrapper = styled.div`
@@ -113,6 +112,7 @@ const ServerContentPage = ({
         chatLoading(false);
       });
 
+      // TODO -> remove this socket, we already save namespace data
       /* namespace is returned as an array with one fetched element */
       namespaceSocket.on('namespace_data', namespace => {
         setCurrentNamespaceData(namespace[0]);

@@ -18,20 +18,22 @@ const StyledButton = styled.button`
   &::after {
     content: '';
     position: absolute;
-    width: 16px;
+    width: 12px;
     height: 1px;
     background-color: #fff;
-    top: 50%;
-    transition: transform 0.5s ease;
+    top: ${({isOpen}) => isOpen ? '25%' : '50%'};
+    transition: all 0.5s ease;
   }
 
   &::before {
-    left: 7px;
+    left: -6px;
+    transform-origin: bottom right;
     transform: translate(-50%, -50%) ${({ isOpen }) => (isOpen ? 'rotate(-43deg)' : 'rotate(43deg)')};
   }
 
   &::after {
-    left: 19px;
+    left: 6px;
+    transform-origin: bottom left;
     transform: translate(-50%, -50%) ${({ isOpen }) => (isOpen ? 'rotate(43deg)' : 'rotate(-43deg)')};
   }
 `;

@@ -46,16 +46,20 @@ const RoomWrapper = styled.div`
 `;
 
 const StyledTrashIcon = styled(RemoveIcon)`
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   fill: ${({ theme }) => theme.color.darkThemeFontColor};
   position: absolute;
   top: 50%;
   right: 2.3rem;
   transform: translate(100%, -50%);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  cursor: pointer;
+  pointer-events: auto !important;
+  transition: all 0.5s ease;
+
+  &:hover {
+    fill: #fff;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -69,15 +73,11 @@ const StyledLink = styled(Link)`
   justify-content: space-around;
   transition: all 0.5s ease;
   cursor: ${({ isCurrent }) => (isCurrent ? 'default' : 'pointer')};
+  pointer-events: ${({ isCurrent }) => (isCurrent ? 'none' : 'auto')};
   background-color: ${({ isCurrent, theme }) => (isCurrent ? theme.color.namespacesPanel : 'transparent')};
 
   &:hover {
     background-color: ${({ theme }) => theme.color.namespacesPanel};
-  }
-
-  &:hover ${StyledTrashIcon} {
-    opacity: 1;
-    visibility: visible;
   }
 `;
 
@@ -136,7 +136,7 @@ const StyledHashIcon = styled(HashIcon)`
 
 const RoomsTemplate = ({
   namespaces,
-  currentNamespaceID,
+  currentNamespaceData,
   toggleCreateRoom,
   isMenuOpen,
   rooms,
@@ -149,59 +149,54 @@ const RoomsTemplate = ({
   return (
     <>
       <CreateRoomBox />
-      <RoomsNavbar isOpen={isMenuOpen}>
-        <NamespaceMenu />
-        <RoomWrapper>
-          {currentNamespaceID && (
+      {currentNamespaceData && (
+        <RoomsNavbar isOpen={isMenuOpen}>
+          <NamespaceMenu />
+          <RoomWrapper>
             <>
-              {rooms.map(item => {
-                return currentRoomName === `${item._id}${slugify(item.name)}` ? (
-                  <StyledLink isCurrent={true} onClick={event => event.preventDefault()} key={item._id}>
-                    <StyledHashIcon isCurrent={true} />
-                    <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
-                    <StyledTrashIcon
-                      onClick={() => {
-                        namespaceSocket.emit('delete_room', { roomID: item._id, roomName: item.name });
-                      }}
-                    />
-                  </StyledLink>
-                ) : (
+              {rooms.map(room => {
+                const roomName = `${room._id}${slugify(room.name)}`;
+                return (
                   <StyledLink
-                    to={`${match.url}/room/${item._id}${slugify(item.name)}`}
-                    isCurrent={false}
-                    key={item._id}
+                    to={`${match.url}/room/${roomName}`}
+                    isCurrent={currentRoomName === roomName}
+                    key={room._id}
                     onClick={() => {
                       namespaceSocket &&
                         namespaceSocket.emit('join_room', {
-                          roomName: `${item._id}${slugify(item.name)}`,
-                          roomID: item._id
+                          roomName: `${room._id}${slugify(room.name)}`,
+                          roomID: room._id
                         });
                       chatLoading(true);
                     }}
                   >
-                    <StyledHashIcon isCurrent={false} />
-                    <StyledRoomNameParagraph>{item.name}</StyledRoomNameParagraph>
-                    <StyledTrashIcon />
+                    <StyledHashIcon isCurrent={currentRoomName === roomName} />
+                    <StyledRoomNameParagraph>{room.name}</StyledRoomNameParagraph>
+                    <StyledTrashIcon
+                      onClick={() => {
+                        namespaceSocket.emit('delete_room', { roomID: room._id, roomName: room.name });
+                      }}
+                    />
                   </StyledLink>
                 );
               })}
             </>
+          </RoomWrapper>
+          {namespaces.created.some(item => item._id.includes(currentNamespaceData._id)) && (
+            <StyledCreateParagraph onClick={() => toggleCreateRoom(true)}>Create new room</StyledCreateParagraph>
           )}
-        </RoomWrapper>
-        {namespaces.created.some(item => item._id.includes(currentNamespaceID)) && (
-          <StyledCreateParagraph onClick={() => toggleCreateRoom(true)}>Create new room</StyledCreateParagraph>
-        )}
-      </RoomsNavbar>
+        </RoomsNavbar>
+      )}
     </>
   );
 };
 
 const mapStateToProps = ({
-  namespaceReducer: { namespaces, currentNamespaceID },
+  namespaceReducer: { namespaces, currentNamespaceData },
   toggleReducer: { isMenuOpen },
   roomReducer: { roomsLoading, rooms, currentRoomName }
 }) => {
-  return { namespaces, currentNamespaceID, isMenuOpen, roomsLoading, rooms, currentRoomName };
+  return { namespaces, currentNamespaceData, isMenuOpen, roomsLoading, rooms, currentRoomName };
 };
 
 const mapDispatchToProps = dispatch => {
