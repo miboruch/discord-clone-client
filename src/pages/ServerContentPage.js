@@ -131,6 +131,7 @@ const ServerContentPage = ({
       });
 
       namespaceSocket.on('members_update', members => {
+        console.log(`MEMBERS UPDATE`);
         setRoomMembers(members);
         chatLoading(false);
       });
@@ -158,7 +159,6 @@ const ServerContentPage = ({
         if (currentRoomName) {
           namespaceSocket.emit('leave_room', currentRoomName);
           setCurrentRoomName(null);
-          setRoomInfo({});
         }
         namespaceSocket.emit('namespace_disconnect');
       };

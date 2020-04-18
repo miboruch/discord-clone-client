@@ -13,3 +13,13 @@ export const dateOptions = {
   second: '2-digit',
   hour12: false
 };
+
+export const isObjectEmpty = obj => {
+  for (let property in obj) {
+    if (obj.hasOwnProperty(property)) {
+      return false;
+    }
+  }
+
+  return JSON.stringify(obj) === JSON.stringify({});
+};

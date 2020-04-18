@@ -7,6 +7,7 @@ import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';
 import { addMessage, chatLoading } from '../actions/chatActions';
 import Spinner from '../components/atoms/Spinner/Spinner';
+import { isObjectEmpty } from '../utils/helpers';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -53,13 +54,12 @@ const ChatPage = ({
     return () => {
       if (namespaceSocket) {
         namespaceSocket.emit('leave_room', currentRoomName);
-        setCurrentRoomName(null);
         setRoomInfo({});
         chatLoading(false);
         console.log(`LEFT ROOM ${currentRoomName}`);
       }
     };
-  }, []);
+  }, [currentRoomName]);
 
   return (
     <StyledWrapper>
@@ -67,8 +67,12 @@ const ChatPage = ({
         <Spinner />
       ) : (
         <>
-          <RoomInfo roomInfo={currentRoomInfo} />
-          <Chat typingUser={typingUser} />
+          {!isObjectEmpty(currentRoomInfo) && (
+            <>
+              <RoomInfo roomInfo={currentRoomInfo} />
+              <Chat typingUser={typingUser} />
+            </>
+          )}
         </>
       )}
     </StyledWrapper>
