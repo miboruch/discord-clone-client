@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { fetchNamespacesSuccess, setCurrentNamespace, setCurrentNamespaceData } from '../actions/namespaceActions';
+import {
+  fetchNamespacesSuccess,
+  removeNamespace,
+  setCurrentNamespace,
+  setCurrentNamespaceData
+} from '../actions/namespaceActions';
 import { setRoomMembers } from '../actions/roomActions';
 import {
   fetchRoomsStart,
@@ -18,6 +23,7 @@ import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
 import { setInformationObject } from '../actions/toggleActions';
+import ConfirmBox from '../components/molecules/ConfirmBox/ConfirmBox';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -81,9 +87,11 @@ const ServerContentPage = ({
   setMessages,
   setInformationObject,
   history,
-  fetchNamespaces
+  fetchNamespaces,
+  removeNamespace
 }) => {
   const [namespaceSocket, setNamespaceSocket] = useState(null);
+
   useEffect(() => {
     setNamespaceSocket(
       io(`${API_URL}/${match.params.id}`, {
@@ -140,9 +148,10 @@ const ServerContentPage = ({
         setInformationObject(informationObject);
       });
 
-      namespaceSocket.on('leave_namespace', () => {
+      namespaceSocket.on('leave_namespace', namespaceID => {
         history.push('/home');
-        namespaceSocket.emit('reload_namespaces', { userID });
+        // namespaceSocket.emit('reload_namespaces', { userID });
+        removeNamespace(namespaceID);
       });
 
       namespaceSocket.on('namespaces_reloaded', namespaces => {
@@ -181,6 +190,7 @@ const ServerContentPage = ({
           <Route exact path={`${match.url}/room/:roomName`} component={ChatPage} />
         </StyledChatWrapper>
         <StyledTestBox />
+        {/*<ConfirmBox isOpen={isConfirmOpen} toggleBox={toggleConfirm} />*/}
       </StyledWrapper>
     </NamespaceSocketContext.Provider>
   );
@@ -203,7 +213,8 @@ const mapDispatchToProps = dispatch => {
     chatLoading: isLoading => dispatch(chatLoading(isLoading)),
     setMessages: messages => dispatch(setMessages(messages)),
     setInformationObject: informationObject => dispatch(setInformationObject(informationObject)),
-    fetchNamespaces: namespaces => dispatch(fetchNamespacesSuccess(namespaces))
+    fetchNamespaces: namespaces => dispatch(fetchNamespacesSuccess(namespaces)),
+    removeNamespace: namespaceID => dispatch(removeNamespace(namespaceID))
   };
 };
 

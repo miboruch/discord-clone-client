@@ -6,6 +6,7 @@ import { StyledButton } from '../../../molecules/AuthContent/styles';
 import MainSocketContext from '../../../../providers/MainSocketContext';
 import { NamespaceControllerContext } from '../context/NamespaceControllerContext';
 import { ReactComponent as PasswordIcon } from '../../../../assets/icons/password.svg';
+import { toggleCreateNamespace } from '../../../../actions/toggleActions';
 
 const StyledNamespaceWrapper = styled.div`
   width: 100%;
@@ -34,7 +35,7 @@ const ButtonWrapper = styled.div`
   align-items: center;
 `;
 
-const NamespaceJoinBox = ({ namespace, userID }) => {
+const NamespaceJoinBox = ({ namespace, userID, toggleCreateNamespace }) => {
   const { socket } = useContext(MainSocketContext);
   const { changePage, setChosenNamespace } = useContext(NamespaceControllerContext);
   return (
@@ -49,6 +50,8 @@ const NamespaceJoinBox = ({ namespace, userID }) => {
               changePage(4);
             } else {
               socket.emit('new_namespace_join', { userID, namespace });
+              toggleCreateNamespace(false);
+              changePage(0);
             }
           }}
         >
@@ -67,4 +70,10 @@ const mapStateToProps = ({ authenticationReducer: { userID } }) => {
   return { userID };
 };
 
-export default connect(mapStateToProps)(NamespaceJoinBox);
+const mapDispatchToProps = dispatch => {
+  return{
+    toggleCreateNamespace: isOpen => dispatch(toggleCreateNamespace(isOpen)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NamespaceJoinBox);

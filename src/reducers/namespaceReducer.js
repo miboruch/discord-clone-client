@@ -46,7 +46,10 @@ export const namespaceReducer = (state = initialState, action) => {
     case REMOVE_NAMESPACE:
       return {
         ...state,
-        namespaces: [...state.namespaces.filter(item => item._id !== action.payload.id)]
+        namespaces: {
+          joined: [...state.namespaces.joined.filter(item => item._id !== action.payload.id)],
+          created: [...state.namespaces.created.filter(item => item._id !== action.payload.id)]
+        }
       };
     case SET_CURRENT_NAMESPACE:
       return {

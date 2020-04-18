@@ -35,6 +35,7 @@ const CreateNamespaceForm = ({ userID, color, toggleCreateNamespace }) => {
           password: ''
         }}
         onSubmit={({ name, isPrivate, password }, { resetForm }) => {
+          console.log(password);
           socket.emit('create_namespace', { name, ownerID: userID, isPrivate, password, color });
           toggleCreateNamespace(false);
           resetForm();
@@ -58,11 +59,15 @@ const CreateNamespaceForm = ({ userID, color, toggleCreateNamespace }) => {
               onBlur={handleBlur}
               name='password'
               disabled={!values.isPrivate}
+              value={values.isPrivate ? values.password : ''}
             />
             <CheckboxWrapper>
               <ToggleCheckbox
                 isChecked={values.isPrivate}
-                toggleFunction={() => setFieldValue('isPrivate', !values.isPrivate)}
+                toggleFunction={() => {
+                  setFieldValue('isPrivate', !values.isPrivate);
+                  setFieldValue('password', '');
+                }}
               />
               <StyledParagraph>
                 {values.isPrivate

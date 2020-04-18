@@ -4,13 +4,15 @@ export const TOGGLE_DARK_THEME = 'TOGGLE_DARK_THEME';
 export const SET_DARK_THEME = 'SET_DARK_THEME';
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 export const SET_INFORMATION_OBJECT = 'SET_INFORMATION_OBJECT';
+export const TOGGLE_CONFIRM_BOX = 'TOGGLE_CONFIRM_BOX';
 
 const initialState = {
   isCreateNamespaceOpen: false,
   isCreateRoomOpen: false,
   isDarkTheme: JSON.parse(localStorage.getItem('isDarkTheme')),
   isMenuOpen: false,
-  informationObject: null
+  informationObject: null,
+  isConfirmOpen: false
 };
 
 export const toggleReducer = (state = initialState, action) => {
@@ -45,6 +47,11 @@ export const toggleReducer = (state = initialState, action) => {
       return {
         ...state,
         informationObject: action.payload
+      };
+    case TOGGLE_CONFIRM_BOX:
+      return{
+        ...state,
+        isConfirmOpen: action.payload
       };
     default:
       return state;
