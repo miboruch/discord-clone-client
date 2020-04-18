@@ -88,10 +88,12 @@ const NamespaceMenu = ({ currentNamespaceData, userID }) => {
   const { socket } = useContext(MainSocketContext);
   const wrapperRef = useRef(null);
   const [isNamespaceMenuOpen, setNamespaceMenuOpen] = useState(false);
+  const [isCopied, setCopied] = useState(false);
   const [tl] = useState(gsap.timeline({ defaults: { ease: 'power3.inOut' } }));
 
   const toggleMenu = () => {
     setNamespaceMenuOpen(!isNamespaceMenuOpen);
+    setCopied(false);
   };
 
   useEffect(() => {
@@ -116,7 +118,12 @@ const NamespaceMenu = ({ currentNamespaceData, userID }) => {
         <SlideIcon isOpen={isNamespaceMenuOpen} />
       </NamespaceName>
       <MenuWrapper ref={wrapperRef}>
-        <SingleMenuItem>copy server id</SingleMenuItem>
+        <SingleMenuItem onClick={() => {
+          navigator.clipboard.writeText(currentNamespaceData._id);
+          setCopied(true);
+        }}>
+          {isCopied ? 'copied!' : 'copy server id'}
+        </SingleMenuItem>
         {currentNamespaceData && currentNamespaceData.ownerID === userID ? (
           <SingleMenuItem
             onClick={() => {

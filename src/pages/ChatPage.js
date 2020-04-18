@@ -6,6 +6,7 @@ import { setCurrentRoomName, setRoomInfo } from '../actions/roomActions';
 import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';
 import { addMessage, chatLoading } from '../actions/chatActions';
+import Spinner from '../components/atoms/Spinner/Spinner';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -18,7 +19,15 @@ const StyledWrapper = styled.div`
   position: relative;
 `;
 
-const ChatPage = ({ currentRoomName, isChatLoading, addMessage, chatLoading, setRoomInfo, currentRoomInfo }) => {
+const ChatPage = ({
+  currentRoomName,
+  isChatLoading,
+  addMessage,
+  chatLoading,
+  setRoomInfo,
+  currentRoomInfo,
+  setCurrentRoomName
+}) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
   const [typingUser, setTypingUser] = useState(null);
 
@@ -44,17 +53,24 @@ const ChatPage = ({ currentRoomName, isChatLoading, addMessage, chatLoading, set
     return () => {
       if (namespaceSocket) {
         namespaceSocket.emit('leave_room', currentRoomName);
+        setCurrentRoomName(null);
         setRoomInfo({});
         chatLoading(false);
         console.log(`LEFT ROOM ${currentRoomName}`);
       }
     };
-  }, [currentRoomName]);
+  }, []);
 
   return (
     <StyledWrapper>
-      {!isChatLoading && currentRoomInfo !== {} ? <RoomInfo roomInfo={currentRoomInfo} /> : null}
-      <Chat typingUser={typingUser} />
+      {isChatLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <RoomInfo roomInfo={currentRoomInfo} />
+          <Chat typingUser={typingUser} />
+        </>
+      )}
     </StyledWrapper>
   );
 };

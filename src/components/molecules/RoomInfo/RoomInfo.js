@@ -22,20 +22,22 @@ const StyledParagraph = styled.p`
   padding: 0 1.2rem;
 `;
 
-const RoomInfo = ({ roomInfo, roomMembers }) => {
+const RoomInfo = ({ currentRoomInfo, roomMembers }) => {
   return (
     <StyledWrapper>
-      <>
-        <StyledParagraph>Users online: {roomMembers}</StyledParagraph>
-        <StyledParagraph>Name: {roomInfo && roomInfo.name}</StyledParagraph>
-        <StyledParagraph>Description: {roomInfo && roomInfo.description}</StyledParagraph>
-      </>
+      {roomMembers !== 0 && (
+        <>
+          <StyledParagraph>Users online: {roomMembers}</StyledParagraph>
+          <StyledParagraph>Name: {currentRoomInfo.name}</StyledParagraph>
+          <StyledParagraph>Description: {currentRoomInfo.description}</StyledParagraph>
+        </>
+      )}
     </StyledWrapper>
   );
 };
 
-const mapStateToProps = ({ roomReducer: { roomMembers } }) => {
-  return { roomMembers };
+const mapStateToProps = ({ roomReducer: { roomMembers, currentRoomInfo } }) => {
+  return { roomMembers, currentRoomInfo };
 };
 
 export default connect(mapStateToProps)(RoomInfo);

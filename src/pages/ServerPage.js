@@ -33,7 +33,9 @@ const ServerPage = ({
   setSearchedNamespaces,
   setSearchLoading,
   setInformationObject,
-  history
+  history,
+  setCurrentNamespace,
+  setCurrentNamespaceData
 }) => {
   const [socket, setSocket] = useState(null);
   const [isSocketLoading, setSocketLoading] = useState(true);
@@ -74,6 +76,8 @@ const ServerPage = ({
 
         socket.on('left_namespace', () => {
           history.push('/home');
+          setCurrentNamespace('');
+          setCurrentNamespaceData(null);
         });
 
         /* informationObject -> {type: enum['error', 'success'], message: String} */

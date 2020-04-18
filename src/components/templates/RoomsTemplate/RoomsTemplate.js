@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import slugify from 'slugify';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toggleCreateRoom } from '../../../actions/toggleActions';
@@ -7,8 +8,7 @@ import CreateRoomBox from '../../molecules/CreateRoomBox/CreateRoomBox';
 import { ReactComponent as HashIcon } from '../../../assets/icons/hash.svg';
 import { ReactComponent as RemoveIcon } from '../../../assets/icons/delete.svg';
 import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
-import slugify from 'slugify';
-import { setCurrentRoomName, setRoomMembers, setRoomInfo } from '../../../actions/roomActions';
+import { setCurrentRoomName, setRoomMembers } from '../../../actions/roomActions';
 import { chatLoading } from '../../../actions/chatActions';
 import NamespaceMenu from '../../molecules/NamespaceMenu/NamespaceMenu';
 
@@ -135,6 +135,7 @@ const StyledHashIcon = styled(HashIcon)`
 `;
 
 const RoomsTemplate = ({
+  userID,
   namespaces,
   currentNamespaceData,
   toggleCreateRoom,
@@ -172,11 +173,17 @@ const RoomsTemplate = ({
                   >
                     <StyledHashIcon isCurrent={currentRoomName === roomName} />
                     <StyledRoomNameParagraph>{room.name}</StyledRoomNameParagraph>
-                    <StyledTrashIcon
-                      onClick={() => {
-                        namespaceSocket.emit('delete_room', { roomID: room._id, roomName: room.name });
-                      }}
-                    />
+                    {currentNamespaceData.ownerID === userID && (
+                      <StyledTrashIcon
+                        onClick={() => {
+                          namespaceSocket.emit('delete_room', {
+                            roomID: room._id,
+                            roomName: room.name,
+                            namespaceID: currentNamespaceData._id
+                          });
+                        }}
+                      />
+                    )}
                   </StyledLink>
                 );
               })}
@@ -192,11 +199,12 @@ const RoomsTemplate = ({
 };
 
 const mapStateToProps = ({
+  authenticationReducer: { userID },
   namespaceReducer: { namespaces, currentNamespaceData },
   toggleReducer: { isMenuOpen },
   roomReducer: { roomsLoading, rooms, currentRoomName }
 }) => {
-  return { namespaces, currentNamespaceData, isMenuOpen, roomsLoading, rooms, currentRoomName };
+  return { userID, namespaces, currentNamespaceData, isMenuOpen, roomsLoading, rooms, currentRoomName };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -204,8 +212,7 @@ const mapDispatchToProps = dispatch => {
     toggleCreateRoom: isOpen => dispatch(toggleCreateRoom(isOpen)),
     setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     chatLoading: isLoading => dispatch(chatLoading(isLoading)),
-    setRoomMembers: members => dispatch(setRoomMembers(members)),
-    setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo))
+    setRoomMembers: members => dispatch(setRoomMembers(members))
   };
 };
 

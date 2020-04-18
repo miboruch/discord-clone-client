@@ -148,8 +148,8 @@ const ServerContentPage = ({
         fetchNamespaces(namespaces);
       });
 
-      namespaceSocket.on('leave_room', () => {
-        history.push('/home');
+      namespaceSocket.on('leave_room', rooms => {
+        fetchRoomsSuccess(rooms);
         setCurrentRoomName(null);
       });
 
@@ -158,6 +158,7 @@ const ServerContentPage = ({
         if (currentRoomName) {
           namespaceSocket.emit('leave_room', currentRoomName);
           setCurrentRoomName(null);
+          setRoomInfo({});
         }
         namespaceSocket.emit('namespace_disconnect');
       };
