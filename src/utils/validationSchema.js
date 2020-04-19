@@ -51,5 +51,5 @@ export const CreateRoomSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Room name is too short - 2 chars minimum')
     .required('Room name is required'),
-  description: Yup.string()
+  description: Yup.string().required('Room description is required')
 });

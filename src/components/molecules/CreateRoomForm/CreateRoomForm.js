@@ -52,7 +52,7 @@ const CreateRoomForm = ({ toggleCreateRoom }) => {
               name='name'
             />
             <FormInput
-              placeholder={errors.description || 'Full name'}
+              placeholder={errors.description || 'Description'}
               inputType='text'
               onChange={handleChange}
               onBlur={handleBlur}

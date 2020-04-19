@@ -95,9 +95,18 @@ const ServerContentPage = ({
 
   useEffect(() => {
     if (namespaceSocket) {
-      namespaceSocket.on('namespace_joined', ({ namespace, users }) => {
+      namespaceSocket.on('namespace_joined', namespace => {
         setCurrentNamespace(namespace._id);
         setCurrentNamespaceData(namespace);
+      });
+
+      namespaceSocket.on('left_namespace', () => {
+        history.push('/home');
+        setCurrentNamespace('');
+        setCurrentNamespaceData(null);
+      });
+
+      namespaceSocket.on('update_users', users => {
         setNamespaceUsers(users);
       });
 
@@ -110,12 +119,6 @@ const ServerContentPage = ({
         setCurrentRoomName(roomName);
         setRoomInfo(roomInfo);
         chatLoading(false);
-      });
-
-      // TODO -> remove this socket, we already save namespace data
-      /* namespace is returned as an array with one fetched element */
-      namespaceSocket.on('namespace_data', namespace => {
-        setCurrentNamespaceData(namespace[0]);
       });
 
       namespaceSocket.on('load_rooms', rooms => {
@@ -142,7 +145,6 @@ const ServerContentPage = ({
 
       namespaceSocket.on('leave_namespace', namespaceID => {
         history.push('/home');
-        // namespaceSocket.emit('reload_namespaces', { userID });
         removeNamespace(namespaceID);
       });
 
@@ -150,8 +152,11 @@ const ServerContentPage = ({
         fetchNamespaces(namespaces);
       });
 
-      namespaceSocket.on('leave_room', rooms => {
-        fetchRoomsSuccess(rooms);
+      namespaceSocket.on('load_namespaces', namespaces => {
+        fetchNamespaces(namespaces);
+      });
+
+      namespaceSocket.on('leave_room', () => {
         setCurrentRoomName(null);
       });
 

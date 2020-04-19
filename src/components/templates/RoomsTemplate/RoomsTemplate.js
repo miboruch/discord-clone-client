@@ -45,7 +45,7 @@ const RoomWrapper = styled.div`
   margin-top: 1rem;
 `;
 
-const StyledTrashIcon = styled(RemoveIcon)`
+const StyledRemoveIcon = styled(RemoveIcon)`
   width: 12px;
   height: 12px;
   fill: ${({ theme }) => theme.color.darkThemeFontColor};
@@ -174,7 +174,7 @@ const RoomsTemplate = ({
                     <StyledHashIcon isCurrent={currentRoomName === roomName} />
                     <StyledRoomNameParagraph>{room.name}</StyledRoomNameParagraph>
                     {currentNamespaceData.ownerID === userID && (
-                      <StyledTrashIcon
+                      <StyledRemoveIcon
                         onClick={() => {
                           namespaceSocket.emit('delete_room', {
                             roomID: room._id,

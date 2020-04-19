@@ -135,7 +135,7 @@ const NamespaceMenu = ({ currentNamespaceData, userID }) => {
         ) : (
           <SingleMenuItem
             onClick={() => {
-              socket.emit('leave_namespace', { namespaceID: currentNamespaceData._id, userID: userID });
+              namespaceSocket.emit('leave_namespace', { namespaceID: currentNamespaceData._id, userID: userID });
             }}
           >
             leave server

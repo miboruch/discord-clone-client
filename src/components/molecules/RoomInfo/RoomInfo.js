@@ -25,11 +25,13 @@ const StyledParagraph = styled.p`
 const RoomInfo = ({ currentRoomInfo, roomMembers }) => {
   return (
     <StyledWrapper>
-      <>
-        <StyledParagraph>Users online: {roomMembers}</StyledParagraph>
-        <StyledParagraph>Name: {currentRoomInfo.name}</StyledParagraph>
-        <StyledParagraph>Description: {currentRoomInfo.description}</StyledParagraph>
-      </>
+      {currentRoomInfo && (
+        <>
+          <StyledParagraph>Users online: {roomMembers}</StyledParagraph>
+          <StyledParagraph>Name: {currentRoomInfo.name}</StyledParagraph>
+          <StyledParagraph>Description: {currentRoomInfo.description}</StyledParagraph>
+        </>
+      )}
     </StyledWrapper>
   );
 };
