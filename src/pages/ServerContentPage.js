@@ -24,6 +24,7 @@ import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
 import { setInformationObject } from '../actions/toggleActions';
+import ServerUsersBox from '../components/molecules/ServerUsersBox/ServerUsersBox';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -56,17 +57,6 @@ const StyledChatWrapper = styled.section`
 
   ${({ theme }) => theme.mq.tablet} {
     position: static;
-  }
-`;
-
-const StyledTestBox = styled.div`
-  width: 300px;
-  height: 100vh;
-  border-left: 1px solid #000;
-  display: none;
-
-  ${({ theme }) => theme.mq.standard} {
-    display: block;
   }
 `;
 
@@ -191,7 +181,7 @@ const ServerContentPage = ({
         <StyledChatWrapper>
           <Route exact path={`${match.url}/room/:roomName`} component={ChatPage} />
         </StyledChatWrapper>
-        <StyledTestBox />
+        <ServerUsersBox />
         {/*<ConfirmBox isOpen={isConfirmOpen} toggleBox={toggleConfirm} />*/}
       </StyledWrapper>
     </NamespaceSocketContext.Provider>
