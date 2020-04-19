@@ -7,7 +7,8 @@ import {
   SET_CURRENT_NAMESPACE,
   SET_CURRENT_NAMESPACE_DATA,
   SET_SEARCHED_NAMESPACES,
-  SET_SEARCH_LOADING
+  SET_SEARCH_LOADING,
+  SET_NAMESPACE_USERS
 } from '../reducers/namespaceReducer';
 
 export const fetchNamespacesStart = () => {
@@ -71,5 +72,12 @@ export const setSearchLoading = isSearching => {
   return {
     type: SET_SEARCH_LOADING,
     payload: isSearching
+  };
+};
+
+export const setNamespaceUsers = users => {
+  return {
+    type: SET_NAMESPACE_USERS,
+    payload: users
   };
 };

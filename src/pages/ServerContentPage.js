@@ -7,7 +7,8 @@ import {
   fetchNamespacesSuccess,
   removeNamespace,
   setCurrentNamespace,
-  setCurrentNamespaceData
+  setCurrentNamespaceData,
+  setNamespaceUsers
 } from '../actions/namespaceActions';
 import { setRoomMembers } from '../actions/roomActions';
 import {
@@ -23,7 +24,6 @@ import RoomsTemplate from '../components/templates/RoomsTemplate/RoomsTemplate';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import ChatPage from './ChatPage';
 import { setInformationObject } from '../actions/toggleActions';
-import ConfirmBox from '../components/molecules/ConfirmBox/ConfirmBox';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -88,7 +88,8 @@ const ServerContentPage = ({
   setInformationObject,
   history,
   fetchNamespaces,
-  removeNamespace
+  removeNamespace,
+  setNamespaceUsers
 }) => {
   const [namespaceSocket, setNamespaceSocket] = useState(null);
 
@@ -104,9 +105,10 @@ const ServerContentPage = ({
 
   useEffect(() => {
     if (namespaceSocket) {
-      namespaceSocket.on('namespace_joined', namespace => {
+      namespaceSocket.on('namespace_joined', ({ namespace, users }) => {
         setCurrentNamespace(namespace._id);
         setCurrentNamespaceData(namespace);
+        setNamespaceUsers(users);
       });
 
       namespaceSocket.on('connect', () => {
@@ -214,7 +216,8 @@ const mapDispatchToProps = dispatch => {
     setMessages: messages => dispatch(setMessages(messages)),
     setInformationObject: informationObject => dispatch(setInformationObject(informationObject)),
     fetchNamespaces: namespaces => dispatch(fetchNamespacesSuccess(namespaces)),
-    removeNamespace: namespaceID => dispatch(removeNamespace(namespaceID))
+    removeNamespace: namespaceID => dispatch(removeNamespace(namespaceID)),
+    setNamespaceUsers: users => dispatch(setNamespaceUsers(users))
   };
 };
 
