@@ -1,4 +1,4 @@
-import { CHAT_LOADING, SET_MESSAGES, ADD_MESSAGE } from '../reducers/chatReducer';
+import { CHAT_LOADING, SET_MESSAGES, ADD_MESSAGE, FETCH_PREVIOUS_MESSAGES } from '../reducers/chatReducer';
 
 export const chatLoading = isLoading => {
   return {
@@ -18,5 +18,12 @@ export const addMessage = message => {
   return {
     type: ADD_MESSAGE,
     payload: message
+  };
+};
+
+export const fetchPreviousMessages = messages => {
+  return {
+    type: FETCH_PREVIOUS_MESSAGES,
+    payload: messages
   };
 };

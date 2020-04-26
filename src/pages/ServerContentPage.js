@@ -125,12 +125,21 @@ const ServerContentPage = ({
         fetchRoomsSuccess(rooms);
       });
 
+      namespaceSocket.on('room_deleted', namespaceID => {
+        history.push(`/server/${namespaceID}`);
+      });
+
       namespaceSocket.on('disconnect', () => {
         console.log('Namespace disconnected');
       });
 
+      /*
+       * messages comes from server in reverse order
+       * - newest message has to be on the bottom
+       * - oldest message has to be on the top
+       */
       namespaceSocket.on('history_catchup', history => {
-        setMessages(history);
+        setMessages(history.reverse());
       });
 
       namespaceSocket.on('members_update', members => {

@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Message from '../../atoms/Message/Message';
 import { dateOptions } from '../../../utils/helpers';
+import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 
 const StyledMessagesWrapper = styled.div`
   position: absolute;
@@ -20,15 +21,36 @@ const StyledMessagesWrapper = styled.div`
   }
 `;
 
-const MessagesComponent = ({ messages }) => {
+const MessagesComponent = ({ messages, currentRoomName }) => {
   const messageWrapperRef = useRef(null);
+  const [sub, setSub] = useState(null);
+  const { namespaceSocket } = useContext(NamespaceSocketContext);
+
   useEffect(() => {
     const messageWrapper = messageWrapperRef.current;
-    messageWrapper.scrollTop = messageWrapper.scrollHeight - messageWrapper.clientHeight;
-  }, [messages]);
+
+    messageWrapper.scrollTop = messageWrapper.scrollHeight;
+  }, []);
+
+  useEffect(() => {
+    const something = messages.length - sub;
+    const messageWrapper = messageWrapperRef.current;
+
+    if (something === 1) {
+      messageWrapper.scrollTop = messageWrapper.scrollHeight - messageWrapper.clientHeight;
+    }
+    setSub(messages.length);
+  }, [messages.length]);
+
+  const handleScroll = e => {
+    if (e.target.scrollTop === 0) {
+      console.log(messages[0].date);
+      namespaceSocket.emit('load_history_by_data', { roomID: currentRoomName, date: new Date(messages[0].date) });
+    }
+  };
 
   return (
-    <StyledMessagesWrapper ref={messageWrapperRef}>
+    <StyledMessagesWrapper onScroll={handleScroll} ref={messageWrapperRef}>
       {messages.map(item => (
         <Message
           name={item.name}
@@ -42,8 +64,8 @@ const MessagesComponent = ({ messages }) => {
   );
 };
 
-const mapStateToProps = ({ chatReducer: { messages } }) => {
-  return { messages };
+const mapStateToProps = ({ chatReducer: { messages }, roomReducer: { currentRoomName } }) => {
+  return { messages, currentRoomName };
 };
 
 export default connect(mapStateToProps)(MessagesComponent);

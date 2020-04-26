@@ -1,6 +1,7 @@
 export const CHAT_LOADING = 'CHAT_LOADING';
 export const SET_MESSAGES = 'SET_MESSAGES';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const FETCH_PREVIOUS_MESSAGES = 'FETCH_PREVIOUS_MESSAGES';
 
 const initialState = {
   isChatLoading: false,
@@ -18,6 +19,11 @@ export const chatReducer = (state = initialState, action) => {
       return {
         ...state,
         messages: action.payload
+      };
+    case FETCH_PREVIOUS_MESSAGES:
+      return {
+        ...state,
+        messages: [...action.payload, ...state.messages]
       };
     case ADD_MESSAGE:
       return {

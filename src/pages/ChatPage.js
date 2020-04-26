@@ -5,7 +5,7 @@ import NamespaceSocketContext from '../providers/NamespaceSocketContext';
 import { setCurrentRoomName, setRoomInfo } from '../actions/roomActions';
 import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';
-import { addMessage, chatLoading } from '../actions/chatActions';
+import { addMessage, chatLoading, fetchPreviousMessages } from '../actions/chatActions';
 import Spinner from '../components/atoms/Spinner/Spinner';
 import { isObjectEmpty } from '../utils/helpers';
 
@@ -27,6 +27,7 @@ const ChatPage = ({
   chatLoading,
   setRoomInfo,
   currentRoomInfo,
+  fetchPreviousMessages,
   setCurrentRoomName
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
@@ -46,6 +47,16 @@ const ChatPage = ({
       namespaceSocket.on('user_is_not_typing', () => {
         setTypingUser(null);
         console.log('user stop typing');
+      });
+
+      /*
+       * messages comes from server in reverse order
+       * - newest message has to be on the bottom
+       * - oldest message has to be on the top
+       */
+      namespaceSocket.on('load_history', messages => {
+        console.log(messages);
+        fetchPreviousMessages(messages.reverse());
       });
     }
   }, [namespaceSocket]);
@@ -88,7 +99,8 @@ const mapDispatchToProps = dispatch => {
     addMessage: message => dispatch(addMessage(message)),
     setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     chatLoading: isLoading => dispatch(chatLoading(isLoading)),
-    setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo))
+    setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo)),
+    fetchPreviousMessages: messages => dispatch(fetchPreviousMessages(messages))
   };
 };
 

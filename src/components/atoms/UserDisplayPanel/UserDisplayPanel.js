@@ -59,13 +59,13 @@ const StyledCrownIcon = styled(CrownIcon)`
   padding-left: 3px;
 `;
 
-const UserDisplayPanel = ({ imageURL, name, isActive, isDarkTheme, isOwner }) => {
+const UserDisplayPanel = ({ imageURL, name, isOnline, isDarkTheme, isOwner }) => {
   return (
     <StyledWrapper isDarkTheme={isDarkTheme}>
       <StyledImage src={imageURL} isDarkTheme={isDarkTheme} />
       <StyledParagraph>{name}</StyledParagraph>
       {isOwner && <StyledCrownIcon />}
-      {isActive ? <ActiveDot /> : <NotActiveDot />}
+      {isOnline ? <ActiveDot /> : <NotActiveDot />}
     </StyledWrapper>
   );
 };
@@ -73,7 +73,7 @@ const UserDisplayPanel = ({ imageURL, name, isActive, isDarkTheme, isOwner }) =>
 UserDisplayPanel.propTypes = {
   imageURL: PropTypes.string,
   name: PropTypes.string.isRequired,
-  isActive: PropTypes.bool.isRequired,
+  isOnline: PropTypes.bool.isRequired,
   isOwner: PropTypes.bool
 };
 

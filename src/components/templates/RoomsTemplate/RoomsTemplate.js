@@ -142,6 +142,7 @@ const RoomsTemplate = ({
   isMenuOpen,
   rooms,
   match,
+  history,
   currentRoomName,
   chatLoading
 }) => {
@@ -181,6 +182,7 @@ const RoomsTemplate = ({
                             roomName: room.name,
                             namespaceID: currentNamespaceData._id
                           });
+                          history.push(`/server/${currentNamespaceData._id}`);
                         }}
                       />
                     )}
