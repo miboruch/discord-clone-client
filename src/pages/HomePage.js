@@ -3,6 +3,20 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { setCurrentNamespace, setCurrentNamespaceData } from '../actions/namespaceActions';
 import { setCurrentRoomName, setRoomInfo } from '../actions/roomActions';
+import UserBox from '../components/molecules/UserBox/UserBox';
+
+const StyledWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+  position: relative;
+`;
+
+const StyledUserBoxWrapper = styled.div`
+  width: 200px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`;
 
 const HomePage = ({ setCurrentNamespace, setCurrentNamespaceData, setCurrentRoomName, setRoomInfo }) => {
   useEffect(() => {
@@ -13,9 +27,12 @@ const HomePage = ({ setCurrentNamespace, setCurrentNamespaceData, setCurrentRoom
   }, []);
 
   return (
-    <div>
+    <StyledWrapper>
       <h1>hello</h1>
-    </div>
+      <StyledUserBoxWrapper>
+        <UserBox />
+      </StyledUserBoxWrapper>
+    </StyledWrapper>
   );
 };
 

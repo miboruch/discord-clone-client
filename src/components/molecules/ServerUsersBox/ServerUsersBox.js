@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import UserDisplayPanel from '../../atoms/UserDisplayPanel/UserDisplayPanel';
+import UserBox from '../UserBox/UserBox';
 
 const StyledWrapper = styled.div`
   width: 300px;
@@ -9,6 +10,7 @@ const StyledWrapper = styled.div`
   border-left: 1px solid #000;
   display: none;
   padding: 60px 0;
+  position: relative;
 
   ${({ theme }) => theme.mq.standard} {
     display: block;
@@ -33,6 +35,7 @@ const ServerUsersBox = ({ namespaceUsers, currentNamespaceData }) => {
           return <UserDisplayPanel isOnline={user.isOnline} name={name} isOwner={isOwner} />;
         })}
       </StyledBox>
+      <UserBox />
     </StyledWrapper>
   );
 };

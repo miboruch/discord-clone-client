@@ -53,6 +53,7 @@ const ContentWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 3rem;
 
   ${({ theme }) => theme.mq.tabletL} {
     display: flex;

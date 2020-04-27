@@ -5,7 +5,6 @@ import gsap from 'gsap';
 import SlideIcon from '../../atoms/SlideIcon/SlideIcon';
 import { useOutsideClick } from '../../../utils/customHooks';
 import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
-import MainSocketContext from '../../../providers/MainSocketContext';
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -85,7 +84,6 @@ const SingleMenuItem = styled.li`
 
 const NamespaceMenu = ({ currentNamespaceData, userID }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
-  const { socket } = useContext(MainSocketContext);
   const wrapperRef = useRef(null);
   const [isNamespaceMenuOpen, setNamespaceMenuOpen] = useState(false);
   const [isCopied, setCopied] = useState(false);
