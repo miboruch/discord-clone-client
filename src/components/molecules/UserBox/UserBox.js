@@ -37,14 +37,14 @@ const UserName = styled.div`
   position: relative;
   cursor: pointer;
   z-index: 10;
-  background-color: ${({ theme }) => theme.color.backgroundDark};
+  background-color: ${({ theme, isDarkTheme }) => (isDarkTheme ? theme.color.backgroundDark : 'transparent')};
 `;
 
 const SingleMenuItem = styled.li`
   width: 100%;
   height: 60px;
-  color: #fff;
-  background-color: ${({ theme }) => theme.color.roomsPanel};
+  color: ${({ isDarkTheme }) => (isDarkTheme ? '#fff' : '#2d2d2d')};
+  background-color: ${({ theme, isDarkTheme }) => (isDarkTheme ? theme.color.roomsPanel : 'transparent')};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -71,11 +71,7 @@ const SingleMenuItem = styled.li`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.color.namespacesPanel};
-  }
-
-  &:last-of-type {
-    border-bottom: 2px solid ${({ theme }) => theme.color.namespacesPanel};
+    background-color: ${({ theme, isDarkTheme }) => (isDarkTheme ? theme.color.namespacesPanel : 'transparent')};
   }
 `;
 
@@ -131,10 +127,11 @@ const UserBox = ({ imageURL, userName, isDarkTheme, logout, history }) => {
   return (
     <StyledUserWrapper>
       <IconWrapper>
-        <SlideIcon isOpen={isMenuOpen} />
+        <SlideIcon isOpen={isMenuOpen} isDarkTheme={isDarkTheme} />
       </IconWrapper>
       <MenuWrapper ref={menuRef}>
         <SingleMenuItem
+          isDarkTheme={isDarkTheme}
           onClick={() => {
             logout();
             history.push('/');
@@ -143,7 +140,7 @@ const UserBox = ({ imageURL, userName, isDarkTheme, logout, history }) => {
           Logout
         </SingleMenuItem>
       </MenuWrapper>
-      <UserName onClick={() => setMenuOpen(!isMenuOpen)}>
+      <UserName onClick={() => setMenuOpen(!isMenuOpen)} isDarkTheme={isDarkTheme}>
         <StyledImage src={imageURL} isDarkTheme={isDarkTheme} />
         <StyledParagraph>
           {userName.name} {userName.lastName}

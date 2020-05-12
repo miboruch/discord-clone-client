@@ -20,8 +20,8 @@ const StyledButton = styled.button`
     position: absolute;
     width: 12px;
     height: 1px;
-    background-color: #fff;
-    top: ${({isOpen}) => isOpen ? '25%' : '50%'};
+    background-color: ${({ isDarkTheme }) => (isDarkTheme ? '#fff' : '#2d2d2d')};
+    top: ${({ isOpen }) => (isOpen ? '25%' : '50%')};
     transition: all 0.5s ease;
   }
 
@@ -38,12 +38,17 @@ const StyledButton = styled.button`
   }
 `;
 
-const SlideIcon = ({ isOpen }) => {
-  return <StyledButton isOpen={isOpen} />;
+const SlideIcon = ({ isOpen, isDarkTheme }) => {
+  return <StyledButton isOpen={isOpen} isDarkTheme={isDarkTheme} />;
 };
 
 SlideIcon.propTypes = {
-  isOpen: PropTypes.bool.isRequired
+  isOpen: PropTypes.bool.isRequired,
+  isDarkTheme: PropTypes.bool
+};
+
+SlideIcon.defaultProps = {
+  isDarkTheme: true
 };
 
 export default SlideIcon;

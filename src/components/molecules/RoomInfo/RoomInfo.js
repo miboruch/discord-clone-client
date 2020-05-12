@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { ReactComponent as Users } from '../../../assets/icons/users.svg';
 
 const StyledWrapper = styled.div`
   position: absolute;
@@ -22,12 +23,20 @@ const StyledParagraph = styled.p`
   padding: 0 1.2rem;
 `;
 
-const RoomInfo = ({ currentRoomInfo, roomMembers }) => {
+const StyledUsersIcon = styled(Users)`
+  width: 35px;
+  height: 35px;
+  margin-left: 2rem;
+  fill: ${({ isDarkTheme }) => (isDarkTheme ? '#fff' : '#2d2d2d')};
+`;
+
+const RoomInfo = ({ currentRoomInfo, roomMembers, isDarkTheme }) => {
   return (
     <StyledWrapper>
       {currentRoomInfo && (
         <>
-          <StyledParagraph>Users online: {roomMembers}</StyledParagraph>
+          <StyledUsersIcon isDarkTheme={isDarkTheme} />
+          <StyledParagraph>{roomMembers}</StyledParagraph>
           <StyledParagraph>Name: {currentRoomInfo.name}</StyledParagraph>
           <StyledParagraph>Description: {currentRoomInfo.description}</StyledParagraph>
         </>
@@ -36,8 +45,8 @@ const RoomInfo = ({ currentRoomInfo, roomMembers }) => {
   );
 };
 
-const mapStateToProps = ({ roomReducer: { roomMembers, currentRoomInfo } }) => {
-  return { roomMembers, currentRoomInfo };
+const mapStateToProps = ({ roomReducer: { roomMembers, currentRoomInfo }, toggleReducer: { isDarkTheme } }) => {
+  return { roomMembers, currentRoomInfo, isDarkTheme };
 };
 
 export default connect(mapStateToProps)(RoomInfo);
