@@ -22,22 +22,22 @@ const StyledInput = styled.input`
   width: 100%;
   height: 40px;
   background: none;
-  border: 1px solid ${({ colorTheme }) => (colorTheme === 'dark' ? '#f5f5f5' : 'rgba(23, 23, 23, 0.4)')};
+  border: none;
+  border-bottom: 1px solid ${({ colorTheme }) => (colorTheme === 'dark' ? '#f5f5f5' : 'rgba(23, 23, 23, 0.4)')};
   color: ${({ colorTheme }) => (colorTheme === 'dark' ? '#f5f5f5' : '#1d1d1d')};
   font-family: ${({ theme }) => theme.font.family.futura};
   font-size: 16px;
   transition: background-color 0.3s ease;
-  padding-left: 1rem;
 
   &:focus {
     outline: none;
   }
-  
+
   &:disabled {
     background-color: #ccc;
   }
-  
-  &::placeholder{
+
+  &::placeholder {
     letter-spacing: 1px;
     padding-left: 0.2rem;
     font-size: 14px;

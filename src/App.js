@@ -1,11 +1,21 @@
 import React, { useEffect } from 'react';
 import './App.css';
+import styled from 'styled-components';
 import Layout from './components/templates/Layout';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import AuthPage from './pages/AuthPage';
 import ServerPage from './pages/ServerPage';
 import { authenticationCheck } from './actions/authenticationActions';
+import Spinner from './components/atoms/Spinner/Spinner';
+
+const StyledWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background-color: ${({ isDarkTheme, theme }) =>
+    isDarkTheme ? theme.color.backgroundDark : theme.color.backgroundLight};
+`;
 
 function App({ isLoggedIn, loading, authenticationCheck }) {
   useEffect(() => {
@@ -16,22 +26,24 @@ function App({ isLoggedIn, loading, authenticationCheck }) {
   return (
     <Router>
       <Layout>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <Switch>
-            {isLoggedIn ? (
-              <>
-                <Route path={'/'} component={ServerPage} />
-              </>
-            ) : (
-              <>
-                <Route path={'/'} component={AuthPage} />
-                <Redirect exact from={'/'} to={'/login'} />
-              </>
-            )}
-          </Switch>
-        )}
+        <StyledWrapper>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <Switch>
+              {isLoggedIn ? (
+                <>
+                  <Route path={'/'} component={ServerPage} />
+                </>
+              ) : (
+                <>
+                  <Route path={'/'} component={AuthPage} />
+                  <Redirect exact from={'/'} to={'/login'} />
+                </>
+              )}
+            </Switch>
+          )}
+        </StyledWrapper>
       </Layout>
     </Router>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { setCurrentNamespace, setCurrentNamespaceData } from '../actions/namespaceActions';
@@ -9,6 +9,10 @@ const StyledWrapper = styled.div`
   width: 100%;
   height: 100vh;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${({ isDarkTheme }) => (isDarkTheme ? '#fff' : '#2d2d2d')};
 `;
 
 const StyledUserBoxWrapper = styled.div`
@@ -18,7 +22,12 @@ const StyledUserBoxWrapper = styled.div`
   right: 0;
 `;
 
-const HomePage = ({ setCurrentNamespace, setCurrentNamespaceData, setCurrentRoomName, setRoomInfo }) => {
+const StyledHeading = styled.h1`
+  color: inherit;
+  font-size: 42px;
+`;
+
+const HomePage = ({ setCurrentNamespace, setCurrentNamespaceData, setCurrentRoomName, setRoomInfo, isDarkTheme }) => {
   useEffect(() => {
     setCurrentNamespace('home');
     setCurrentNamespaceData(null);
@@ -27,13 +36,17 @@ const HomePage = ({ setCurrentNamespace, setCurrentNamespaceData, setCurrentRoom
   }, []);
 
   return (
-    <StyledWrapper>
-      <h1>hello</h1>
+    <StyledWrapper isDarkTheme={isDarkTheme}>
+      <StyledHeading>This page is not finished yet</StyledHeading>
       <StyledUserBoxWrapper>
         <UserBox />
       </StyledUserBoxWrapper>
     </StyledWrapper>
   );
+};
+
+const mapStateToProps = ({ toggleReducer: { isDarkTheme } }) => {
+  return { isDarkTheme };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -45,4 +58,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
