@@ -111,10 +111,9 @@ const MessageInput = ({ isDarkTheme, currentRoomInfo, currentRoomName, userID, u
             toggleEmoji();
             inputRef.current.focus();
           };
-
           return (
             <>
-              <StyledForm autocomplete='off'>
+              <StyledForm autoComplete='off'>
                 <StyledTextArea
                   ref={inputRef}
                   placeholder={currentRoomInfo && `Message #${currentRoomInfo.name}`}

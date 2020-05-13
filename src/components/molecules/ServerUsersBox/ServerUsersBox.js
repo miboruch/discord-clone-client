@@ -32,7 +32,7 @@ const ServerUsersBox = ({ namespaceUsers, currentNamespaceData }) => {
         {namespaceUsers.map(user => {
           const name = `${user.name} ${user.lastName}`;
           const isOwner = currentNamespaceData && user._id === currentNamespaceData.ownerID;
-          return <UserDisplayPanel isOnline={user.isOnline} name={name} isOwner={isOwner} />;
+          return <UserDisplayPanel isOnline={user.isOnline} name={name} isOwner={isOwner} key={user._id} />;
         })}
       </StyledBox>
       <UserBox />

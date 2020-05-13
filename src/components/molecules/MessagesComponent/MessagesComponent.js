@@ -50,8 +50,9 @@ const MessagesComponent = ({ messages, currentRoomName }) => {
 
   return (
     <StyledMessagesWrapper onScroll={handleScroll} ref={messageWrapperRef}>
-      {messages.map(item => (
+      {messages.map((item, index) => (
         <Message
+          key={index}
           name={item.name}
           lastName={item.lastName}
           date={new Date(item.date).toLocaleString('pl-PL', dateOptions)}
