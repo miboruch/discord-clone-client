@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { addMessage, chatLoading } from '../../../actions/chatActions';
 import Spinner from '../../atoms/Spinner/Spinner';
-import NamespaceSocketContext from '../../../providers/NamespaceSocketContext';
 import MessageInput from '../../molecules/MessageInput/MessageInput';
 import MessagesComponent from '../../molecules/MessagesComponent/MessagesComponent';
 
@@ -35,7 +34,7 @@ const BoldSpan = styled.span`
   font-weight: bold;
 `;
 
-const Chat = ({ isChatLoading, chatLoading, addMessage, currentRoomName, typingUser }) => {
+const Chat = ({ isChatLoading, typingUser }) => {
   return (
     <StyledChatWrapper>
       {isChatLoading ? (

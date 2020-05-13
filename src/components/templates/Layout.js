@@ -15,7 +15,7 @@ const StyledWrapper = styled.div`
 `;
 
 /* Layout provides all HOC, ThemeProviders and so on... */
-const Layout = ({ children, toggleDarkTheme, isDarkTheme }) => {
+const Layout = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <SEO />

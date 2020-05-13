@@ -90,7 +90,9 @@ export const userRegister = (email, password, name, lastName) => async dispatch 
       lastName
     });
 
-    dispatch(authSuccess(data.token, data._doc._id, data.name, data.lastName));
+    const userData = data._doc;
+
+    dispatch(authSuccess(data.token, userData._id, userData.name, userData.lastName));
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data._doc._id);
   } catch (error) {

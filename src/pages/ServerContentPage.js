@@ -129,10 +129,6 @@ const ServerContentPage = ({
         history.push(`/server/${namespaceID}`);
       });
 
-      namespaceSocket.on('disconnect', () => {
-        console.log('Namespace disconnected');
-      });
-
       /*
        * messages comes from server in reverse order
        * - newest message has to be on the bottom
@@ -143,7 +139,6 @@ const ServerContentPage = ({
       });
 
       namespaceSocket.on('members_update', members => {
-        console.log(`MEMBERS UPDATE`);
         setRoomMembers(members);
         chatLoading(false);
       });

@@ -44,7 +44,6 @@ const MessagesComponent = ({ messages, currentRoomName }) => {
 
   const handleScroll = e => {
     if (e.target.scrollTop === 0) {
-      console.log(messages[0].date);
       namespaceSocket.emit('load_history_by_data', { roomID: currentRoomName, date: new Date(messages[0].date) });
     }
   };

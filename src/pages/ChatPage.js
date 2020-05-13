@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import NamespaceSocketContext from '../providers/NamespaceSocketContext';
-import { setCurrentRoomName, setRoomInfo } from '../actions/roomActions';
+import { setRoomInfo } from '../actions/roomActions';
 import Chat from '../components/templates/Chat/Chat';
 import RoomInfo from '../components/molecules/RoomInfo/RoomInfo';
 import { addMessage, chatLoading, fetchPreviousMessages } from '../actions/chatActions';
@@ -28,7 +28,6 @@ const ChatPage = ({
   setRoomInfo,
   currentRoomInfo,
   fetchPreviousMessages,
-  setCurrentRoomName
 }) => {
   const { namespaceSocket } = useContext(NamespaceSocketContext);
   const [typingUser, setTypingUser] = useState(null);
@@ -41,12 +40,10 @@ const ChatPage = ({
 
       namespaceSocket.on('user_is_typing', ({ name, lastName }) => {
         setTypingUser({ name, lastName });
-        console.log('user typing');
       });
 
       namespaceSocket.on('user_is_not_typing', () => {
         setTypingUser(null);
-        console.log('user stop typing');
       });
 
       /*
@@ -55,7 +52,6 @@ const ChatPage = ({
        * - oldest message has to be on the top
        */
       namespaceSocket.on('load_history', messages => {
-        console.log(messages);
         fetchPreviousMessages(messages.reverse());
       });
     }
@@ -67,7 +63,6 @@ const ChatPage = ({
         namespaceSocket.emit('leave_room', currentRoomName);
         setRoomInfo({});
         chatLoading(false);
-        console.log(`LEFT ROOM ${currentRoomName}`);
       }
     };
   }, [currentRoomName]);
@@ -97,7 +92,6 @@ const mapStateToProps = ({ roomReducer: { currentRoomName, currentRoomInfo }, ch
 const mapDispatchToProps = dispatch => {
   return {
     addMessage: message => dispatch(addMessage(message)),
-    setCurrentRoomName: roomName => dispatch(setCurrentRoomName(roomName)),
     chatLoading: isLoading => dispatch(chatLoading(isLoading)),
     setRoomInfo: roomInfo => dispatch(setRoomInfo(roomInfo)),
     fetchPreviousMessages: messages => dispatch(fetchPreviousMessages(messages))

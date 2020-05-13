@@ -35,7 +35,6 @@ const CreateNamespaceForm = ({ userID, color, toggleCreateNamespace }) => {
           password: ''
         }}
         onSubmit={({ name, isPrivate, password }, { resetForm }) => {
-          console.log(password);
           socket.emit('create_namespace', { name, ownerID: userID, isPrivate, password, color });
           toggleCreateNamespace(false);
           resetForm();
