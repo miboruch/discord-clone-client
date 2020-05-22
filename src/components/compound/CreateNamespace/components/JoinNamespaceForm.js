@@ -59,7 +59,7 @@ const JoinNamespaceForm = ({ setSearchLoading }) => {
         {({ handleChange, handleBlur, errors }) => (
           <StyledForm isDisabled={currentFormFocused === 1} autocomplete={'off'}>
             <Styles.StyledInfoParagraph>
-              {errors.namespaceName ? errors.namespaceName : 'Or by the name'}
+              {errors.namespaceName ? errors.namespaceName : 'Or by the name - search "Test" server with a "test" password if you do not want to create new server'}
             </Styles.StyledInfoParagraph>
             <FormInput
               placeholder={'Server name'}

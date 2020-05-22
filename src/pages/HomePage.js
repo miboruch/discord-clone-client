@@ -12,7 +12,15 @@ const StyledWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   color: ${({ isDarkTheme }) => (isDarkTheme ? '#fff' : '#2d2d2d')};
+`;
+
+const ContentWrapper = styled.section`
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 const StyledUserBoxWrapper = styled.div`
@@ -27,6 +35,12 @@ const StyledHeading = styled.h1`
   font-size: 42px;
 `;
 
+const StyledParagraph = styled.p`
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin-top: 2rem;
+`;
+
 const HomePage = ({ setCurrentNamespace, setCurrentNamespaceData, setCurrentRoomName, setRoomInfo, isDarkTheme }) => {
   useEffect(() => {
     setCurrentNamespace('home');
@@ -37,7 +51,14 @@ const HomePage = ({ setCurrentNamespace, setCurrentNamespaceData, setCurrentRoom
 
   return (
     <StyledWrapper isDarkTheme={isDarkTheme}>
-      <StyledHeading>This page is not finished yet</StyledHeading>
+      <ContentWrapper>
+        <StyledHeading>How to test this chat?</StyledHeading>
+        <StyledParagraph>
+          If you don't want to create new server, just click the plus button on the left side, and search for{' '}
+          <strong>Test</strong> server. The password for this room is <strong>test</strong> You can create your own
+          server as well.
+        </StyledParagraph>
+      </ContentWrapper>
       <StyledUserBoxWrapper>
         <UserBox />
       </StyledUserBoxWrapper>

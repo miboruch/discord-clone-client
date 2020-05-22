@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { LoginSchema } from '../../../../utils/validationSchema';
+import { withRouter } from 'react-router-dom';
 import FormInput from '../../FormInput/FormInput';
 import { Formik } from 'formik';
 import { userLogin } from '../../../../actions/authenticationActions';
 import { StyledHeading, StyledForm, StyledButton, StyledLink, StyledParagraph } from '../styles';
 
-const LoginContent = ({ loginError, userLogin }) => {
+const LoginContent = ({ loginError, userLogin, history }) => {
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
-      onSubmit={({ email, password }) => userLogin(email, password)}
+      onSubmit={({ email, password }) => userLogin(email, password, history)}
       validationSchema={LoginSchema}
     >
       {({ handleChange, handleBlur, errors }) => (
@@ -47,8 +48,10 @@ const mapStateToProps = ({ authenticationReducer: { loginError } }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    userLogin: (email, password) => dispatch(userLogin(email, password))
+    userLogin: (email, password, history) => dispatch(userLogin(email, password, history))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginContent);
+const LoginContentWithRouter = withRouter(LoginContent);
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContentWithRouter);

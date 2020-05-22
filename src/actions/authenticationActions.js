@@ -65,7 +65,7 @@ export const authLogout = () => dispatch => {
   dispatch(userLogout());
 };
 
-export const userLogin = (email, password) => async dispatch => {
+export const userLogin = (email, password, history) => async dispatch => {
   dispatch(authStart());
 
   try {
@@ -74,12 +74,13 @@ export const userLogin = (email, password) => async dispatch => {
 
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data.id);
+    history.push('/home');
   } catch (error) {
     dispatch(authLoginFailure(error));
   }
 };
 
-export const userRegister = (email, password, name, lastName) => async dispatch => {
+export const userRegister = (email, password, name, lastName, history) => async dispatch => {
   dispatch(authStart());
 
   try {
@@ -95,6 +96,7 @@ export const userRegister = (email, password, name, lastName) => async dispatch 
     dispatch(authSuccess(data.token, userData._id, userData.name, userData.lastName));
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data._doc._id);
+    history.push('/home');
   } catch (error) {
     dispatch(authRegisterFailure(error));
   }

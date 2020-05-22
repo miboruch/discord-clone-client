@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import { RegisterSchema } from '../../../../utils/validationSchema';
 import FormInput from '../../FormInput/FormInput';
 import { Formik } from 'formik';
+import { withRouter } from 'react-router-dom';
 import { userRegister } from '../../../../actions/authenticationActions';
 import { StyledHeading, StyledForm, StyledButton, StyledLink, StyledParagraph } from '../styles';
 
-const RegisterContent = ({ registerError, userRegister }) => {
+const RegisterContent = ({ registerError, userRegister, history }) => {
   return (
     <Formik
       initialValues={{ email: '', password: '', name: '', lastName: '' }}
-      onSubmit={({ email, password, name, lastName }) => userRegister(email, password, name, lastName)}
+      onSubmit={({ email, password, name, lastName }) => userRegister(email, password, name, lastName, history)}
       validationSchema={RegisterSchema}
     >
       {({ handleChange, handleBlur, errors }) => (
@@ -61,8 +62,10 @@ const mapStateToProps = ({ authenticationReducer: { registerError } }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    userRegister: (email, password, name, lastName) => dispatch(userRegister(email, password, name, lastName))
+    userRegister: (email, password, name, lastName, history) => dispatch(userRegister(email, password, name, lastName, history))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterContent);
+const RegisterContentWithRouter = withRouter(RegisterContent);
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterContentWithRouter);
